@@ -2,6 +2,7 @@
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
+
 #pragma once
 #include "../Input/InputManager.h"
 #include "../Input/PadInput.h"
@@ -23,5 +24,5 @@ private:
 	Pad* pad;
 	Player *player;
 	Map* map;
-
+	
 };
