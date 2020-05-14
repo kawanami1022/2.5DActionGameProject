@@ -13,7 +13,7 @@ public:
 	Player();
 	~Player();
 	void update()override;
-	void draw()override;
+	void draw(int)override;
 	void moveX();	//	‰¡ˆÚ“®
 	void moveY();	//	cˆÚ“®
 	void setPos();

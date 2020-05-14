@@ -22,7 +22,7 @@ Vector2::Vector2(double ax, double ay) :x(ax), y(ay) {}
 // デカルト座標系での角度を求める
 // 目的:
 //		x
-double Vector2::getAngle(double x, double y)
+double Vector2::calcAngle(double x, double y)
 {
 	// 0°～90°の時
 	if(0<x&&0<y)

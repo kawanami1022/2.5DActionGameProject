@@ -11,6 +11,7 @@ Player::Player()
 {
 	pos[FLAME_ID_NOW] = { 500.0,300.0 };
 	pos[FLAME_ID_LAST] = { 500.0,300.0 };
+	
 	diff = { 0.0,0.0 };
 	speed = 5;
 	velocity = { 0.0,0.0 };
@@ -26,9 +27,10 @@ void Player::update()
 {
 }
 
-void Player::draw()
+void Player::draw(int angle)
 {
 	DrawCircle((int)pos[FLAME_ID_NOW].x, (int)pos[FLAME_ID_NOW].y, 16, 0xffff00, true, true);
+
 	DrawFormatString(0, 128, 0xffffff, "player:%f,%f", pos[FLAME_ID_NOW].x, pos[FLAME_ID_NOW].y);
 }
 
@@ -65,7 +67,7 @@ Vector2 Player::getDiff()
 Vector2 Player::calcVelocity(short* LStickPos)
 {
 	Vector2 vec2;
-	double angle = vec2.getAngle(LStickPos[0], LStickPos[1]);	// 角度を求める
+	double angle = vec2.calcAngle(LStickPos[0], LStickPos[1]);	// 角度を求める
 	velocity.x = vec2.calcCos(angle) * speed;		// 移動：X軸
 	velocity.y = -vec2.calcSin(angle) * speed;		// 移動：Y軸
 	return { velocity.x,velocity.y };
