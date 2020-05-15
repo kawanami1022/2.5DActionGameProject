@@ -40,6 +40,7 @@ public:
 	bool Release(BUTTON_ID);						// Now 0,	Last 1
 	XINPUT_STATE getXInput(STATE_ID);				//ƒgƒŠƒK[‚Ì’l‚ğæ“¾
 	bool checkStickDeadzone(short posX, short posY, int, double);		// true:“®‚©‚· false:“®‚©‚³‚È‚¢
+	double getAngleLeft();
 private:
 	XINPUT_STATE input[STATE_ID_MAX];
 	Vector2 *vec2;
