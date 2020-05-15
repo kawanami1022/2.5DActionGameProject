@@ -13,7 +13,7 @@ public:
 	Player();
 	~Player();
 	void update()override;
-	void draw(int)override;
+	void draw();
 	void moveX();	//	‰¡ˆÚ“®
 	void moveY();	//	cˆÚ“®
 	void setPos();
@@ -22,4 +22,5 @@ public:
 	Vector2 getPos();
 	Vector2 getDiff();
 private:
+	int walkImage[5 * 4];
 };
