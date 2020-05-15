@@ -36,8 +36,8 @@ void GameScene::update()
 
 void GameScene::draw()
 {
-	player->draw();
 	map->draw();
+	player->draw();
 }
 
 // 目的: オブジェクト移動
@@ -57,7 +57,7 @@ void GameScene::move()
 								pad->getXInput(STATE_ID_NOW).ThumbLY,
 								PAD_INPUT_1,0.2))
 	{
-
+		//Player movement range		true:player move	false:map move
 		if (checkMoveObj(mpPosChX, scrPosChX,
 			player->getVelocity().x,
 			player->getPos().x,

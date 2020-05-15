@@ -68,3 +68,9 @@ bool Pad::checkStickDeadzone(short posX, short posY, int padNum, double deadZone
 	return false;
 }
 
+// –Ú“I	:
+double Pad::getAngleLeft()
+{
+	return 0.0;
+}
+
