@@ -12,23 +12,26 @@
 
 SceneController::SceneController()
 {
-    nowScene = std::make_unique<GameScene>();
+    ChangeWindowMode(true);
+    SetGraphMode(800, 800, 32);
+    // ＤＸライブラリ初期化処理
+    if (DxLib_Init() == 0)
+    {
+        nowScene = std::make_unique<GameScene>();
+    }
+      
+    // エラーが起きたら直ちに終了
 }
 
 SceneController::~SceneController()
 {
+    DxLib_End();
 
 }
 
 int SceneController::run() {
 
-    ChangeWindowMode(true);
-    SetGraphMode(800, 800, 32);
-    // ＤＸライブラリ初期化処理
-    if (DxLib_Init() == -1)
-    {
-        return -1;        // エラーが起きたら直ちに終了
-    }
+
     // メインループ.
     while (!CheckHitKey(KEY_INPUT_ESCAPE) && !ProcessMessage()) 
     {
@@ -39,6 +42,5 @@ int SceneController::run() {
         ScreenFlip();
     }
 
-    DxLib_End();
     return 0;
 };
