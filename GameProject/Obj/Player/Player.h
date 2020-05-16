@@ -22,5 +22,6 @@ public:
 	Vector2 getPos();
 	Vector2 getDiff();
 private:
+	Vector2* vec2;
 	int walkImage[5 * 4];
 };
