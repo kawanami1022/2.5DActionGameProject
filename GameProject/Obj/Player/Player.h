@@ -16,6 +16,7 @@ public:
 	void draw();
 	void moveX();	//	‰¡ˆÚ“®
 	void moveY();	//	cˆÚ“®
+	void setAngle(int);
 	void setPos();
 	Vector2 calcVelocity(short* LStickPos);	// ˆÚ“®—Ê‚ğ‹‚ß‚é
 	Vector2 getVelocity();
@@ -23,5 +24,7 @@ public:
 	Vector2 getDiff();
 private:
 	Vector2* vec2;
+	int angle;
+	int animCnt;
 	int walkImage[5 * 4];
 };

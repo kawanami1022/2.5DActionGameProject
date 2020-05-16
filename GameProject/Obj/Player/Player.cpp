@@ -16,6 +16,8 @@ Player::Player()
 	diff = { 0.0,0.0 };
 	speed = 5;
 	velocity = { 0.0,0.0 };
+	animCnt = 0;
+	angle = 0;
 	LoadDivGraph("Graphic/Character Test/(33x51)(walk).png", 20, 5, 4, 166/5, 205/4, walkImage, false);
 }
 
@@ -31,9 +33,11 @@ void Player::update()
 void Player::draw()
 {
 	DrawFormatString(0, 128, 0xff0000, "player:%f,%f", pos[FLAME_ID_NOW].x, pos[FLAME_ID_NOW].y);
-	DrawRotaGraph((int)pos[FLAME_ID_NOW].x, (int)pos[FLAME_ID_NOW].y, 1.5, 0, walkImage[0], true, false);
-	DrawCircle((int)pos[FLAME_ID_NOW].x, (int)pos[FLAME_ID_NOW].y, 3, 0xff0000, true, true);
-	
+	DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+				(int)pos[FLAME_ID_NOW].y,
+				1.5, 0, walkImage[animCnt / 10 % 5],
+				true, false);
+	animCnt++;
 }
 
 //目的プレーヤー移動
@@ -47,6 +51,13 @@ void Player::moveY()
 	pos[FLAME_ID_NOW].y += getVelocity().y;		// 移動：X軸
 }
 
+void Player::setAngle(int angle)
+{
+	this->angle = angle;
+}
+
+
+//目的	:プレーヤーの現在位置保存
 void Player::setPos()
 {
 	pos[FLAME_ID_LAST] = pos[FLAME_ID_NOW];

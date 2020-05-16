@@ -10,6 +10,7 @@ Pad::Pad()
 {
 	this->input[STATE_ID_NOW] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
 	this->input[STATE_ID_LAST] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
+	this->LStickAngle = 0;
 	vec2 = new Vector2;
 }
 
@@ -22,6 +23,7 @@ void Pad::update()
 {
 	// “ü—Íó‘Ô‚ðŽæ“¾
 	GetJoypadXInputState(DX_INPUT_PAD1, &input[STATE_ID_NOW]);
+	this->LStickAngle = this->calcAngleLeft();
 }
 
 bool Pad::HoldDown(BUTTON_ID buttonID)
@@ -68,9 +70,17 @@ bool Pad::checkStickDeadzone(short posX, short posY, int padNum, double deadZone
 	return false;
 }
 
-// –Ú“I	:
+// –Ú“I	:LStick‚ÌŠp“x‚ð‹‚ß‚é
+double Pad::calcAngleLeft()
+{
+	double angle = vec2->calcAngle(
+		(double)this->input[STATE_ID_NOW].ThumbLX,
+		(double)this->input[STATE_ID_NOW].ThumbLY);
+	return angle;
+}
+
 double Pad::getAngleLeft()
 {
-	return 0.0;
+	return this->LStickAngle;
 }
 
