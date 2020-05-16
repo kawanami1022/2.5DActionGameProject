@@ -10,7 +10,7 @@
 Player::Player()
 {
 	vec2 = new Vector2();
-	pos[FLAME_ID_NOW] = { 500.0,300.0 };				// Œ»ÝˆÊ’u
+	pos[FLAME_ID_NOW] = { 500.0,300.0 };				// ç¾åœ¨ä½ç½®
 	pos[FLAME_ID_LAST] = { 500.0,300.0 };
 
 	diff = { 0.0,0.0 };
@@ -29,9 +29,8 @@ void Player::update()
 {
 }
 
-void Player::draw()
+void Player::draw(int angle)
 {
-	DrawFormatString(0, 128, 0xff0000, "player:%f,%f", pos[FLAME_ID_NOW].x, pos[FLAME_ID_NOW].y);
 	DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
 				(int)pos[FLAME_ID_NOW].y,
 				1.5, 0, walkImage[animCnt / 10 % 5],
@@ -39,15 +38,15 @@ void Player::draw()
 	animCnt++;
 }
 
-//–Ú“IƒvƒŒ[ƒ„[ˆÚ“®
+//ç›®çš„ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ç§»å‹•
 void Player::moveX()
 {
-	pos[FLAME_ID_NOW].x += getVelocity().x;		// ˆÚ“®FXŽ²
+	pos[FLAME_ID_NOW].x += getVelocity().x;		// ç§»å‹•ï¼šXè»¸
 }
 
 void Player::moveY()
 {
-	pos[FLAME_ID_NOW].y += getVelocity().y;		// ˆÚ“®FXŽ²
+	pos[FLAME_ID_NOW].y += getVelocity().y;		// ç§»å‹•ï¼šXè»¸
 }
 
 void Player::setAngle(int angle)
@@ -56,7 +55,7 @@ void Player::setAngle(int angle)
 }
 
 
-//–Ú“I	:ƒvƒŒ[ƒ„[‚ÌŒ»ÝˆÊ’u•Û‘¶
+//ç›®çš„	:ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ç¾åœ¨ä½ç½®ä¿å­˜
 void Player::setPos()
 {
 	pos[FLAME_ID_LAST] = pos[FLAME_ID_NOW];
@@ -78,9 +77,9 @@ Vector2 Player::getDiff()
 
 Vector2 Player::calcVelocity(short* LStickPos)
 {
-	double angle = vec2->calcAngle(LStickPos[0], LStickPos[1]);	// Šp“x‚ð‹‚ß‚é
-	velocity.x = vec2->calcCos(angle) * speed;		// ˆÚ“®FXŽ²
-	velocity.y = -vec2->calcSin(angle) * speed;		// ˆÚ“®FYŽ²
+	double angle = vec2->calcAngle(LStickPos[0], LStickPos[1]);	// è§’åº¦ã‚’æ±‚ã‚ã‚‹
+	velocity.x = vec2->calcCos(angle) * speed;		// ç§»å‹•ï¼šXè»¸
+	velocity.y = -vec2->calcSin(angle) * speed;		// ç§»å‹•ï¼šYè»¸
 	return { velocity.x,velocity.y };
 }
 
