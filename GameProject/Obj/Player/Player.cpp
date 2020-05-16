@@ -18,7 +18,6 @@ Player::Player()
 	velocity = { 0.0,0.0 };
 	animCnt = 0;
 	angle = 0;
-	LoadDivGraph("Graphic/Character Test/(33x51)(walk).png", 20, 5, 4, 166/5, 205/4, walkImage, false);
 }
 
 Player::~Player()

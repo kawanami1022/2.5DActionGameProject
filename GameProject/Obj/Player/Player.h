@@ -6,6 +6,9 @@
 //#include "../../Input/InputManager.h"
 //#include "../../Input/PadInput.h"
 #include "../Obj.h"
+const int walkImageCnt = 4;		// ‰æ‘œ‚Ì”
+const int walkImageDiv = 4;		// ‰æ‘œ•ªŠ„”
+
 
 class Player :public Obj
 {
@@ -26,5 +29,5 @@ private:
 	Vector2* vec2;
 	int angle;
 	int animCnt;
-	int walkImage[5 * 4];
+	int walkImage[walkImageCnt][walkImageDiv];
 };
