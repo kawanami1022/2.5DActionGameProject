@@ -51,6 +51,9 @@
     <ClInclude Include="Collision2D\collision.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="CPP_Lib\mapData.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Vector2D\Vector2.cpp">

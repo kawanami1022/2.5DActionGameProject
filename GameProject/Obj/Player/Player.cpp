@@ -1,4 +1,4 @@
-//-------------------------------------------------
+﻿//-------------------------------------------------
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
@@ -18,6 +18,7 @@ Player::Player()
 	velocity = { 0.0,0.0 };
 	animCnt = 0;
 	angle = 0;
+	//LoadDivGraph(,,,,,,,)
 }
 
 Player::~Player()
@@ -29,7 +30,7 @@ void Player::update()
 {
 }
 
-void Player::draw(int angle)
+void Player::draw()
 {
 	DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
 				(int)pos[FLAME_ID_NOW].y,
@@ -49,6 +50,7 @@ void Player::moveY()
 	pos[FLAME_ID_NOW].y += getVelocity().y;		// 移動：X軸
 }
 
+// スティックの角度を取得
 void Player::setAngle(int angle)
 {
 	this->angle = angle;
@@ -56,7 +58,7 @@ void Player::setAngle(int angle)
 
 
 //目的	:プレーヤーの現在位置保存
-void Player::setPos()
+void Player::savePos()
 {
 	pos[FLAME_ID_LAST] = pos[FLAME_ID_NOW];
 }
