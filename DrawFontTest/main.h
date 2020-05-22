@@ -25,4 +25,4 @@ void GameDraw(void);				// ‰æ–Ê•`‰æ
 int imageFont[95];						// Ì«İÄ‰æ‘œ‚Ì“Ç‚İ‚İ
 
 
-void DrawStringFromImage(int x, int y, const char* str);
+void DrawStringFromImage(int x, int y, int extend, const char* str);		// Draw Font from Font Image  ( xÀ•W,yÀ•W,Šg‘åk¬,string)

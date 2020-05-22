@@ -1,5 +1,6 @@
 ﻿#include <Dxlib.h>
 #include "main.h"
+#include <cstring>			// library for string
 
 int WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 {
@@ -85,28 +86,34 @@ void GameDraw(void)
 
 	// ゲーム中の背景の描画
 
-
-	for (int i = 0; i < 16; i++)
+	// ﾌｫﾝﾄ描画を確認する
+	for (int i = 0; i < sizeof(imageFont); i++)
 	{
-		DrawGraph(0 + i * 16, 0 , imageFont[i], true);
+		DrawGraph(0 + (i%16) * 16, 0 + (i/16)*16 , imageFont[i], true);
 	}
+
 	DrawString(400, 400, "OK!", GetColor(255, 255, 255));
-	/*DrawStringFromImage(200, 200, "KA ME HA !");*/
+	DrawStringFromImage(200, 200, 2,  "I'm find , Thanks !");
 	
 	ScreenFlip();				// 裏画面と表画面を入れ替える
 }
 
-void DrawStringFromImage(int x, int y, const char* str)
+void DrawStringFromImage(int x, int y,int extend, const char* str)
 {
-	int dstX = x;	// strのx座標
-	int dstY = y;	// strのｙ座標
-	int checkCode;	// ASCIIｺｰﾄﾞの確認
+	int dstX = x;					// strのx座標
+	int dstY = y;					// strのｙ座標
+	int checkCode;					// ASCIIｺｰﾄﾞの確認
+	int imageOrder;					// Order of font image
+	int sizeStr = strlen(str);		// length of a string
+	int fontSizeX = 16 * extend;	// ﾌｫﾝﾄ画像のサイズ
+	int fontSizeY = 16 * extend;	// ﾌｫﾝﾄ画像のサイズ
+
 
 	// ASCII range check
-	for (int i = 0; i < sizeof(str);i++)
+	for (int i = 0; i < sizeStr; i++)
 	{
-		unsigned checkACII = static_cast<int>(str[i]);
-		if (checkACII < 32 || checkACII >126)
+		checkCode = static_cast<int>(str[i]);
+		if (checkCode < 32 || checkCode > 126)
 		{
 			AST();
 			return;
@@ -114,15 +121,14 @@ void DrawStringFromImage(int x, int y, const char* str)
 	}
 
 
-	for (int i = 0; i < sizeof(str); i++)
+	for (int i = 0; i < sizeStr; i++)
 	{
-		checkCode = static_cast<int>(str[i]) - 32;		// check ASCII code of each character of a string 
-														// then conver to Font Image order
+		checkCode = static_cast<int>(str[i]);		// check ASCII code of each character of a string 
+		imageOrder = checkCode - 32;					// then conver to Font Image order　(-32)
 
 
-		DrawRotaGraph(dstX, dstY, 0, 0, imageFont[checkCode], true);
+		DrawRotaGraph(dstX + i * fontSizeX, dstY, extend, 0, imageFont[imageOrder],true);
 
-		dstX += 16;
 	}
 
 }
