@@ -18,7 +18,8 @@ Player::Player()
 	velocity = { 0.0,0.0 };
 	animCnt = 0;
 	angle = 0;
-	//LoadDivGraph(,,,,,,,)
+	LoadDivGraph("Graphic/Player/player(walk).png",
+		16, 4, 4, 96, 96, walkImage, true);
 }
 
 Player::~Player()
@@ -32,10 +33,39 @@ void Player::update()
 
 void Player::draw()
 {
-	DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
-				(int)pos[FLAME_ID_NOW].y,
-				1.5, 0, walkImage[animCnt / 10 % 5],
-				true, false);
+	// 下
+	if (225 < angle && angle < 315)
+	{
+		DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+			(int)pos[FLAME_ID_NOW].y,
+			PLAYER_MAG, 0, walkImage[animCnt / 10 % 4 + PLAYER_ANIM_WIDTH * 0],
+			true, false);
+	}
+	// 右
+	if (315 < angle || angle < 45)
+	{
+		DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+			(int)pos[FLAME_ID_NOW].y,
+			PLAYER_MAG, 0, walkImage[animCnt / 10 % 4 + PLAYER_ANIM_WIDTH * 2],
+			true, false);
+	}
+	// 上
+	if (45 < angle && angle < 135)
+	{
+		DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+			(int)pos[FLAME_ID_NOW].y,
+			PLAYER_MAG, 0, walkImage[animCnt / 10 % 4+ PLAYER_ANIM_WIDTH*3],
+			true, false);
+	}
+	// 左
+	if (135 < angle && angle < 225)
+	{
+		DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+			(int)pos[FLAME_ID_NOW].y,
+			PLAYER_MAG, 0, walkImage[animCnt / 10 % 4+ PLAYER_ANIM_WIDTH *1],
+			true, false);
+	}
+
 	animCnt++;
 }
 

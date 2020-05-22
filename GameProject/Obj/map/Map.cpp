@@ -7,10 +7,23 @@
 #include "../Player/Player.h"
 #include "../Obj.h"
 #include "Map.h"
+#include "../../CPP_Lib/mapData.h"
+
+const char* ImageFileName[] =
+{
+	"../../Graphic/mapChip/mapChip_03.png"
+	"../../Graphic/mapChip/mapChip_05.png"
+	"../../Graphic/mapChip/mapChip_06.png"
+	"../../Graphic/mapChip/mapChip_07.png"
+	"../../Graphic/mapChip/mapChip_09.png"
+};
 
 Map::Map()
 {
 	pos[FLAME_ID_NOW] = { 100,100 };
+	x = 0;
+	y = 0;
+	GetMapSizeForTxt(&x, &y, "");
 }
 
 Map::~Map()
@@ -25,17 +38,17 @@ void Map::draw()
 {
 	for (int y = 0; y < CHIP_CNT_Y; y++)
 	{
-		for (int x = 0; x < CHIP_CNT_X; x++)
-		{
-			DrawLine((int)(-pos[FLAME_ID_NOW].x),
-				(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y),
-				(int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X), 
-				(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y), 0x888888, 1);		// width
-			DrawLine((int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X),
-				(int)(-pos[FLAME_ID_NOW].y),
-				(int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X), 
-				(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y), 0x888888, 1);		// width
-		}
+		DrawLine((int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X),
+			(int)(-pos[FLAME_ID_NOW].y),
+			(int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X), 
+			(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y), 0x888888, 1);		// width
+	}
+	for (int x = 0; x < CHIP_CNT_X; x++)
+	{
+		DrawLine((int)(-pos[FLAME_ID_NOW].x),
+			(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y),
+			(int)(-pos[FLAME_ID_NOW].x + x * CHIP_SIZE_X),
+			(int)(-pos[FLAME_ID_NOW].y + y * CHIP_SIZE_Y), 0x888888, 1);		// width
 	}
 	DrawFormatString(0, 0, 0x888888, "mapPos:%f,%f", pos->x, pos->y);
 }
