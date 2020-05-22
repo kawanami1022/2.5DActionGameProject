@@ -22,7 +22,7 @@ bool GameInit(void);				// ¹Ş°ÑŒn‰Šú‰»
 void GameScene(void);				// ¹Ş°Ñ¼İ
 void GameDraw(void);				// ‰æ–Ê•`‰æ
 
-int image;
-int LoadFont;						// Ì«İÄÌ§²Ù‚Ì±ÄŞÚ½
+int imageFont[95];						// Ì«İÄ‰æ‘œ‚Ì“Ç‚İ‚İ
 
-void DrawText(int x, int y, const char* str);
+
+void DrawStringFromImage(int x, int y, int extend, const char* str);		// Draw Font from Font Image  ( xÀ•W,yÀ•W,Šg‘åk¬,string)
