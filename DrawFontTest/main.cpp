@@ -11,7 +11,7 @@ int WinMain(HINSTANCE, HINSTANCE, LPSTR, int)
 	}
 
 	GameInit();
-	if (!GameInit)
+	if (!GameInit())
 	{
 		AST();
 		return -1;
@@ -43,17 +43,19 @@ bool SysInit(void)
 		rtnFlag = false;
 	}
 
-	image = LoadGraph("Image/mago1.jpg");
-	if (image == -1)
+
+	// ﾌｫﾝﾄ画像を読み込む
+	if (LoadDivGraph(
+		"Font/font.png",
+		95,
+		16,6,
+		16,16,
+		&imageFont[0])
+		== -1)
 	{
 		AST();
 	}
 
-	LoadFont = LoadFontDataToHandle("Font/mago1.ttf", 0);
-	if (LoadFont == -1)
-	{
-		AST();
-	}
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	return rtnFlag;
@@ -83,20 +85,25 @@ void GameDraw(void)
 
 	// ゲーム中の背景の描画
 
-	/*DrawFormatStringToHandle(400, 300, GetColor(255, 255, 255), FontHandle, "KAMEHAMEHA");
-		DrawStringToHandle(400, 200, "BAKA!", GetColor(255, 255, 255), FontHandle);*/
-	DrawGraph(400, 300, image, true);
+
+	for (int i = 0; i < 16; i++)
+	{
+		DrawGraph(0 + i * 16, 0 , imageFont[i], true);
+	}
 	DrawString(400, 400, "OK!", GetColor(255, 255, 255));
+	/*DrawStringFromImage(200, 200, "KA ME HA !");*/
 	
 	ScreenFlip();				// 裏画面と表画面を入れ替える
 }
 
-void DrawText(int x, int y, const char* str)
+void DrawStringFromImage(int x, int y, const char* str)
 {
-	int dstX = x;
-	int dstY = y;
+	int dstX = x;	// strのx座標
+	int dstY = y;	// strのｙ座標
+	int checkCode;	// ASCIIｺｰﾄﾞの確認
 
-	for (unsigned i = 0; str[i] != '¥0'; ++i)
+	// ASCII range check
+	for (int i = 0; i < sizeof(str);i++)
 	{
 		unsigned checkACII = static_cast<int>(str[i]);
 		if (checkACII < 32 || checkACII >126)
@@ -106,9 +113,16 @@ void DrawText(int x, int y, const char* str)
 		}
 	}
 
-	for (unsigned i = 0; str[i] != '¥0'; ++i)
+
+	for (int i = 0; i < sizeof(str); i++)
 	{
-		DrawRotaGraph(dstX, dstY, 0, 0, i, true);
+		checkCode = static_cast<int>(str[i]) - 32;		// check ASCII code of each character of a string 
+														// then conver to Font Image order
+
+
+		DrawRotaGraph(dstX, dstY, 0, 0, imageFont[checkCode], true);
+
+		dstX += 16;
 	}
 
 }
