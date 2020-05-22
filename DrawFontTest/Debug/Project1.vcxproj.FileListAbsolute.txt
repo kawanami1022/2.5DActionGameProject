@@ -1,4 +1,0 @@
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\Debug\Project1.exe
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\Debug\Project1.pdb
-E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\Debug\Project1.exe
-E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\Debug\Project1.pdb
