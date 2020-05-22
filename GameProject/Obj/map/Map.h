@@ -29,4 +29,6 @@ public:
 private:
 	Vector2 pos[FLAME_ID_MAX];
 	Vector2 diff;
+	int x, y;
+	int* chipID;
 };

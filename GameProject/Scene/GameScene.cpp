@@ -28,7 +28,6 @@ GameScene::~GameScene()
 void GameScene::update()
 {
 	pad->update();
-	player->setAngle(pad->getAngleLeft());
 	move();
 	player->savePos();
 	map->setPos();
@@ -82,6 +81,8 @@ void GameScene::move()
 		{
 			map->moveY(player->getVelocity(), mpPosChY);
 		}
+		player->setAngle(pad->getAngleLeft());
+
 	}
 }
 
