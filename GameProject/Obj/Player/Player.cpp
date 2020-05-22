@@ -1,4 +1,4 @@
-//-------------------------------------------------
+ï»¿//-------------------------------------------------
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
@@ -9,43 +9,56 @@
 
 Player::Player()
 {
-	pos[FLAME_ID_NOW] = { 500.0,300.0 };
+	vec2 = new Vector2();
+	pos[FLAME_ID_NOW] = { 500.0,300.0 };				// ç¾åœ¨ä½ç½®
 	pos[FLAME_ID_LAST] = { 500.0,300.0 };
-	
+
 	diff = { 0.0,0.0 };
 	speed = 5;
 	velocity = { 0.0,0.0 };
-	LoadDivGraph("Character Test/(33x51)(walk).png", 20, 5, 4, 166/5, 205/4, walkImage, false);
+	animCnt = 0;
+	angle = 0;
+	//LoadDivGraph(,,,,,,,)
 }
 
 Player::~Player()
 {
+	delete vec2;
 }
 
 void Player::update()
 {
 }
 
-void Player::draw(int angle)
+void Player::draw()
 {
-	DrawCircle((int)pos[FLAME_ID_NOW].x, (int)pos[FLAME_ID_NOW].y, 16, 0xffff00, true, true);
-
-	DrawFormatString(0, 128, 0xffffff, "player:%f,%f", pos[FLAME_ID_NOW].x, pos[FLAME_ID_NOW].y);
-	//DrawGraph((int)pos[FLAME_ID_NOW].x, (int)pos[FLAME_ID_NOW].y, walkImage[0], true);
+	DrawRotaGraph((int)pos[FLAME_ID_NOW].x,
+				(int)pos[FLAME_ID_NOW].y,
+				1.5, 0, walkImage[animCnt / 10 % 5],
+				true, false);
+	animCnt++;
 }
 
-//–Ú“IƒvƒŒ[ƒ„[ˆÚ“®
+//ç›®çš„ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ç§»å‹•
 void Player::moveX()
 {
-	pos[FLAME_ID_NOW].x += getVelocity().x;		// ˆÚ“®FXŽ²
+	pos[FLAME_ID_NOW].x += getVelocity().x;		// ç§»å‹•ï¼šXè»¸
 }
 
 void Player::moveY()
 {
-	pos[FLAME_ID_NOW].y += getVelocity().y;		// ˆÚ“®FXŽ²
+	pos[FLAME_ID_NOW].y += getVelocity().y;		// ç§»å‹•ï¼šXè»¸
 }
 
-void Player::setPos()
+// ã‚¹ãƒ†ã‚£ãƒƒã‚¯ã®è§’åº¦ã‚’å–å¾—
+void Player::setAngle(int angle)
+{
+	this->angle = angle;
+}
+
+
+//ç›®çš„	:ãƒ—ãƒ¬ãƒ¼ãƒ¤ãƒ¼ã®ç¾åœ¨ä½ç½®ä¿å­˜
+void Player::savePos()
 {
 	pos[FLAME_ID_LAST] = pos[FLAME_ID_NOW];
 }
@@ -66,10 +79,9 @@ Vector2 Player::getDiff()
 
 Vector2 Player::calcVelocity(short* LStickPos)
 {
-	Vector2 vec2;
-	double angle = vec2.calcAngle(LStickPos[0], LStickPos[1]);	// Šp“x‚ð‹‚ß‚é
-	velocity.x = vec2.calcCos(angle) * speed;		// ˆÚ“®FXŽ²
-	velocity.y = -vec2.calcSin(angle) * speed;		// ˆÚ“®FYŽ²
+	double angle = vec2->calcAngle(LStickPos[0], LStickPos[1]);	// è§’åº¦ã‚’æ±‚ã‚ã‚‹
+	velocity.x = vec2->calcCos(angle) * speed;		// ç§»å‹•ï¼šXè»¸
+	velocity.y = -vec2->calcSin(angle) * speed;		// ç§»å‹•ï¼šYè»¸
 	return { velocity.x,velocity.y };
 }
 

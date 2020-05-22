@@ -2,6 +2,7 @@
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
+#include <array>
 #include <math.h>
 #include "Vector2.h"
 
@@ -54,5 +55,17 @@ double Vector2::calcTwoPtDisComp(int* pointA, int* pointB)
 	int dissX = pointA[0] + pointB[0];
 	int dissY = pointA[1] + pointB[1];
 	return sqrtf(dissX * dissX + dissY * dissY);
+}
+
+double Vector2::calcVecX(double dis, double angle)
+{
+	double vec = dis * calcSin(angle);
+	return vec;
+}
+
+double Vector2::calcVecY(double dis, double angle)
+{
+	double vec = dis * calcCos(angle);
+	return vec;
 }
 

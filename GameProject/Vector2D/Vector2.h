@@ -1,7 +1,7 @@
 //-------------------------------------------------
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
-//-------------------------------------------------
+//-------------------------------------------------d
 #pragma once
 #define PI 3.14159265
 
@@ -16,5 +16,9 @@ public:
 	double calcSin(double angle);				// y軸のベクトルを求める
 	double calcCos(double angle);				// x軸のベクトルを求める
 	double calcTwoPtDisComp(int*, int*);		// 2つのポイントの間の距離の合成
+	double calcVecX(double dis, double angle);	// 角度からx軸y軸のそれぞれの速度を計算する
+	double calcVecY(double dis, double angle);	// 角度からx軸y軸のそれぞれの速度を計算する
 	double x, y;								// 座標格納用変数
+
+
 };
