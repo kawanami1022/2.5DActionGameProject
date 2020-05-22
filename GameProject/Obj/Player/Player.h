@@ -7,7 +7,8 @@
 //#include "../../Input/PadInput.h"
 #include "../Obj.h"
 const int walkImageDiv = 4 * 4;		// ‰æ‘œ•ªŠ„”
-
+#define PLAYER_ANIM_WIDTH	4
+#define PLAYER_MAG	1.5			// ƒvƒŒ[ƒ„[‚Ì”{—¦
 
 class Player :public Obj
 {
