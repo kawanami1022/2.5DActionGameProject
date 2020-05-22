@@ -1,6 +1,6 @@
 ﻿  main.cpp
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\main.cpp(5,1): warning C4007: 'WinMain': must be '__stdcall'
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\main.cpp(14,15): warning C4551: function call missing argument list
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\main.cpp(99,33): warning C4566: character represented by universal-character-name '\u00A5' cannot be represented in the current code page (932)
-E:\DATA\ASO Pop Culture College\Project\Team Project\Test\main.cpp(109,33): warning C4566: character represented by universal-character-name '\u00A5' cannot be represented in the current code page (932)
-  Project1.vcxproj -> E:\DATA\ASO Pop Culture College\Project\Team Project\Test\Debug\Project1.exe
+E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\main.cpp(5,1): warning C4007: 'WinMain': must be '__stdcall'
+E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\main.cpp(14,15): warning C4551: function call missing argument list
+E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\main.cpp(99,33): warning C4566: character represented by universal-character-name '\u00A5' cannot be represented in the current code page (932)
+E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\main.cpp(109,33): warning C4566: character represented by universal-character-name '\u00A5' cannot be represented in the current code page (932)
+  Project1.vcxproj -> E:\DATA\ASO Pop Culture College\Project\Team Project\Git\2.5DActionGameProject\DrawFontTest\Debug\Project1.exe
