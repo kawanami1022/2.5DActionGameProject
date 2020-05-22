@@ -49,15 +49,15 @@ bool SysInit(void)
 		AST();
 	}
 
-	LoadFont = LoadFontDataToHandle("Font/mago1.pfa", 0);
+	LoadFont = LoadFontDataToHandle("Font/mago1.ttf", 0);
 	if (LoadFont == -1)
 	{
 		AST();
 	}
-
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	return rtnFlag;
+
 
 }
 
