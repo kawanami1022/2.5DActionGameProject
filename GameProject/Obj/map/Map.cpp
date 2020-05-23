@@ -23,7 +23,7 @@ Map::Map()
 	pos[FLAME_ID_NOW] = { 100,100 };
 	x = 0;
 	y = 0;
-	GetMapSizeForTxt(&x, &y, "");
+	GetMapSizeForTxt(&x, &y, "stage01.txt",',');
 }
 
 Map::~Map()
