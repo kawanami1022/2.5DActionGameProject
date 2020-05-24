@@ -16,7 +16,7 @@ Obj::~Obj()
 //入力	:objPos		オブジェクトの座標
 //		:objPosUL	オブジェクトの移動範囲左上
 //		:objPosDR	オブジェクトの移動範囲右下
-Vector2 Obj::fixPos(Vector2 *objPos, Vector2 objPosUL, Vector2 objPosDR)
+Vector2<double> Obj::fixPos(Vector2<double> *objPos, Vector2<double> objPosUL, Vector2<double> objPosDR)
 {
 	// 移動範囲左隅に寄せる
 	if ((*objPos).x <= objPosUL.x)

@@ -21,12 +21,12 @@ public:
 	void moveY();	//	cˆÚ“®
 	void setAngle(int);		// Šp“x‚ğŒÅ’è
 	void savePos();
-	Vector2 calcVelocity(short* LStickPos);	// ˆÚ“®—Ê‚ğ‹‚ß‚é
-	Vector2 getVelocity();
-	Vector2 getPos();
-	Vector2 getDiff();
+	Vector2<double> calcVelocity(short* LStickPos);	// ˆÚ“®—Ê‚ğ‹‚ß‚é
+	Vector2<double> getVelocity();
+	Vector2<double> getPos();
+	Vector2<double> getDiff();
 private:
-	Vector2* vec2;
+	Vector2<double>* vec2;
 	int angle;
 	int animCnt;
 	int walkImage[walkImageDiv];

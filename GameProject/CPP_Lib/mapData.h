@@ -5,10 +5,10 @@
 #include <list>
 
 template<typename T>
-void GetMapSizeForTxt(T* x, T* y, std::string FileName, char checkChar);
+int GetMapSizeForTxt(T* x, T* y, std::string FileName, char checkChar);
 
 template<typename T>
-void LoadMapDataForTxt(T size_x, T size_y, T* mapChipData, std::string FileName, char checkChar);
+int LoadMapDataForTxt(T size_x, T size_y, T* mapChipData, std::string FileName, char checkChar);
 
 using namespace std;
 
@@ -17,7 +17,7 @@ using namespace std;
 //		:T *y
 //		:FileName
 template<typename T>
-void GetMapSizeForTxt(T* x, T* y, std::string FileName,char countChar)
+int GetMapSizeForTxt(T* x, T* y, std::string FileName,char countChar)
 {
 	char checkChar;
 	int lineSize = 0;	//	行ごとのファイルの大きさ
@@ -62,7 +62,9 @@ void GetMapSizeForTxt(T* x, T* y, std::string FileName,char countChar)
 			(*y)++;
 		}
 		fs.close();
+		return 0;
 	}
+	return -1;
 }
 
 //目的	:x軸y軸それぞれのチップ数を求める
@@ -71,7 +73,7 @@ void GetMapSizeForTxt(T* x, T* y, std::string FileName,char countChar)
 //		:T *mapChipData
 //		:FileName
 template<typename T>
-void LoadMapDataForTxt(T size_x, T size_y, T* mapChipData, std::string FileName,char checkChar)
+int LoadMapDataForTxt(T size_x, T size_y, T* mapChipData, std::string FileName,char checkChar)
 {
 	int lineSize = 0;	// 行の大きさ
 
@@ -109,6 +111,8 @@ void LoadMapDataForTxt(T size_x, T size_y, T* mapChipData, std::string FileName,
 			fs.seekp(fs.tellp());
 		}
 		
+		return 0;
 		fs.close();
 	}
+	return -1;
 }
