@@ -20,12 +20,13 @@ private:
     int backGroundImage;        // 背景
     int characterImage;         // キャラクター
     int jailImage;
-
+    int lockImage;
 
 
     Vector2<int> characterImageSize;
     Vector2<int> characterImagePos;
 
     Texture* jailImg;
+    Texture* lockImg;
 
 };
