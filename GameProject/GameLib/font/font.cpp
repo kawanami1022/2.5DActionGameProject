@@ -1,3 +1,4 @@
+#include <string>
 #include "DxLib.h"
 #include "font.h"
 

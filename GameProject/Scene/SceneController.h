@@ -5,8 +5,8 @@
 #pragma once
 #include <memory>
 #include "BaseScene.h"
-#define SCREEN_SIZE_X   800
-#define SCREEN_SIZE_Y   800
+#define SCREEN_SIZE_X   1336
+#define SCREEN_SIZE_Y   768
 
 
 // ƒQ[ƒ€‚ÌÀˆ—‚ğŠÇ—‚·‚é.

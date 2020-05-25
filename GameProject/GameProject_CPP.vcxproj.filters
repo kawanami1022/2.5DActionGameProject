@@ -102,4 +102,21 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Image Include="Graphic\Title Scene Image\background.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Graphic\Title Scene Image\button.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Graphic\Title Scene Image\character.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Graphic\Title Scene Image\jail.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="Graphic\Title Scene Image\lock.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
 </Project>

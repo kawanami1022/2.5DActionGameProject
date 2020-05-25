@@ -13,8 +13,7 @@ class Vector2
 {
 public:
 	Vector2();
-	Vector2(int x,int y);
-	Vector2(double x, double y);
+	Vector2(T x,T y);
 
 	T calcAngle(T x, T y);		// 角度を求める
 	T calcSin(T angle);				// y軸のベクトルを求める
@@ -31,16 +30,16 @@ public:
 
 template<class T> Vector2<T>::Vector2()
 {
-
+	x = 0;
+	y = 0;
 }
 
-template<class T> Vector2<T>::Vector2(int x, int y)
+template<class T> Vector2<T>::Vector2(T x, T y)
 {
-	this->x = static_cast<double>(x);
-	this->y = static_cast<double>(y);
+	this->x = x;
+	this->y = y;
 }
 
-template<class T> Vector2<T>::Vector2(double ax, double ay) :x(ax), y(ay) {}
 
 
 // デカルト座標系での角度を求める
