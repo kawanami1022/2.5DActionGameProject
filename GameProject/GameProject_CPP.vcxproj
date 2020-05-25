@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClInclude Include="Collision2D\collision.h" />
     <ClInclude Include="CPP_Lib\mapData.h" />
+    <ClInclude Include="GameLib\font\font.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\PadInput.h" />
     <ClInclude Include="Obj\map\Map.h" />
@@ -175,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Collision2D\collision.cpp" />
+    <ClCompile Include="GameLib\font\font.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\PadInput.cpp" />
     <ClCompile Include="main.cpp" />

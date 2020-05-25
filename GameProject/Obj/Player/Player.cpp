@@ -9,7 +9,7 @@
 
 Player::Player()
 {
-	vec2 = new Vector2();
+	vec2 = new Vector2<double>;
 	pos[FLAME_ID_NOW] = { 500.0,300.0 };				// 現在位置
 	pos[FLAME_ID_LAST] = { 500.0,300.0 };
 
@@ -95,19 +95,19 @@ void Player::savePos()
 
 
 
-Vector2 Player::getPos()
+Vector2<double> Player::getPos()
 {
 	return pos[FLAME_ID_NOW];
 }
 
-Vector2 Player::getDiff()
+Vector2<double> Player::getDiff()
 {
 	diff.x = pos[FLAME_ID_NOW].x - pos[FLAME_ID_LAST].x;
 	diff.y = pos[FLAME_ID_NOW].y - pos[FLAME_ID_LAST].y;
 	return diff;
 }
 
-Vector2 Player::calcVelocity(short* LStickPos)
+Vector2<double> Player::calcVelocity(short* LStickPos)
 {
 	double angle = vec2->calcAngle(LStickPos[0], LStickPos[1]);	// 角度を求める
 	velocity.x = vec2->calcCos(angle) * speed;		// 移動：X軸
@@ -115,7 +115,7 @@ Vector2 Player::calcVelocity(short* LStickPos)
 	return { velocity.x,velocity.y };
 }
 
-Vector2 Player::getVelocity()
+Vector2<double> Player::getVelocity()
 {
 	return { velocity.x,velocity.y };
 }

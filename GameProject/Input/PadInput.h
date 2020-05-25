@@ -44,6 +44,6 @@ public:
 	double getAngleLeft();
 private:
 	XINPUT_STATE input[STATE_ID_MAX];
-	Vector2 *vec2;
+	Vector2<double> *vec2;
 	double LStickAngle;
 };

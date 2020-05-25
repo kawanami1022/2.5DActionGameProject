@@ -19,13 +19,13 @@ public:
 	virtual ~Obj();
 	virtual void update() = 0;
 	virtual void draw() = 0;
-	virtual Vector2 fixPos(Vector2*, Vector2, Vector2);
+	virtual Vector2<double> fixPos(Vector2<double>*, Vector2<double>, Vector2<double>);
 	 
 protected:
-	Vector2 pos[FLAME_ID_MAX];
-	Vector2 diff;
+	Vector2<double> pos[FLAME_ID_MAX];
+	Vector2<double> diff;
 	int speed;	// ‘¬“x
-	Vector2 velocity;
+	Vector2<double> velocity;
 private:
 
 };

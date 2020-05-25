@@ -11,7 +11,7 @@ Pad::Pad()
 	this->input[STATE_ID_NOW] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
 	this->input[STATE_ID_LAST] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
 	this->LStickAngle = 0;
-	vec2 = new Vector2;
+	vec2 = new Vector2<double>;
 }
 
 Pad::~Pad()
@@ -58,8 +58,8 @@ XINPUT_STATE Pad::getXInput(STATE_ID stateID)
 bool Pad::checkStickDeadzone(short posX, short posY, int padNum, double deadZone)
 {
 	//double deadZoneMax=vec;
-	int analogPosDef[2] = { 0,0 };
-	int analogPosNow[2] = { posX,posY };
+	double analogPosDef[2] = { 0,0 };
+	double analogPosNow[2] = { posX,posY };
 	;
 	
 	// xyÇÃçáê¨
