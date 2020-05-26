@@ -31,7 +31,7 @@ SceneController::SceneController()
     // ＤＸライブラリ初期化処理
     if (DxLib_Init() == 0)
     {
-        nowScene = std::make_unique<TitleScene>();
+        nowScene = std::make_unique<GameScene>();
     }
      
     // エラーが起きたら直ちに終了

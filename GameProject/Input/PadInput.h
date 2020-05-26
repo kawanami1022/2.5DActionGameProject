@@ -2,6 +2,7 @@
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
+#include "DxLib.h"
 #include "InputManager.h"
 #include "../Vector2D/Vector2.h"
 

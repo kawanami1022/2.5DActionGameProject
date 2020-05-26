@@ -4,8 +4,8 @@
 //-------------------------------------------------
 
 #pragma once
-#include "../Input/InputManager.h"
-#include "../Input/PadInput.h"
+//#include "../Input/InputManager.h"
+//#include "../Input/PadInput.h"
 #include "../Obj/Player/Player.h"
 #include "../Obj/map/Map.h"
 
@@ -20,7 +20,6 @@ public:
 	void move();
 	bool checkMoveObj(int*, int*, int, int, int);	// true: マップ移動 false:プレーヤー移動
 private:
-	Pad* pad;
 	Player *player;
 	Map* map;
 	

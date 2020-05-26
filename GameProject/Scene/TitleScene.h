@@ -3,8 +3,6 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #pragma once
-//#include "../Input/InputManager.h"
-//#include "../Input/PadInput.h"
 #include "../Vector2D/Vector2.h"
 #include "../Texture/Texture.h"
 

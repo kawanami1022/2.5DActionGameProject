@@ -12,14 +12,12 @@
 
 GameScene::GameScene()
 {
-	pad = new Pad();
 	player = new Player();
 	map = new Map();
 }
 
 GameScene::~GameScene()
 {
-	delete pad;
 	delete player;
 	delete map;
 }
