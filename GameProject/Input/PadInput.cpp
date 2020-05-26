@@ -7,9 +7,9 @@
 
 Pad::Pad()
 {
-	this->input[STATE_ID_NOW] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
-	this->input[STATE_ID_LAST] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };
-	this->LStickAngle = 0;
+	this->input[STATE_ID_NOW] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };		// NOW	0:押されてない
+	this->input[STATE_ID_LAST] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };		// LAST	0:押されてない
+	this->LStickAngle = 0;																	// 左スティックの角度
 	vec2 = new Vector2<double>;
 }
 
@@ -21,39 +21,50 @@ Pad::~Pad()
 void Pad::update()
 {
 	// 入力状態を取得
-	GetJoypadXInputState(DX_INPUT_PAD1, &input[STATE_ID_NOW]);
+	GetJoypadXInputState(DX_INPUT_PAD1, &input[STATE_ID_NOW]);					// パッド1の
 	this->LStickAngle = this->calcAngleLeft();
 }
 
+// NOW 1 LAST 1 押し続けている
 bool Pad::HoldDown(BUTTON_ID buttonID)
 {
 	if (input[STATE_ID_NOW].Buttons[buttonID] == 1 && input[STATE_ID_LAST].Buttons[buttonID] == 1) { return true; }
 	return false;
 }
 
+// NOW 0 LAST 0 離し続けている
 bool Pad::HoldUp(BUTTON_ID buttonID)
 {
 	if (input[STATE_ID_NOW].Buttons[buttonID] == 0 && input[STATE_ID_LAST].Buttons[buttonID] == 0){return true;}
 	return false;
 }
 
+// NOW 1 LAST 0 今押した
 bool Pad::Push(BUTTON_ID buttonID)
 {
 	if (input[STATE_ID_NOW].Buttons[buttonID] == 1 && input[STATE_ID_LAST].Buttons[buttonID] == 0){return true;}
 	return false;
 }
 
+// NOW 0 LAST 1 今離した
 bool Pad::Release(BUTTON_ID buttonID)
 {
 	if (input[STATE_ID_NOW].Buttons[buttonID] == 0 && input[STATE_ID_LAST].Buttons[buttonID] == 1){return true;}
 	return false;
 }
 
+//目的	:入力状態を取得
+//入力	:stateID	状態
 XINPUT_STATE Pad::getXInput(STATE_ID stateID)
 {
 	return { input[stateID] };
 }
 
+//目的	:デッドゾーンを設ける
+//入力	:posX
+//		:posY
+//		:padNum			
+//		:deadZone		無効値
 bool Pad::checkStickDeadzone(short posX, short posY, int padNum, double deadZone)
 {
 	//double deadZoneMax=vec;
@@ -78,6 +89,7 @@ double Pad::calcAngleLeft()
 	return angle;
 }
 
+// 目的	: 左スティックの角度を取得
 double Pad::getAngleLeft()
 {
 	return this->LStickAngle;

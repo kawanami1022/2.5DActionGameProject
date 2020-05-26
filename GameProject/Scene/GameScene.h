@@ -12,15 +12,15 @@
 class GameScene :public BaseScene
 {
 public:
-	GameScene();
+	GameScene();		
 	~GameScene();
 
-	void update();
-	void draw();
-	void move();
+	void update();			// 更新処理
+	void draw();			// 描画処理
+	void move();			// 移動処理
 	bool checkMoveObj(int*, int*, int, int, int);	// true: マップ移動 false:プレーヤー移動
 private:
-	Player *player;
-	Map* map;
+	Player *player;			// プレーヤー
+	Map* map;				// マップ
 	
 };

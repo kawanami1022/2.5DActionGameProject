@@ -16,17 +16,17 @@ public:
     void draw()override;        // タイトル中の処理、入力を待ってゲーム画面へ遷移する.
 private:
 
-    // タイトルシーン画像用
+    // タイトルシーン画像ハンドル
     int backGroundImage;        // 背景
     int characterImage;         // キャラクター
-    int jailImage;
-    int lockImage;
+    int jailImage;              // 檻
+    int lockImage;              // 鍵
 
 
-    Vector2<int> characterImageSize;
-    Vector2<int> characterImagePos;
+    Vector2<int> characterImageSize;        // キャラクター画像サイズ保存用
+    Vector2<int> characterImagePos;         // キャラクター画像座標
 
-    Texture* jailImg;
-    Texture* lockImg;
+    Texture* jailImg;           // 檻の画像情報
+    Texture* lockImg;           // 鍵の画像情報
 
 };

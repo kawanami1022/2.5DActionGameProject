@@ -40,12 +40,9 @@ template<class T> Vector2<T>::Vector2(T x, T y)
 	this->y = y;
 }
 
-
-
-// デカルト座標系での角度を求める
-// 目的:
-//		x
- 
+// 目的:デカルト座標系での角度を求める
+//入力	:x	x座標
+//		:y	y座標
 template<class T>T Vector2<T>::calcAngle(T x, T y)
 {
 	// 0°～90°の時
@@ -57,21 +54,25 @@ template<class T>T Vector2<T>::calcAngle(T x, T y)
 		return 180 + atan(y / x) * 180 / PI;
 	// 270°～360°の時
 	else { return 360 + atan(y / x) * 180 / PI; }
-
-
 }
 
+//目的	:
+//入力	:angle
 template<class T>T Vector2<T>::calcSin(T angle)
 {
 	return sin(angle * (PI / 180));
 }
 
+//目的	:
+//入力	:angle
 template<class T>T Vector2<T>::calcCos(T angle)
 {
 	return cos(angle * (PI / 180));
 }
 
 // 目的	:2点間の距離の合成した距離を求める
+//入力	:pointA	
+//		:pointB
 template<class T>T Vector2<T>::calcTwoPtDisComp(T* pointA, T* pointB)
 {
 	// 0:x 1:y
@@ -80,15 +81,21 @@ template<class T>T Vector2<T>::calcTwoPtDisComp(T* pointA, T* pointB)
 	return sqrtf(dissX * dissX + dissY * dissY);
 }
 
+//目的	:x軸の移動量を求める
+//入力	:dis		
+//		 angle		
 template<class T>T Vector2<T>::calcVecX(T dis, T angle)
 {
-	double vec = dis * calcSin(angle);
+	double vec = dis * calcCos(angle);
 	return vec;
 }
 
+//目的	:y軸の移動量を求める
+//入力	:dis		
+//		 angle		
 template<class T>T Vector2<T>::calcVecY(T dis, T angle)
 {
-	double vec = dis * calcCos(angle);
+	double vec = dis * calcSin(angle);
 	return vec;
 }
 

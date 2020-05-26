@@ -22,6 +22,7 @@ GameScene::~GameScene()
 	delete map;
 }
 
+
 void GameScene::update()
 {
 	pad->update();
