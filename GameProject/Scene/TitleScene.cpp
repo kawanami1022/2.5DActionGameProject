@@ -6,7 +6,6 @@
 #include "SceneController.h"
 #include "BaseScene.h"
 #include "TitleScene.h"
-#include "../Input/PadInput.h"
 
 TitleScene::TitleScene()
 {

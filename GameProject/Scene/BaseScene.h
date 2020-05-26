@@ -3,6 +3,8 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #pragma once
+//#include "../Input/InputManager.h"
+//#include "../Input/PadInput.h"
 // シーン内での処理を行う基底クラス.
 class BaseScene {
 public:
