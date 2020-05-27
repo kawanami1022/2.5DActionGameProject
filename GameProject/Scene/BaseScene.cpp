@@ -6,8 +6,10 @@
 
 BaseScene::BaseScene()
 {
+	pad = new Pad();
 }
 
 BaseScene::~BaseScene()
 {
+	delete pad;
 }

@@ -3,8 +3,7 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #include "DxLib.h"
-//#include "../Input/InputManager.h"
-//#include "../Input/PadInput.h"
+
 #include "../Collision2D/collision.h"
 #include "SceneController.h"
 #include "BaseScene.h"
@@ -13,14 +12,12 @@
 
 GameScene::GameScene()
 {
-	pad = new Pad();
 	player = new Player();
 	map = new Map();
 }
 
 GameScene::~GameScene()
 {
-	delete pad;
 	delete player;
 	delete map;
 }

@@ -6,6 +6,7 @@
 #include "../../Vector2D/Vector2.h"
 #include "../Obj.h"
 
+#define CHIP_ID		5
 #define CHIP_SIZE_X	32 
 #define CHIP_SIZE_Y 32
 #define CHIP_CNT_X	60
@@ -29,6 +30,7 @@ public:
 private:
 	Vector2<double> pos[FLAME_ID_MAX];
 	Vector2<double> diff;
-	int x, y;
+	Vector2<int> chipCnt;
 	int* chipID;
+	int* mapChipImg;
 };

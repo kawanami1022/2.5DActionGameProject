@@ -11,22 +11,33 @@
 
 const char* ImageFileName[] =
 {
-	"../../Graphic/mapChip/mapChip_03.png"
-	"../../Graphic/mapChip/mapChip_05.png"
-	"../../Graphic/mapChip/mapChip_06.png"
-	"../../Graphic/mapChip/mapChip_07.png"
-	"../../Graphic/mapChip/mapChip_09.png"
+	"Graphic/mapChip/mapChip_03.png",
+	"Graphic/mapChip/mapChip_05.png",
+	"Graphic/mapChip/mapChip_06.png",
+	"Graphic/mapChip/mapChip_07.png",
+	"Graphic/mapChip/mapChip_09.png",
 };
 
 Map::Map()
 {
 	pos[FLAME_ID_NOW] = { 100,100 };
-	GetMapSizeForTxt(&x, &y, "stage01.txt",',');
-	
+	GetMapSizeForTxt(&chipCnt.x, &chipCnt.y, "stage01.txt",',');
+	chipID = new int[chipCnt.x * chipCnt.y];
+	LoadMapDataForTxt(chipCnt.x, chipCnt.y, chipID, "stage01.txt", ',');
+
+	mapChipImg = new int[CHIP_ID];
+	for (int id = 0; id < CHIP_ID; id++)
+	{
+		mapChipImg[id] = LoadGraph(ImageFileName[id], true);
+	}
+
+
 }
 
 Map::~Map()
 {
+	delete[] mapChipImg;
+	delete[]chipID;
 }
 
 void Map::update()
@@ -35,23 +46,31 @@ void Map::update()
 
 void Map::draw()
 {
-	// vertucal c
-	for (int x = 0; x < CHIP_CNT_X; x++)
+	for (int y = 0; y < chipCnt.y; y++)
 	{
-		//DrawLine((int)(-pos[FLAME_ID_NOW].x+CHIP_SIZE_X*),
-		//	(int)(-pos[FLAME_ID_NOW].y),
-		//	(int)(-pos[FLAME_ID_NOW].x), 
-		//	(int)(-pos[FLAME_ID_NOW].y), 0x888888, 1);		
+		for (int x = 0; x < chipCnt.x; x++)
+		{
+			DrawGraph(x * CHIP_SIZE_X, y * CHIP_SIZE_Y, mapChipImg[chipID[x + y * chipCnt.x]], true);
+		}
+	}
+	// vertucal c
+	for (int x = 0; x < chipCnt.x+1; x++)
+	{
+		DrawLine((int)(-pos[FLAME_ID_NOW].x + CHIP_SIZE_X * x),
+			(int)(-pos[FLAME_ID_NOW].y),
+			(int)(-pos[FLAME_ID_NOW].x + CHIP_SIZE_X * x),
+			(int)(-pos[FLAME_ID_NOW].y + CHIP_SIZE_Y * chipCnt.y), 0x888888, 1);
 	}
 	// side ‰¡
-	for (int x = 0; x < CHIP_CNT_X; x++)
+	for (int y = 0; y < chipCnt.y+1; y++)
 	{
 		DrawLine((int)(-pos[FLAME_ID_NOW].x),
-			(int)(-pos[FLAME_ID_NOW].y),
-			(int)(-pos[FLAME_ID_NOW].x),
-			(int)(-pos[FLAME_ID_NOW].y), 0x888888, 1);		// width
+			(int)(-pos[FLAME_ID_NOW].y + CHIP_SIZE_Y * y),
+			(int)(-pos[FLAME_ID_NOW].x + CHIP_SIZE_X * chipCnt.x),
+			(int)(-pos[FLAME_ID_NOW].y + CHIP_SIZE_Y * y), 0x888888, 1);		// width
 	}
 	DrawFormatString(0, 0, 0x888888, "mapPos:%f,%f", pos->x, pos->y);
+
 }
 
 void Map::drawMap()
