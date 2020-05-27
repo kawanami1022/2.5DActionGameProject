@@ -23,6 +23,10 @@ GameScene::~GameScene()
 }
 
 
+void GameScene::input()
+{
+}
+
 void GameScene::update()
 {
 	pad->update();

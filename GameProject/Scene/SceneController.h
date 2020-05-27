@@ -20,5 +20,6 @@ public:
     SceneController();
     ~SceneController();
 
+    void changeScene(BaseScene* scene);
     int run();
 };

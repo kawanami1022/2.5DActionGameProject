@@ -15,6 +15,7 @@ public:
 	GameScene();		
 	~GameScene();
 
+	void input();
 	void update();			// XVˆ—
 	void draw();			// •`‰æˆ—
 	void move();			// ˆÚ“®ˆ—

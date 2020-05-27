@@ -11,6 +11,7 @@ public:
     ~BaseScene();
 
     // Œp³æ‚ÅÀ‘•‚³‚ê‚éŠÖ”.
+    virtual void input() = 0;
     virtual void update() = 0;
     virtual void draw() = 0;
 protected:

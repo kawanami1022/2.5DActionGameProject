@@ -3,9 +3,11 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #include <DxLib.h>
+#include <iostream>
 #include "SceneController.h"
 #include "BaseScene.h"
 #include "TitleScene.h"
+#include "GameScene.h"
 
 TitleScene::TitleScene()
 {
@@ -32,9 +34,14 @@ TitleScene::~TitleScene()
 	DeleteGraph(backGroundImage, true);		// 鍵
 }
 
+void TitleScene::input()
+{
+}
+
 void TitleScene::update()
 {
-
+	pad->update();
+	switchScene();
 }
 
 void TitleScene::draw()
@@ -44,4 +51,14 @@ void TitleScene::draw()
 	DrawGraph(characterImagePos.x, characterImagePos.y,characterImage, true);			// キャラクター
 	jailImg->drawTextureNomal();														// 檻
 	lockImg->drawTextureCenter();														// 鍵(画像中心位置に描画)
+}
+
+void TitleScene::switchScene()
+{
+	if (pad->Push(BUTTON_ID_A))
+	{
+		std::cout << "BUTTON_ID_A" << std::endl;
+
+	}
+
 }

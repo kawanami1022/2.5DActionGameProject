@@ -31,7 +31,8 @@ SceneController::SceneController()
     // ＤＸライブラリ初期化処理
     if (DxLib_Init() == 0)
     {
-        nowScene = std::make_unique<GameScene>();
+        //nowScene = std::make_unique<TitleScene>();
+        nowScene.reset(new TitleScene);
     }
      
     // エラーが起きたら直ちに終了
@@ -43,6 +44,11 @@ SceneController::~SceneController()
 
 }
 
+void SceneController::changeScene(BaseScene* scene)
+{
+    nowScene.reset(scene);
+}
+
 int SceneController::run() {
 
 
@@ -51,6 +57,8 @@ int SceneController::run() {
     {
         ClsDrawScreen();
         // シーンに応じた処理を行う.
+        
+        nowScene->input();
         nowScene->update();
         nowScene->draw();
         ScreenFlip();

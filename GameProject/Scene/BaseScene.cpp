@@ -3,6 +3,7 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #include "BaseScene.h"
+#include "SceneController.h"
 
 BaseScene::BaseScene()
 {
