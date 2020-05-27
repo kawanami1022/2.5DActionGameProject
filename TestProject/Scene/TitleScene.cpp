@@ -23,7 +23,7 @@ unique_Base TitleScene::Update(unique_Base own)
 
 	if (CheckHitKey(KEY_INPUT_SPACE))
 	{
-		/*return std::make_unique<GameScene>();*/
+		//return std::make_unique<GameScene>();
 	}
 
 	return std::move(own);

@@ -28,6 +28,7 @@ enum BUTTON_ID
 class Pad
 {
 public:
+
 	Pad();
 	~Pad();
 
