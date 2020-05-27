@@ -1,0 +1,212 @@
+﻿  BlastEffect.cpp
+C:\Users\trinh\Desktop\project5\Scene\func\BlastEffect.cpp(11,121): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=double
+          ]
+C:\Users\trinh\Desktop\project5\Scene\func\BlastEffect.cpp(11,68): warning C4244: 'argument': conversion from 'T' to 'float', possible loss of data
+          with
+          [
+              T=double
+          ]
+  FuncCheckhit.cpp
+  FuncShake.cpp
+  Bullet.cpp
+  imageMng.cpp
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,75): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,121): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,16): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,22): error C2065: 'string': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,7): error C2923: 'std::map': 'string' is not a valid template type argument for parameter '_Kty'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(6,43): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(6,50): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(6,50): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(8,15): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(8,20): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(11,43): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(11,50): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(11,50): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(12,1): error C2084: function 'const VecInt &imageMng::GetID(const int)' already has a body
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(6): message : see previous definition of 'GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(13,18): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(13,32): error C2663: 'std::_Tree<_Traits>::end': 2 overloads have no legal conversion for 'this' pointer
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(15,10): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(16,10): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(16,30): error C2065: 'fileName': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(18,16): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(21,43): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(21,50): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(21,50): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(22,1): error C2084: function 'const VecInt &imageMng::GetID(const int)' already has a body
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(11): message : see previous definition of 'GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(23,18): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(23,32): error C2663: 'std::_Tree<_Traits>::end': 2 overloads have no legal conversion for 'this' pointer
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(36,10): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(36,22): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(36,33): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,16): error C2065: 'fileName': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,33): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,44): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,55): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,65): error C2065: 'divCnt': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,74): error C2065: 'divSize': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,84): error C2065: 'divSize': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,102): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(37,109): error C2660: 'DxLib::LoadDivGraph': function does not take 1 arguments
+E:\Game Engine\DxLib\DxLib.h(2477,14): message : see declaration of 'DxLib::LoadDivGraph'
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(39,16): error C2065: 'key': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.cpp(43,1): error C2512: 'std::map': no appropriate default constructor available
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\map(75,71): message : see declaration of 'std::map'
+  Enemy.cpp
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,75): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,121): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,16): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,22): error C2065: 'string': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,7): error C2923: 'std::map': 'string' is not a valid template type argument for parameter '_Kty'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(84,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [4]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(84,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(84,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(85,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [4]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(85,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(85,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(88,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(88,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(88,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(89,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(89,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(89,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(90,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(90,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(90,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(91,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(91,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(91,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(92,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(92,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Enemy.cpp(92,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+  EnemyMove.cpp
+C:\Users\trinh\Desktop\project5\Object\EnemyMove.cpp(72,14): warning C4018: '>=': signed/unsigned mismatch
+C:\Users\trinh\Desktop\project5\Object\EnemyMove.cpp(362,29): warning C4018: '<': signed/unsigned mismatch
+  funcBullet.cpp
+C:\Users\trinh\Desktop\project5\Scene\GameScene.h(10,18): warning C4099: 'FuncBullet': type name first seen using 'class' now seen using 'struct'
+C:\Users\trinh\Desktop\project5\Scene\func\funcBullet.h(5): message : see declaration of 'FuncBullet'
+  InputState.cpp
+  INPUT_ID.cpp
+  KeyState.cpp
+C:\Users\trinh\Desktop\project5\Input\KeyState.cpp(71,3): warning C4473: 'printf' : not enough arguments passed for format string
+C:\Users\trinh\Desktop\project5\Input\KeyState.cpp(71,3): message : placeholders and their parameters expect 2 variadic arguments, but 1 were provided
+C:\Users\trinh\Desktop\project5\Input\KeyState.cpp(71,3): message : the missing variadic argument 2 is required by format string '%d'
+  LAYER.cpp
+  Obj.cpp
+  Player.cpp
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(21,75): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,33): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C4430: missing type specifier - int assumed. Note: C++ does not support default-int
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,39): error C2143: syntax error: missing ',' before '&'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(22,121): error C2535: 'const VecInt &imageMng::GetID(const int)': member function already defined or declared
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,16): error C2039: 'string': is not a member of 'std'
+C:\Program Files (x86)\Microsoft Visual Studio\2019\Professional\VC\Tools\MSVC\14.25.28610\include\cmath(683): message : see declaration of 'std'
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,22): error C2065: 'string': undeclared identifier
+C:\Users\trinh\Desktop\project5\common\imageMng.h(39,7): error C2923: 'std::map': 'string' is not a valid template type argument for parameter '_Kty'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(19,49): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(19,32): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(87,48): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(87,27): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(96,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [4]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(96,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(96,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(97,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [4]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(97,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(97,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(101,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [4]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(101,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(101,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(105,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(105,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(105,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(106,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(106,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(106,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(107,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(107,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(107,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(108,20): error C2664: 'const VecInt &imageMng::GetID(const int)': cannot convert argument 1 from 'const char [7]' to 'const int'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(108,20): message : There is no context in which this conversion is possible
+C:\Users\trinh\Desktop\project5\common\imageMng.h(20,16): message : see declaration of 'imageMng::GetID'
+C:\Users\trinh\Desktop\project5\Object\Player.cpp(108,6): error C2672: 'std::vector<std::pair<int,unsigned int>,std::allocator<std::pair<int,unsigned int>>>::emplace_back': no matching overloaded function found
+  GameScene.cpp
+C:\Users\trinh\Desktop\project5\Scene\func\funcBullet.h(6,1): warning C4099: 'FuncBullet': type name first seen using 'struct' now seen using 'class'
+C:\Users\trinh\Desktop\project5\Scene\func\funcBullet.h(5): message : see declaration of 'FuncBullet'
+C:\Users\trinh\Desktop\project5\Scene\GameScene.cpp(42,18): warning C4473: 'printf' : not enough arguments passed for format string
+C:\Users\trinh\Desktop\project5\Scene\GameScene.cpp(42,18): message : placeholders and their parameters expect 1 variadic arguments, but 0 were provided
+C:\Users\trinh\Desktop\project5\Scene\GameScene.cpp(42,18): message : the missing variadic argument 1 is required by format string '%d'
+  BaseScene.cpp
+  main.cpp
+  SceneMng.cpp
+C:\Users\trinh\Desktop\project5\Scene\SceneMng.cpp(81,4): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+C:\Users\trinh\Desktop\project5\Scene\SceneMng.cpp(80,4): warning C4244: 'argument': conversion from 'double' to 'int', possible loss of data
+  Vector2.cpp
+  TitleScene.cpp
+  Generating Code...
+C:\Users\trinh\Desktop\project5\Object\Bullet.cpp(55): warning C4715: 'Bullet::DestroyPrpc': not all control paths return a value
+  Compiling...
+  _DebugConOut.cpp
+  _DebugDispOut.cpp
+  Generating Code...
