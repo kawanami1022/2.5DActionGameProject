@@ -3,7 +3,13 @@
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
 #pragma once
+#include <memory>
 #include "../Input/PadInput.h"
+
+class BaseScene;
+
+using nowScene = std::unique_ptr<BaseScene>;
+
 // シーン内での処理を行う基底クラス.
 class BaseScene {
 public:
