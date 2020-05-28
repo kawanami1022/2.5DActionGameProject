@@ -32,6 +32,11 @@ public:
 	Pad();
 	~Pad();
 
+	// static class pointerを取る関数定義
+	static Pad& GetInstance(void)
+	{
+		return *sInstance;
+	}
 
 	void update();
 	//int analogNumber() const;
@@ -46,6 +51,17 @@ public:
 	double calcAngleLeft();
 	double getAngleLeft();
 private:
+	struct PadDeleter
+	{
+		void operator()(Pad* Pad) const // 一つ目　オーバーロードしたい　二つ目　右辺式何をﾃﾞﾘｰﾄしたいかを右側に書く
+		{
+			delete Pad;
+		}
+	};
+
+	// static class pointer 定義
+	static std::unique_ptr<Pad, PadDeleter> sInstance;
+
 	XINPUT_STATE input[STATE_ID_MAX];
 	Vector2<double> *vec2;
 	double LStickAngle;

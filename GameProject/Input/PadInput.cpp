@@ -6,6 +6,8 @@
 #include "DxLib.h"
 #include "PadInput.h"
 
+std::unique_ptr<Pad, Pad::PadDeleter> Pad::sInstance(new Pad());		// class pointer@‚ðì‚é
+
 Pad::Pad()
 {
 	this->input[STATE_ID_NOW] = { 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0,0,0, 0,0, 0,0,0,0 };		// NOW	0:‰Ÿ‚³‚ê‚Ä‚È‚¢
