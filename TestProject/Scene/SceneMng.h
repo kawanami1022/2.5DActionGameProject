@@ -44,7 +44,7 @@ public:
 
 	void Run(void);		
 
-	bool AddDrawQueT(DrawQueT dQue);
+	bool AddDrawQue(DrawQueT dQue);
 
 	const Vector2 ScreenSize;
 	const Vector2 ScreenCenter;

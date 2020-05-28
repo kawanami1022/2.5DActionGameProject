@@ -8,7 +8,7 @@ SceneMng* SceneMng::sInstance = nullptr;
 
 SceneMng::SceneMng() :  ScreenSize{ 1366, 768 },
 						ScreenCenter{ ScreenSize / 2 },
-						GameScreenSize{ 800,600 },
+						GameScreenSize{ 1366, 768 },
 						GameScreenOffset{ ScreenCenter - GameScreenSize / 2 } // ºİ½Ä×¸À‚ª‘–‚Á‚½uŠÔAÛ¯¸‚ª‚©‚©‚éB
 {
 	_frame = 0;
@@ -64,7 +64,7 @@ void SceneMng::Run(void)
 	}
 }
 
-bool SceneMng::AddDrawQueT(DrawQueT dQue)
+bool SceneMng::AddDrawQue(DrawQueT dQue)
 {
 	if (std::get<static_cast<int>(DRAW_QUE::IMAGE)>(dQue) <= 0) 	// std::get<‰½”Ô–Ú>‚Åæ‚èo‚·
 	{
@@ -107,10 +107,10 @@ bool SceneMng::SysInit(void)
 
 	SetDrawScreen(DX_SCREEN_BACK);	// •`‰ææ‚ğÊŞ¯¸ÊŞ¯Ì§‚Éİ’è
 
-
+	// LoadDivGraph all background images
 	lpImageMng.GetID("bg", "image/background.png");
 	lpImageMng.GetID("button", "image/button.png");
-	lpImageMng.GetID("character", "image/character.png");
+	lpImageMng.GetID("bg char", "image/character.png");
 	lpImageMng.GetID("jail", "image/jail.png");
 	lpImageMng.GetID("lock", "image/lock.png");
 
