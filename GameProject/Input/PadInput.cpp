@@ -98,8 +98,8 @@ double Pad::getAngleLeft()
 	return this->LStickAngle;
 }
 
-// 目的	: 現在の入力情報を保存する
-void Pad::saveInput()
+// 目的	: 現在の入力情報を保存する(これをゲームループ内に呼ぶことで入力状態によって判定することができる)
+void Pad::saveInputState()
 {
 	this->input[STATE_ID_LAST] = this->input[STATE_ID_NOW];
 }

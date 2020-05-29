@@ -38,11 +38,17 @@ void TitleScene::input()
 {
 }
 
-void TitleScene::update()
+activeScene TitleScene::update(activeScene scene)
 {
 	pad->update();
 	switchScene();
-	pad->saveInput();
+	if (pad->Push(BUTTON_ID_A))
+	{
+		std::cout << "BUTTON_ID_A" << std::endl;
+		return std::make_unique<GameScene>();
+	}
+	pad->saveInputState();
+	return scene;
 }
 
 void TitleScene::draw()
@@ -56,10 +62,6 @@ void TitleScene::draw()
 
 void TitleScene::switchScene()
 {
-	if (pad->Push(BUTTON_ID_A))
-	{
-		std::cout << "BUTTON_ID_A" << std::endl;
 
-	}
 
 }

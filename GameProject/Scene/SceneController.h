@@ -13,8 +13,8 @@
 class SceneController {
 private:
     // 今がどのシーンか示すクラス.
-    std::unique_ptr<BaseScene> nowScene;
-
+    //std::unique_ptr<BaseScene> nowScene;
+    activeScene _activeScene;
 public:
     // コンストラクタ、初期画面をタイトルにセットする.
     SceneController();

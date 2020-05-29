@@ -32,7 +32,8 @@ SceneController::SceneController()
     if (DxLib_Init() == 0)
     {
         //nowScene = std::make_unique<TitleScene>();
-        nowScene.reset(new TitleScene);
+        //nowScene.reset(new TitleScene);
+
     }
      
     // エラーが起きたら直ちに終了
@@ -46,21 +47,21 @@ SceneController::~SceneController()
 
 void SceneController::changeScene(BaseScene* scene)
 {
-    nowScene.reset(scene);
+    _activeScene.reset(scene);
 }
 
 int SceneController::run() {
 
-
+    _activeScene = std::make_unique<TitleScene>();
     // メインループ.
     while (!CheckHitKey(KEY_INPUT_ESCAPE) && !ProcessMessage()) 
     {
         ClsDrawScreen();
         // シーンに応じた処理を行う.
         
-        nowScene->input();
-        nowScene->update();
-        nowScene->draw();
+        _activeScene->input();
+        _activeScene= (*_activeScene).update(std::move(_activeScene));
+        _activeScene->draw();
         ScreenFlip();
     }
 

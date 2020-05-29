@@ -27,13 +27,13 @@ void GameScene::input()
 {
 }
 
-void GameScene::update()
+activeScene GameScene::update(activeScene scene)
 {
 	pad->update();
 	move();
 	player->savePos();
 	map->setPos();
-
+	return scene;
 }
 
 void GameScene::draw()

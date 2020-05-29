@@ -16,7 +16,7 @@ public:
 	~GameScene();
 
 	void input();
-	void update();			// 更新処理
+	activeScene update(activeScene);			// 更新処理
 	void draw();			// 描画処理
 	void move();			// 移動処理
 	bool checkMoveObj(int*, int*, int, int, int);	// true: マップ移動 false:プレーヤー移動
