@@ -98,3 +98,11 @@ double Pad::getAngleLeft()
 	return this->LStickAngle;
 }
 
+// –Ú“I	: Œ»Ý‚Ì“ü—Íî•ñ‚ð•Û‘¶‚·‚é
+void Pad::saveInput()
+{
+	this->input[STATE_ID_LAST] = this->input[STATE_ID_NOW];
+}
+
+
+

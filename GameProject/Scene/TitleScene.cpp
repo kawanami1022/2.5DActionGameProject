@@ -42,6 +42,7 @@ void TitleScene::update()
 {
 	pad->update();
 	switchScene();
+	pad->saveInput();
 }
 
 void TitleScene::draw()

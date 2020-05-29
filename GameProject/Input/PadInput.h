@@ -50,6 +50,7 @@ public:
 	bool checkStickDeadzone(short posX, short posY, int, double);		// true:“®‚©‚· false:“®‚©‚³‚È‚¢
 	double calcAngleLeft();
 	double getAngleLeft();
+	void saveInput();
 private:
 	struct PadDeleter
 	{
