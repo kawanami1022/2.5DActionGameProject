@@ -60,7 +60,7 @@ int SceneController::run() {
         // ƒV[ƒ“‚É‰ž‚¶‚½ˆ—‚ðs‚¤.
         
         _activeScene->input();
-        _activeScene= (*_activeScene).update(std::move(_activeScene));
+        _activeScene = _activeScene->update(std::move(_activeScene));
         _activeScene->draw();
         ScreenFlip();
     }
