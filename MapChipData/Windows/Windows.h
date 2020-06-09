@@ -1,7 +1,6 @@
 #pragma once
-
 #include <windows.h>
-static LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+
 
 class Windows
 {

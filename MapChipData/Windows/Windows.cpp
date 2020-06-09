@@ -1,26 +1,11 @@
 // 作成したWindow.hを含める
 #include "Windows.h"
+#include "../Input/Input.h"
 
 // ウィンドウハンドル
 HWND hWnd = NULL;
 // 終了通知が来ているか？
 bool g_isQuitMessage = false;
-
-// ウインドウプロシージャー
-static LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam)
-{
-	switch (uiMsg)
-	{
-	case WM_CLOSE:		// 閉じる際にWindowを破棄する
-		DestroyWindow(hWnd);
-		return 0;
-	case WM_DESTROY:	// プログラムの終了を通知する
-		PostQuitMessage(0);
-		return 0L;
-	}
-	// 既定のウィンドウプロシージャを呼び出す
-	return DefWindowProc(hWnd, uiMsg, wParam, lParam);
-}
 
 Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 {
