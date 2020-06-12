@@ -1,8 +1,10 @@
 #pragma once
 #include <windows.h>
-
+#include "../Input/Input.h"
 
 extern LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lParam);
+BOOL CALLBACK DlgWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam);
+
 class Windows
 {
 public:
@@ -14,7 +16,9 @@ public:
 	void Message();
 	// 描画処理
 	void Draw();
-
+	// ダイアログ用ウィンドウプロシージャー
+private:
+	Input* input;
 };
 // ウィンドウハンドルの取得
 HWND GetWindowHandle(void);

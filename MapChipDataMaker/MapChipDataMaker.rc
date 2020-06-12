@@ -70,6 +70,65 @@ BEGIN
     MENUITEM "Edit(&E)",                    0
 END
 
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Dialog
+//
+
+#if defined(APSTUDIO_INVOKED) || defined(CREATENEW)
+#if defined(APSTUDIO_INVOKED)
+IDD_DIALOG1$(CREATENEW) DIALOGEX 0, 0, 310, 177
+#else
+IDD_DIALOG1 DIALOGEX 0, 0, 310, 177
+#endif
+STYLE DS_SETFONT | DS_MODALFRAME | DS_FIXEDSYS | WS_POPUP | WS_CAPTION | WS_SYSMENU
+CAPTION "Dialog"
+FONT 8, "MS Shell Dlg", 400, 0, 0x1
+BEGIN
+    DEFPUSHBUTTON   "OK",IDOK,199,156,50,14
+    PUSHBUTTON      "cancel",IDCANCEL,253,156,50,14
+    LTEXT           "Please decide the file name of the map chip data text",IDC_STATIC,18,20,175,8
+    LTEXT           "Determine the name of the text file for saving the directory of images for map chip data",IDC_STATIC,15,80,213,25
+END
+#endif
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// DESIGNINFO
+//
+
+#ifdef APSTUDIO_INVOKED
+GUIDELINES DESIGNINFO
+BEGIN
+    "IDD_DIALOG1$(CREATENEW)", DIALOG
+    BEGIN
+        LEFTMARGIN, 7
+        RIGHTMARGIN, 303
+        TOPMARGIN, 7
+        BOTTOMMARGIN, 170
+    END
+END
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// AFX_DIALOG_LAYOUT
+//
+
+#if defined(APSTUDIO_INVOKED) || defined(CREATENEW)
+#if defined(APSTUDIO_INVOKED)
+IDD_DIALOG1$(CREATENEW) AFX_DIALOG_LAYOUT
+#else
+IDD_DIALOG1 AFX_DIALOG_LAYOUT
+#endif
+BEGIN
+    0
+END
+#endif
+
 #endif    // “ú–{Œê (“ú–{) resources
 /////////////////////////////////////////////////////////////////////////////
 

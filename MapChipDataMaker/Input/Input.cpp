@@ -10,4 +10,5 @@ Input::~Input()
 
 void Input::keyUpdate()
 {
+
 }

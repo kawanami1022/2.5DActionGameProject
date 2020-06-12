@@ -1,4 +1,5 @@
 // 作成したWindow.hを含める
+#include <tchar.h>
 #include "Windows.h"
 #include "../resource.h"
 #define GetHInstance( ) ((HINSTANCE)GetModuleHandle(0))
@@ -10,11 +11,22 @@ bool g_isQuitMessage = false;
 // ウインドウプロシージャー
 extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
+	HWND hDialog;
 	switch (Msg)
 	{
 	case WM_CLOSE:		// 閉じる際にWindowを破棄する
 		DestroyWindow(hWnd);
 		return 0;
+	case WM_COMMAND:
+		switch (LOWORD(wParam))
+		{
+		case ID_FILE_NEW:
+			hDialog = CreateDialog(
+				(HINSTANCE)GetWindowLong(hWnd, GWL_HINSTANCE),
+				MAKEINTRESOURCE(IDD_DIALOG1),
+				hWnd,
+				(DLGPROC)DlgWndProc);
+		}
 	case WM_DESTROY:	// プログラムの終了を通知する
 		PostQuitMessage(0);
 		return 0L;
@@ -34,7 +46,7 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = GetModuleHandle(NULL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOW+1);
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME+1);
 	wcex.lpszMenuName = MAKEINTRESOURCE(IDR_MENU2);
 	wcex.lpszClassName = TEXT("DirectX9 Sample");
 	wcex.hIcon = LoadIcon(GetHInstance(), MAKEINTRESOURCE(IDI_ICON1));				// アイコン
@@ -54,6 +66,8 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 	width = Rect.right - Rect.left;
 	height = Rect.bottom - Rect.top;
 
+	input = new Input();
+
 	// ウインドウの生成
 	hWnd = CreateWindow(wcex.lpszClassName,
 		pName,
@@ -71,6 +85,8 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 		return;
 	}
 
+
+
 	// ウインドウの表示
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
@@ -79,6 +95,7 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 
 Windows::~Windows()
 {
+	delete input;
 }
 
 
@@ -127,5 +144,11 @@ void Windows::Message()
 
 void Windows::Draw()
 {
+
+}
+
+BOOL DlgWndProc(HWND hWnd, UINT iMsg, WPARAM wParam, LPARAM lParam)
+{
+	return 0;
 }
 
