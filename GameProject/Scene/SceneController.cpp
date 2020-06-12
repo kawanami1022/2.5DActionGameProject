@@ -10,7 +10,26 @@
 #include "TitleScene.h"
 #include "GameScene.h"
 
+
 FILE* File;
+
+// Create new static pointer
+std::unique_ptr<SceneController, SceneController::SceneControllerDeleter> SceneController::sInstance(new SceneController());
+
+bool SceneController::AddDrawQue(DrawQueT dQue)
+{
+    if (std::get<static_cast<int>(DRAW_QUE::IMAGE)>(dQue) <= 0) 	// std::get<何番目>で取り出す
+    {
+        // 画像IDが不正なので、追加しない
+        return false;
+    }
+    // Queを追加
+    // _drawList.push_back(); 要素を追加するときに使う
+
+    _drawList.emplace_back(dQue);
+    return true;
+	
+}
 
 SceneController::SceneController()
 {
@@ -26,6 +45,7 @@ SceneController::SceneController()
         "w",		// const char * _Mode
         stdout);	// FILE * _File
 
+    SetWindowText("Endless Prison");
     ChangeWindowMode(true);
     SetGraphMode(SCREEN_SIZE_X, SCREEN_SIZE_Y, 32);
     // ＤＸライブラリ初期化処理
@@ -36,6 +56,8 @@ SceneController::SceneController()
 
     }
      
+    SetDrawScreen(DX_SCREEN_BACK);
+
     // エラーが起きたら直ちに終了
 }
 
@@ -56,14 +78,43 @@ int SceneController::run() {
     // メインループ.
     while (!CheckHitKey(KEY_INPUT_ESCAPE) && !ProcessMessage()) 
     {
-        ClsDrawScreen();
+
+        _drawList.clear();
         // シーンに応じた処理を行う.
         
-        _activeScene->input();
-        _activeScene= (*_activeScene).update(std::move(_activeScene));
-        _activeScene->draw();
-        ScreenFlip();
+        /*_activeScene->input();*/
+        _activeScene = _activeScene->update(std::move(_activeScene));
+
+        
+        Draw();
     }
 
     return 0;
-};
+}
+void SceneController::Draw()
+{
+    SetDrawScreen(DX_SCREEN_BACK);
+    ClsDrawScreen();
+
+    // ｽﾀｯｸにたまっているQUEを描画する
+    for (auto dQue : _drawList)
+    {
+        double x, y, rad;
+        int id;
+
+        std::tie(id, x, y, rad) = dQue;
+
+        // Queの内容を描画する
+        DrawRotaGraph(
+            x,
+            y,
+            1.0,
+            rad,
+            id,
+            true);
+    }
+
+    /*SetDrawScreen(DX_SCREEN_BACK);*/
+    ScreenFlip();
+}
+;

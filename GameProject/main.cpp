@@ -7,7 +7,9 @@
 
 INT WINAPI WinMain(HINSTANCE, HINSTANCE, PSTR, INT)
 {
-    SceneController sceneController;
-    sceneController.run();
-    return 0;
+    /*SceneController sceneController;
+    sceneController.run();*/
+
+    // Change to static pointer, so don't need to create entity
+    SceneController::GetInstance().run();
 }

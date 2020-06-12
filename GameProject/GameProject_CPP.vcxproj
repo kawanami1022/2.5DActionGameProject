@@ -121,7 +121,6 @@
       <ConformanceMode>true</ConformanceMode>
       <AdditionalIncludeDirectories>
       </AdditionalIncludeDirectories>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -140,7 +139,6 @@
       <SDLCheck>true</SDLCheck>
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
-      <RuntimeLibrary>MultiThreaded</RuntimeLibrary>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -153,6 +151,7 @@
     <ClInclude Include="Collision2D\collision.h" />
     <ClInclude Include="CPP_Lib\mapData.h" />
     <ClInclude Include="GameLib\font\font.h" />
+    <ClInclude Include="ImageMng\ImageMng.h" />
     <ClInclude Include="Input\InputManager.h" />
     <ClInclude Include="Input\PadInput.h" />
     <ClInclude Include="Obj\map\Map.h" />
@@ -168,6 +167,7 @@
   <ItemGroup>
     <ClCompile Include="Collision2D\collision.cpp" />
     <ClCompile Include="GameLib\font\font.cpp" />
+    <ClCompile Include="ImageMng\ImageMng.cpp" />
     <ClCompile Include="Input\InputManager.cpp" />
     <ClCompile Include="Input\PadInput.cpp" />
     <ClCompile Include="main.cpp" />

@@ -6,7 +6,7 @@
 #include "DxLib.h"
 #include "PadInput.h"
 
-std::unique_ptr<Pad, Pad::PadDeleter> Pad::sInstance(new Pad());		// class pointer@‚ğì‚é
+std::unique_ptr<Pad, Pad::PadDeleter> Pad::sInstance(new Pad());		// static pointer@‚ğì‚é
 
 Pad::Pad()
 {

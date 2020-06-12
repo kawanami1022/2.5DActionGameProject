@@ -20,10 +20,10 @@ public:
 private:
 
     // タイトルシーン画像ハンドル
-    int backGroundImage;        // 背景
-    int characterImage;         // キャラクター
-    int jailImage;              // 檻
-    int lockImage;              // 鍵
+    //int backGroundImage;        // 背景
+    //int characterImage;         // キャラクター
+    //int jailImage;              // 檻
+    //int lockImage;              // 鍵
 
 
     Vector2<int> characterImageSize;        // キャラクター画像サイズ保存用

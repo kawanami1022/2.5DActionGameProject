@@ -4,7 +4,7 @@
 //-------------------------------------------------
 #pragma once
 #include <memory>
-#include "../Input/PadInput.h"
+//#include "../Input/PadInput.h"
 
 class BaseScene;
 
@@ -14,13 +14,13 @@ using activeScene = std::unique_ptr<BaseScene>;
 class BaseScene {
 public:
     BaseScene();
-    ~BaseScene();
+    virtual ~BaseScene();
 
     // åpè≥êÊÇ≈é¿ëïÇ≥ÇÍÇÈä÷êî.
     virtual void input() = 0;
     virtual activeScene update(activeScene) = 0;
     virtual void draw() = 0;
 protected:
-    Pad* pad;
+    /*Pad* pad;*/
 
 };
