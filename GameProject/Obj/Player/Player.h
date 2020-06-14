@@ -14,6 +14,7 @@ class Player :public Obj
 {
 public:
 	Player();
+	Player(Vector2<double> pos, Vector2<double> size);
 	~Player();
 	void update()override;
 	void draw();
@@ -30,4 +31,7 @@ private:
 	int angle;
 	int animCnt;
 	int walkImage[walkImageDiv];
+
+	// ‰Šú‰»
+	void Init(void);
 };
