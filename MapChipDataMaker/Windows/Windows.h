@@ -20,4 +20,8 @@ private:
 	Input* input;
 };
 // ウィンドウハンドルの取得
+<<<<<<< HEAD
 HWND GetWindowHandle(void);
+=======
+HWND GetWindowHandle(void);
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4

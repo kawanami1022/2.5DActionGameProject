@@ -25,6 +25,7 @@ enum BUTTON_ID
 	BUTTON_ID_MAX
 };
 
+
 class Pad
 {
 public:

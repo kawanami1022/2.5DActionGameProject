@@ -9,11 +9,14 @@
 #include "BaseScene.h"
 #include "GameScene.h"
 #include "../Input/PadInput.h"
+#include "../Obj/Player/Player.h"
+#include "../Obj/Obj.h"
+#include "../Obj/map/Map.h"
 
 
 GameScene::GameScene()
 {
-	player = new Player();
+	player = new Player({500.0,300.0}, {32.0,32.0});
 	map = new Map();
 }
 
@@ -34,8 +37,8 @@ activeScene GameScene::update(activeScene scene)
 	move();
 	player->savePos();
 	map->setPos();
-
-	return std::move(scene);
+	draw();
+	return scene;
 }
 
 void GameScene::draw()

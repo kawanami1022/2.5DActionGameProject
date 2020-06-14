@@ -11,13 +11,17 @@ bool g_isQuitMessage = false;
 // ウインドウプロシージャー
 extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
+<<<<<<< HEAD
 	HWND hDialog;
+=======
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	switch (Msg)
 	{
 	case WM_CLOSE:		// 閉じる際にWindowを破棄する
 		DestroyWindow(hWnd);
 		return 0;
 	case WM_COMMAND:
+<<<<<<< HEAD
 		switch (LOWORD(wParam))
 		{
 		case ID_FILE_NEW:
@@ -25,6 +29,9 @@ extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
 		}
 		break;
 			// 
+=======
+
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	case WM_DESTROY:	// プログラムの終了を通知する
 		PostQuitMessage(0);
 		return 0L;
@@ -44,7 +51,11 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 	wcex.cbWndExtra = 0;
 	wcex.hInstance = GetModuleHandle(NULL);
 	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
+<<<<<<< HEAD
 	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME);
+=======
+	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME+1);
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	wcex.lpszMenuName = MAKEINTRESOURCE(IDR_MENU2);
 	wcex.lpszClassName = TEXT("DirectX9 Sample");
 	wcex.hIcon = LoadIcon(GetHInstance(), MAKEINTRESOURCE(IDI_ICON1));				// アイコン
@@ -83,6 +94,11 @@ Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
 		return;
 	}
 
+<<<<<<< HEAD
+=======
+
+
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	// ウインドウの表示
 	ShowWindow(hWnd, SW_SHOW);
 	UpdateWindow(hWnd);
@@ -94,6 +110,13 @@ Windows::~Windows()
 	delete input;
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 // メッセージの更新
 bool Windows::UpdateWindowMessage(void)
 {
@@ -139,3 +162,7 @@ void Windows::Draw()
 
 }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4

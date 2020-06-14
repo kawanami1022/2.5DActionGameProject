@@ -7,7 +7,8 @@
 
 Obj::Obj()
 {
-	_pos = { 0,0 };
+	_animFrame = 0;
+	_animCount = 0;
 	_rad = 0;
 }
 
@@ -82,3 +83,10 @@ Vector2<double> Obj::fixPos(Vector2<double> *objPos, Vector2<double> objPosUL, V
 
 	return (*objPos);
 }
+
+bool Obj::SetAnim(const STATE state, AnimVector& data)
+{
+	// first iterator‚ª•Ô‚é second bool’l‚ª•Ô‚é@17ˆÈ~‚µ‚©g‚¦‚È‚¢
+	return (_animMap.try_emplace(state, std::move(data))).second;
+}
+	

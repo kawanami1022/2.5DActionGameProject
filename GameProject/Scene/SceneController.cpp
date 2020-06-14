@@ -54,7 +54,7 @@ SceneController::SceneController()
         //nowScene = std::make_unique<TitleScene>();
         //nowScene.reset(new TitleScene);
 
-    }
+    }       
      
     SetDrawScreen(DX_SCREEN_BACK);
 
@@ -84,7 +84,7 @@ int SceneController::run() {
         
         /*_activeScene->input();*/
         _activeScene = _activeScene->update(std::move(_activeScene));
-
+        /*_activeScene->draw();*/
         
         Draw();
     }
