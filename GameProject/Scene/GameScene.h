@@ -6,8 +6,13 @@
 #pragma once
 //#include "../Input/InputManager.h"
 //#include "../Input/PadInput.h"
-#include "../Obj/Player/Player.h"
-#include "../Obj/map/Map.h"
+//#include "../Obj/Player/Player.h"
+//#include "../Obj/Obj.h"
+//#include "../Obj/map/Map.h"
+
+class Obj;
+class Player;
+class Map;
 
 class GameScene :public BaseScene
 {

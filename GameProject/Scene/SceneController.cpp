@@ -84,7 +84,7 @@ int SceneController::run() {
         
         /*_activeScene->input();*/
         _activeScene = _activeScene->update(std::move(_activeScene));
-        _activeScene->draw();
+        /*_activeScene->draw();*/
         
         Draw();
     }
