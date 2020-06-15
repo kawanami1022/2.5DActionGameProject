@@ -8,6 +8,8 @@
 #include "../Obj.h"
 #include "Map.h"
 #include "../../CPP_Lib/mapData.h"
+#include "../../ImageMng/ImageMng.h"
+#include "../../Scene/SceneController.h"
 
 const char* ImageFileName[] =
 {
@@ -29,6 +31,7 @@ Map::Map()
 	for (int id = 0; id < CHIP_ID; id++)
 	{
 		mapChipImg[id] = LoadGraph(ImageFileName[id], true);
+
 	}
 
 
@@ -50,7 +53,9 @@ void Map::draw()
 	{
 		for (int x = 0; x < chipCnt.x; x++)
 		{
-			DrawGraph(x * CHIP_SIZE_X, y * CHIP_SIZE_Y, mapChipImg[chipID[x + y * chipCnt.x]], true);
+			/*DrawGraph(x * CHIP_SIZE_X, y * CHIP_SIZE_Y, mapChipImg[chipID[x + y * chipCnt.x]], true);*/
+
+			lpSceneMng.AddDrawQue({ mapChipImg[chipID[x + y * chipCnt.x]] ,x * CHIP_SIZE_X,y * CHIP_SIZE_Y ,0});
 		}
 	}
 	// vertucal c

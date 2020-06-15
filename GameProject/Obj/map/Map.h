@@ -5,6 +5,7 @@
 #pragma once
 #include "../../Vector2D/Vector2.h"
 #include "../Obj.h"
+#include <vector>
 
 #define CHIP_ID		5
 #define CHIP_SIZE_X	32 
@@ -33,4 +34,5 @@ private:
 	Vector2<int> chipCnt;
 	int* chipID;
 	int* mapChipImg;
+
 };
