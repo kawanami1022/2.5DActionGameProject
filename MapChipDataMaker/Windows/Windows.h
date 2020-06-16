@@ -7,21 +7,24 @@ extern LRESULT CALLBACK WndProc(HWND hWnd, UINT uiMsg, WPARAM wParam, LPARAM lPa
 class Windows
 {
 public:
-	Windows(const TCHAR* pName, int x, int y, int width, int height);
+	Windows(const TCHAR* pName, HINSTANCE hInst, int nCmdShow);
 	~Windows();
+	//------初期化
+	// ウィンドクラス登録
+	ATOM InitApp(HINSTANCE hInst);
+	// ウィンドウ生成
+	BOOL InitInstance(HINSTANCE hInst, int nCmdShow);
+
 	bool UpdateWindowMessage(void);
 	// 終了通知が来ているか？
 	bool IsQuitMessage(void);
 	void Message();
 	// 描画処理
 	void Draw();
-	// ダイアログ用ウィンドウプロシージャー
+
 private:
+
 	Input* input;
+	// ウィンドウハンドル
 };
 // ウィンドウハンドルの取得
-<<<<<<< HEAD
-HWND GetWindowHandle(void);
-=======
-HWND GetWindowHandle(void);
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4

@@ -2,36 +2,22 @@
 #include <tchar.h>
 #include "Windows.h"
 #include "../resource.h"
-#define GetHInstance( ) ((HINSTANCE)GetModuleHandle(0))
-// ウィンドウハンドル
-HWND hWnd = NULL;
+
 // 終了通知が来ているか？
 bool g_isQuitMessage = false;
-
+TCHAR szClassName[] = TEXT("sample");
 // ウインドウプロシージャー
 extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
 {
-<<<<<<< HEAD
 	HWND hDialog;
-=======
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	switch (Msg)
 	{
-	case WM_CLOSE:		// 閉じる際にWindowを破棄する
+	case WM_CLOSE:				// 閉じる際にWindowを破棄する
 		DestroyWindow(hWnd);
 		return 0;
 	case WM_COMMAND:
-<<<<<<< HEAD
-		switch (LOWORD(wParam))
-		{
-		case ID_FILE_NEW:
-			break;
-		}
 		break;
 			// 
-=======
-
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 	case WM_DESTROY:	// プログラムの終了を通知する
 		PostQuitMessage(0);
 		return 0L;
@@ -40,68 +26,10 @@ extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lPara
 	return DefWindowProc(hWnd, Msg, wParam, lParam);
 }
 
-Windows::Windows(const TCHAR* pName, int x, int y, int width, int height)
+Windows::Windows(const TCHAR* pName, HINSTANCE hInst, int nCmdShow)
 {
-	WNDCLASSEX wcex;
-	// ウインドウの設定
-	wcex.cbSize = sizeof(WNDCLASSEX);
-	wcex.style = CS_HREDRAW | CS_VREDRAW;
-	wcex.lpfnWndProc = WndProc;
-	wcex.cbClsExtra = 0;
-	wcex.cbWndExtra = 0;
-	wcex.hInstance = GetModuleHandle(NULL);
-	wcex.hCursor = LoadCursor(NULL, IDC_ARROW);
-<<<<<<< HEAD
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME);
-=======
-	wcex.hbrBackground = (HBRUSH)(COLOR_WINDOWFRAME+1);
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
-	wcex.lpszMenuName = MAKEINTRESOURCE(IDR_MENU2);
-	wcex.lpszClassName = TEXT("DirectX9 Sample");
-	wcex.hIcon = LoadIcon(GetHInstance(), MAKEINTRESOURCE(IDI_ICON1));				// アイコン
-	wcex.hIconSm = LoadIcon(wcex.hInstance, MAKEINTRESOURCE(IDI_ICON1));
-	RegisterClassExW(&wcex);
-
-	DWORD dwStyle = WS_OVERLAPPEDWINDOW;
-
-	RECT Rect;
-	Rect.left = 0;
-	Rect.top = 0;
-	Rect.right = width;
-	Rect.bottom = height;
-	// ウィンドウのスタイルに合わせた適切なサイズを取得する
-	AdjustWindowRect(&Rect, dwStyle, false);
-
-	width = Rect.right - Rect.left;
-	height = Rect.bottom - Rect.top;
-
-	input = new Input();
-
-	// ウインドウの生成
-	hWnd = CreateWindow(wcex.lpszClassName,
-		pName,
-		dwStyle,
-		x,
-		y,
-		width,
-		height,
-		NULL,
-		NULL,
-		GetModuleHandle(NULL),
-		NULL);
-	if (hWnd == NULL)
-	{
-		return;
-	}
-
-<<<<<<< HEAD
-=======
-
-
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
-	// ウインドウの表示
-	ShowWindow(hWnd, SW_SHOW);
-	UpdateWindow(hWnd);
+	InitApp(hInst);
+	InitInstance(hInst, nCmdShow);
 
 }
 
@@ -110,13 +38,62 @@ Windows::~Windows()
 	delete input;
 }
 
-<<<<<<< HEAD
-=======
+ATOM Windows::InitApp(HINSTANCE hInst)
+{
+	WNDCLASSEX wc;
+	wc.cbSize = sizeof(WNDCLASSEX);					// 構造体のサイズ
+	wc.style = CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS;	// クラスのスタイル
+	wc.lpfnWndProc = WndProc;				// プロシージャー名
+	wc.cbClsExtra = 0;					// 補助メモリ
+	wc.cbWndExtra = 0;					// 補助メモリ
+	wc.hInstance = hInst;					// インスタンス
+	wc.hIcon = (HICON)LoadImage(			// アイコン
+		NULL, MAKEINTRESOURCE(IDI_APPLICATION),
+		IMAGE_ICON, 0, 0, 
+		LR_DEFAULTSIZE | LR_SHARED);
+	wc.hCursor = (HCURSOR)LoadImage(
+		NULL, MAKEINTRESOURCE(IDC_ARROW),
+		IMAGE_CURSOR, 0, 0, 
+		LR_DEFAULTSIZE | LR_SHARED);
+	wc.hbrBackground =					// 背景ブラシ
+		(HBRUSH)GetStockObject(WHITE_BRUSH);
+	wc.lpszMenuName = NULL;				// メニュー名
+	wc.lpszClassName = szClassName;		// クラス名
+	wc.hIconSm = (HICON)LoadImage(
+		NULL, MAKEINTRESOURCE(IDI_APPLICATION),
+		IMAGE_ICON, 0, 0, LR_DEFAULTSIZE | LR_SHARED);
+	return (RegisterClassEx(&wc));
+}
 
+BOOL Windows::InitInstance(HINSTANCE hInst, int nCmdShow)
+{
+	input = new Input();
+	
+	HWND hWnd;
+	// ウインドウの生成
+	hWnd = CreateWindow(szClassName,
+		TEXT("sample"),
+		WS_OVERLAPPEDWINDOW,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		CW_USEDEFAULT,
+		NULL,
+		NULL,
+		hInst,
+		NULL);
+	if (!hWnd)
+	{
+		MessageBox(hWnd, TEXT("ウィンドウの生成に失敗"), TEXT(""), MB_OK);
+		return false;
+	}
 
+	// ウインドウの表示
+	ShowWindow(hWnd, nCmdShow);
+	UpdateWindow(hWnd);
+	return true;
+}
 
-
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
 // メッセージの更新
 bool Windows::UpdateWindowMessage(void)
 {
@@ -132,8 +109,6 @@ bool Windows::UpdateWindowMessage(void)
 // 終了通知が来ているか？
 bool Windows::IsQuitMessage(void) { return g_isQuitMessage; }
 
-// ウィンドウハンドルの取得
-HWND GetWindowHandle(void) { return hWnd; }
 
 // メッセージ処理
 void Windows::Message()
@@ -162,7 +137,5 @@ void Windows::Draw()
 
 }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> 15bf2dd6549b6f8ace83cf854b0f8e95da6d90b4
+
