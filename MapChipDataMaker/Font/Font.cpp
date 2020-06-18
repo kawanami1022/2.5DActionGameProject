@@ -1,6 +1,5 @@
 #include "Font.h"
 
-void drawString(std::string str, HDC hdc)
+void font::drawString(LPCTSTR str, HDC hdc, HWND hWnd)
 {
-
 }

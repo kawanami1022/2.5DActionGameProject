@@ -1,4 +1,11 @@
 #pragma once
 #include <string>
 #include <Windows.h>
-void drawString(std::string str, HDC hdc);
+namespace font
+{
+void drawString(LPCTSTR str, HDC hdc, HWND hWnd);
+
+}
+
+
+using namespace font;

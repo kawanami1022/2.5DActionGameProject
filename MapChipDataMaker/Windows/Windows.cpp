@@ -2,29 +2,12 @@
 #include <tchar.h>
 #include "Windows.h"
 #include "../resource.h"
+#include "../Font/Font.h"
+#include "../Procedure/procedure.h"
 
-// 終了通知が来ているか？
-bool g_isQuitMessage = false;
+
 TCHAR szClassName[] = TEXT("sample");
-// ウインドウプロシージャー
-extern LRESULT CALLBACK WndProc(HWND hWnd, UINT Msg, WPARAM wParam, LPARAM lParam)
-{
-	HWND hDialog;
-	switch (Msg)
-	{
-	case WM_CLOSE:				// 閉じる際にWindowを破棄する
-		DestroyWindow(hWnd);
-		return 0;
-	case WM_COMMAND:
-		break;
-			// 
-	case WM_DESTROY:	// プログラムの終了を通知する
-		PostQuitMessage(0);
-		return 0L;
-	}
-	// 既定のウィンドウプロシージャを呼び出す
-	return DefWindowProc(hWnd, Msg, wParam, lParam);
-}
+
 
 Windows::Windows(const TCHAR* pName, HINSTANCE hInst, int nCmdShow)
 {
@@ -35,7 +18,6 @@ Windows::Windows(const TCHAR* pName, HINSTANCE hInst, int nCmdShow)
 
 Windows::~Windows()
 {
-	delete input;
 }
 
 ATOM Windows::InitApp(HINSTANCE hInst)
@@ -67,9 +49,7 @@ ATOM Windows::InitApp(HINSTANCE hInst)
 
 BOOL Windows::InitInstance(HINSTANCE hInst, int nCmdShow)
 {
-	input = new Input();
-	
-	HWND hWnd;
+
 	// ウインドウの生成
 	hWnd = CreateWindow(szClassName,
 		TEXT("sample"),
@@ -95,13 +75,12 @@ BOOL Windows::InitInstance(HINSTANCE hInst, int nCmdShow)
 }
 
 // メッセージの更新
-bool Windows::UpdateWindowMessage(void)
+bool Windows::Run(void)
 {
 	// メインループ
 	while (!IsQuitMessage())
 	{
 		Message();
-		Draw();		// 描画
 	}
 	return false;
 }
@@ -131,11 +110,7 @@ void Windows::Message()
 		//return true;
 	}
 }
-
-void Windows::Draw()
+HWND Windows::getWinHdl()
 {
-
+	return hWnd;
 }
-
-
-
