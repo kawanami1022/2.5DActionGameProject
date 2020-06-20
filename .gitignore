@@ -72,3 +72,7 @@ MapChipDataMaker/.vs/MapChipDataMaker/v16/ipch/AutoPCH/58133656754878a0/PROCEDUR
 MapChipDataMaker/x64/Debug/Font.obj
 
 MapChipDataMaker/x64/Debug/Procedure.obj
+
+MapChipDataMaker/.vs/MapChipDataMaker/v16/ipch/AutoPCH/f65a54157d214675/SCENE.ipch
+
+*.obj

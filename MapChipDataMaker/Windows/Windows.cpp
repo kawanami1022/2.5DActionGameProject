@@ -13,7 +13,6 @@ Windows::Windows(const TCHAR* pName, HINSTANCE hInst, int nCmdShow)
 {
 	InitApp(hInst);
 	InitInstance(hInst, nCmdShow);
-
 }
 
 Windows::~Windows()
