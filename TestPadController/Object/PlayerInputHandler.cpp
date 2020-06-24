@@ -37,11 +37,13 @@ void PlayerInputHandler::MovePlayer(void)
 
 
 	// Move with left joystick
-	DxLib::SetJoypadDeadZone(padNum_, 0.5);
-	if (input_->buf_.ThumbLX < 0) pos_.x += -speed;
-	if (input_->buf_.ThumbLX > 256) pos_.x += speed;
-	if (input_->buf_.ThumbLY > 256) pos_.y += -speed;
-	if (input_->buf_.ThumbLY < 0) pos_.y += speed;
+	if (input_->buf_.ThumbLX < (128-128*30)) pos_.x += -speed;
+	if (input_->buf_.ThumbLX > (128+128*30)) pos_.x += speed;
+	if (input_->buf_.ThumbLY > (128 + 128 * 30)) pos_.y += -speed;
+	if (input_->buf_.ThumbLY < (128 - 128 * 30)) pos_.y += speed;
+
+	TRACE("ThumbLX : %d\n", input_->buf_.ThumbLX);
+	TRACE("ThumbLY : %d\n", input_->buf_.ThumbLY);
 }
 
 PlayerInputHandler::~PlayerInputHandler()
