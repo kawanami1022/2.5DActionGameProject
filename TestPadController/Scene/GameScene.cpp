@@ -17,8 +17,15 @@ GameScene::GameScene()
 
 	// Create player object and push to _objList
 	_objList.emplace_back(
-		new Player({ lpSceneMng.GameScreenSize.x / 2.0 ,lpSceneMng.GameScreenSize.y - 16.0 }, { 30,32 })
+		new Player({ lpSceneMng.GameScreenSize.x / 2.0 - 64 ,lpSceneMng.GameScreenSize.y /2.0  }, { 30,32 },DX_INPUT_PAD1)
 	);
+	_objList.emplace_back(
+		new Player({ lpSceneMng.GameScreenSize.x / 2.0 ,lpSceneMng.GameScreenSize.y / 2.0 }, { 30,32 }, DX_INPUT_PAD2)
+	);
+	_objList.emplace_back(
+		new Player({ lpSceneMng.GameScreenSize.x / 2.0 + 64 ,lpSceneMng.GameScreenSize.y / 2.0 }, { 30,32 }, DX_INPUT_PAD3)
+	);
+
 }
 
 GameScene::~GameScene()

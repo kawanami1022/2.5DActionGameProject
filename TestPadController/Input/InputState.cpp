@@ -34,7 +34,7 @@ const StatePair& InputState::state(XPAD_INPUT_ID id) const
 	}
 }
 
-bool InputState::state(XPAD_INPUT_ID id, int data)
+bool InputState::SetKeyState(XPAD_INPUT_ID id, int data)
 {
 	if (state_.find(id) != state_.end())
 	{

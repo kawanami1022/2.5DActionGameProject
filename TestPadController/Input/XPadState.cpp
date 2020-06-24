@@ -1,8 +1,11 @@
 #include "XPadState.h"
+#include "../_debug/_DebugConOut.h"
 
-XPadState::XPadState()
+XPadState::XPadState(int& padNum):padNum_(padNum)
 {
-	DxLib::GetJoypadXInputState(DX_INPUT_PAD1, &buf_);
+	TRACE("Pad Number %d\n", padNum_);
+
+	DxLib::GetJoypadXInputState(padNum_, &buf_);
 	keyConDef_.reserve(static_cast<size_t>(end(XPAD_INPUT_ID())));
 
 	keyConDef_.emplace_back(XINPUT_BUTTON_DPAD_UP);
@@ -34,7 +37,7 @@ XPadState::~XPadState()
 void XPadState::Update()
 {
 	SetOld();
-	DxLib::GetJoypadXInputState(DX_INPUT_PAD1, &buf_);	// _bufはすべてのﾎﾞﾀﾝの押下状態をとる
+	DxLib::GetJoypadXInputState(padNum_, &buf_);	// _bufはすべてのﾎﾞﾀﾝの押下状態をとる
 	(this->*func)(); // 自分自身のﾎﾟｲﾝﾀｰはthis
 }
 
@@ -47,7 +50,7 @@ void XPadState::RefPadData(void)
 	// f1keyを押した瞬間refKeyDataの呼び出しにもどす　トレースで切り替わったら変わったことを表示する
 	for (auto id : XPAD_INPUT_ID())
 	{
-		state(id, buf_.Buttons[keyCon_[static_cast<int>(id)]]);
+		SetKeyState(id, buf_.Buttons[keyCon_[static_cast<int>(id)]]);
 	}
 }
 

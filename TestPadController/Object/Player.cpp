@@ -4,12 +4,12 @@
 #include "../Input/XPadState.h"
 #include "../_debug/_DebugConOut.h"
 
-Player::Player()
+Player::Player():inputHandler_{ _pos, _padNum }
 {
 	Init();
 }
 
-Player::Player(Vector2Dbl pos, Vector2Dbl size)
+Player::Player(Vector2Dbl pos, Vector2Dbl size, int padNum):_padNum(padNum),inputHandler_{_pos, _padNum }
 {
 	_pos = pos;
 	_size = size;
@@ -24,39 +24,9 @@ void Player::Update(sharedObj)
 		return;
 	}
 
-	//// (*_input).Update(); .は中　->は外
-	input_->Update();			// Use KeyState Update to controll button keys
 
-	//// Player Movement Setting
-	auto move = [](std::weak_ptr<InputState> keyData, XPAD_INPUT_ID id, double& pNum, const int speed) {
-		// keyData.expired() 終わっているかいないか
-		if (!keyData.expired())
-		{
-			if ((*keyData.lock()).state(id).first)		// Use lock() of weak pointer to access as share pointer
-			{
-				pNum += speed;
-			}
-		}
-	};
+	inputHandler_.Update();
 
-	move(input_, XPAD_INPUT_ID::DPAD_LEFT, _pos.x, -5);
-	move(input_, XPAD_INPUT_ID::DPAD_RIGHT, _pos.x, 5);
-	move(input_, XPAD_INPUT_ID::DPAD_UP, _pos.y, -5);
-	move(input_, XPAD_INPUT_ID::DPAD_DOWN, _pos.y, 5);
-
-	auto makeDead = [this](std::weak_ptr<InputState> padData)
-	{
-		if (!padData.expired())
-		{
-			if ((*padData.lock()).isTriggered(XPAD_INPUT_ID::Y))
-			{
-				this->SetAlive(false);
-				TRACE("Y is pressed");
-			}
-		}
-	};
-
-	makeDead(input_);
 
 	// Check Game Screen collision
 	if (_pos.x <= (_size.x / 2)) _pos.x = (_size.x / 2);
@@ -92,7 +62,7 @@ void Player::Init(void)
 	//_input.仲介人(渡したいもの)
 
 	// Change pointer from InputState to KeyState use KeyState feature
-	input_ = std::make_shared<XPadState>();
+	/*input_ = std::make_shared<XPadState>();*/
 
 	// Set default state as NORNAL
 	state(STATE::NORMAL);

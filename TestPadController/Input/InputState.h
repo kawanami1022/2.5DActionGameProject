@@ -18,8 +18,7 @@ public:
 	// Get pad state
 	const StatePair& state(XPAD_INPUT_ID) const;
 
-	// Set pad state
-	bool state(XPAD_INPUT_ID, int data);
+	
 
 	// ¡‚Ü‚³‚É‰Ÿ‚³‚ê‚Ü‚µ‚½
 	bool isTriggered(XPAD_INPUT_ID) const;
@@ -30,10 +29,17 @@ public:
 	// ‰Ÿ‚µ‚Ä‚½“z‚ª¡‚Ü‚³‚É—£‚³‚ê‚½
 	bool isReleased(XPAD_INPUT_ID) const;
 
+							
+
+protected:
+	// Set pad state
+	bool SetKeyState(XPAD_INPUT_ID, int data);
+
 	// Set previous state
-	void SetOld(void);								
+	void SetOld(void);
 
 private:
+
 	KeyMap state_;
 
 };

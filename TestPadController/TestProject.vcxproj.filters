@@ -57,6 +57,9 @@
     <ClCompile Include="Input\XPadState.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Object\PlayerInputHandler.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Scene\SceneMng.h">
@@ -99,6 +102,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Input\XPAD_INPUT_ID.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Object\PlayerInputHandler.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
