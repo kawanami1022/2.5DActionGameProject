@@ -16,8 +16,8 @@ int CALLBACK WinMain(
     _In_ int       nCmdShow
 )
 {
-    Windows windows(TEXT("MapChipDataMaker"), 100, 100, 640, 480);
-    windows.UpdateWindowMessage();
+    Windows windows(TEXT("MapChipDataMaker"), hInstance,nCmdShow);
+    windows.Run();
     return 0;
 }
 
