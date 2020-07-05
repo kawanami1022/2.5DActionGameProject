@@ -16,13 +16,17 @@ enum FLAME_ID
 
 enum class STATE
 {
-	NORMAL,  // 通常
-	EX,		 // 特殊
-	DETH,	 // 爆発(死亡）
+	//NORMAL,  // 通常
+	//EX,		 // 特殊
+	//DETH,	 // 爆発(死亡）
+	UP,
+	DOWN,
+	LEFT,
+	RIGHT,
 	MAX
 };
 
-using AnimVector = std::vector<std::pair<int, unsigned int>>;
+using AnimVector = std::vector<std::pair<int, unsigned int>>;		// ID and frames
 
 class Obj
 {
@@ -33,6 +37,10 @@ public:
 	virtual void draw();
 	virtual Vector2<double> fixPos(Vector2<double>*, Vector2<double>, Vector2<double>);
 	 
+
+	bool SetAnim(const STATE Key, AnimVector& data);
+
+
 protected:
 	Vector2<double> pos[FLAME_ID_MAX];
 	Vector2<double> diff;
@@ -40,9 +48,14 @@ protected:
 	Vector2<double> velocity;
 
 	// Variable use for animation
-	Vector2<float> _pos;
-	float _rad;
-	std::map<STATE, AnimVector> _animMap;
+
+	bool _alive;		// 生きているか
+	bool _dead;			// 死んでいるか
+
+	Vector2<double> _pos;
+	Vector2<double> _size;
+	double _rad;		// 角度
+	std::map<STATE, AnimVector> _animMap;	// Each STATE has different image ID and frame count
 	STATE _state;
 	//std::string _animKey;		// 現在どのｱﾆﾒｰｼｮﾝを表示するのかを表す鍵
 	unsigned int _animFrame;	// ｱﾆﾒｰｼｮﾝﾌﾚｰﾑ　何ｺﾏ目か

@@ -2,6 +2,7 @@
 //--------------Project by ------------------------
 //----------------------koshiro kawanami-----------
 //-------------------------------------------------
+#include <memory>
 #include "DxLib.h"
 #include "InputManager.h"
 #include "../Vector2D/Vector2.h"
@@ -24,6 +25,7 @@ enum BUTTON_ID
 	BUTTON_ID_Y = 15,
 	BUTTON_ID_MAX
 };
+
 
 class Pad
 {

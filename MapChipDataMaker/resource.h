@@ -8,6 +8,8 @@
 #define IDD_DIALOG1                     104
 #define ID_FILE_NEW                     40001
 #define ID_FILE_ADD                     40002
+#define ID_FILE_NEW40003                40003
+#define ID_40003                        40004
 
 // Next default values for new objects
 // 

@@ -142,9 +142,12 @@
     <ResourceCompile Include="MapChipDataMaker.rc" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Font\Font.cpp" />
     <ClCompile Include="Geometry\Geometry.cpp" />
     <ClCompile Include="Input\Input.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Procedure\Procedure.cpp" />
+    <ClCompile Include="Scene\Scene.cpp" />
     <ClCompile Include="Texture\Texture.cpp" />
     <ClCompile Include="Windows\Windows.cpp" />
   </ItemGroup>
@@ -152,9 +155,12 @@
     <None Include="MapChipDataMaker.aps" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Font\Font.h" />
     <ClInclude Include="Geometry\Geometry.h" />
     <ClInclude Include="Input\Input.h" />
+    <ClInclude Include="Procedure\procedure.h" />
     <ClInclude Include="resource.h" />
+    <ClInclude Include="Scene\Scene.h" />
     <ClInclude Include="Texture\Texture.h" />
     <ClInclude Include="Windows\Windows.h" />
   </ItemGroup>
