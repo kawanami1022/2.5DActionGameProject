@@ -1,8 +1,9 @@
 #include "Entity.h"
 
+#include "../Component/ProjectileEmitterComponent.h"
 
-Entity::Entity(EntityManager& entityMng, std::string name) :
-	entityMng_(entityMng), name_(name)
+
+Entity::Entity(EntityManager& entityMng, std::string name) : name_(name), entityMng_(&entityMng)
 {
 	isActive_ = true;
 }
@@ -21,4 +22,10 @@ void Entity::Render()
 	{
 		component->Render();
 	}
+}
+
+Vector2 Entity::GetProjectileVelocity()
+{
+	if (HasComponent<ProjectileEmitterComponent>())
+		return GetComponent<ProjectileEmitterComponent>()->velocity_;
 }
