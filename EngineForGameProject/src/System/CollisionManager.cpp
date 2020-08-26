@@ -103,7 +103,6 @@ bool CollisionManager::CheckCollision(const Circle& cir, const Rect& rect)
     return CheckCollision(cir, clamp_on_AABB(cir.pos, rect));
 }
 
-
 void CollisionManager::SetGravity(const Vector2& gravity)
 {
     gravity_ = gravity;
@@ -113,8 +112,8 @@ void CollisionManager::ApplyForce(const float& deltaTime)
 {
     for (auto& actorCollider : actorColliders_)
     {
-        Vector2 oldVel = actorCollider.velocity_;
-        actorCollider.velocity_.Y = oldVel.Y + gravity_.Y * deltaTime;
+        Vector2 oldVel = actorCollider->velocity_;
+        actorCollider->velocity_.Y = oldVel.Y + gravity_.Y * deltaTime;
     }
 }
 
@@ -126,7 +125,7 @@ void CollisionManager::Update(const float& deltaTime)
     }
     for (auto& actorCollider : actorColliders_)
     {
-        actorCollider.Update(deltaTime);
+        actorCollider->Update(deltaTime);
     }
     for (auto& projectileCollider : projectileColliders_)
     {
@@ -139,7 +138,9 @@ void CollisionManager::Update(const float& deltaTime)
 void CollisionManager::RemoveCollider()
 {
     ProcessRemoveCollider(projectileColliders_);
-    ProcessRemoveCollider(actorColliders_);
+    actorColliders_.erase(std::remove_if(actorColliders_.begin(), actorColliders_.end(), [](std::shared_ptr<RigidBody2D>& collider) {
+        return !collider->IsOwnerExist(); }),
+        actorColliders_.end());
 }
 
 void CollisionManager::PlatformResolution(const float& deltaTime)
@@ -151,16 +152,16 @@ void CollisionManager::PlatformResolution(const float& deltaTime)
             Vector2 cn;
             float ct;
             if (target.tag_ == "ASURA") continue;
-            if (actor.velocity_.Y != 0)  actor.isGrounded_ = false;
-            if (CheckSweptAABB(actor.collider_, actor.velocity_, target.collider_, cn,
+            if (actor->velocity_.Y != 0)  actor->isGrounded_ = false;
+            if (CheckSweptAABB(actor->collider_, actor->velocity_, target.collider_, cn,
                 ct, deltaTime))
             {
-                if (actor.collider_.Bottom() <= target.collider_.origin.Y)
+                if (actor->collider_.Bottom() <= target.collider_.origin.Y)
                 {
-                    actor.isGrounded_ = true;
-                    actor.velocity_.Y = 0;
+                    actor->isGrounded_ = true;
+                    actor->velocity_.Y = 0;
                 }
-                else  actor.velocity_.X = 0;
+                else  actor->velocity_.X = 0;
                 
             }
         }
@@ -178,7 +179,7 @@ bool CollisionManager::IsEnterBossArea(const std::string& bossID, Vector2& bossP
             {
                 target.flag_ = true;
                 bossPos = target.collider_.origin;
-                return CheckCollision(actor.collider_, target.collider_);
+                return CheckCollision(actor->collider_, target.collider_);
             }
         }
     }
@@ -188,26 +189,33 @@ void CollisionManager::ProjectileCollision()
 {
     for (auto& actor : actorColliders_)
     {
-        if (actor.tag_ == "PLAYER") continue;
+        if (actor->tag_ == "PLAYER") continue;
         for (auto& projectile : projectileColliders_)
         {
-            if (CheckCollision(projectile.collider_, actor.collider_) && !actor.flag_)
+            if (CheckCollision(projectile.collider_, actor->collider_) && !actor->flag_)
             {
-                actor.flag_ = false;
+                actor->flag_ = false;
                 projectile.flag_ = false;
-                /*actor.owner_.lock()->Destroy();*/
                 projectile.owner_.lock()->Destroy();
                 if (projectile.tag_ == "PLAYER-SHURIKEN")
                 {
-                    bool flip = projectile.owner_.lock()->GetProjectileVelocity().X > 0 ? true : false;
-                    gs_.effectMng_->EmitBloodEffect(actor.collider_.Center().X, actor.collider_.Center().Y, flip);
+                    auto projectile_owner = projectile.owner_.lock();
+                    auto actor_owner = actor->owner_.lock();
+                    auto damage = projectile_owner->GetProjectileDamage();
+                    actor_owner->TakeDamage(damage);
+
+                    bool flip = projectile_owner->GetProjectileVelocity().X > 0 ? true : false;
+                    gs_.effectMng_->EmitBloodEffect(actor->collider_.Center().X, projectile.collider_.pos.Y, flip);
                 }
                 if (projectile.tag_ == "PLAYER-BOMB")
                 {
-                    float X, Y;
-                    X = projectile.collider_.pos.X - projectile.collider_.radius;
-                    Y = projectile.collider_.pos.Y - projectile.collider_.radius;
+                    auto projectile_owner = projectile.owner_.lock();
+                    auto actor_owner = actor->owner_.lock();
+                    auto damage = projectile_owner->GetProjectileDamage();
+                    actor_owner->TakeDamage(damage);
 
+                    float X = projectile.collider_.pos.X;
+                    float Y = projectile.collider_.pos.Y;
                     gs_.effectMng_->BombExplosionEffect(X,Y);
                 }
             }
@@ -224,7 +232,7 @@ void CollisionManager::Render()
 
     for (auto& actorCollider : actorColliders_)
     {
-        actorCollider.Render();
+        actorCollider->Render();
     }
 
     for (auto& projectileCollider : projectileColliders_)

@@ -28,6 +28,7 @@ namespace
 
 	constexpr float rigidbody_width_scale = 1.2f;
 	constexpr float rigidbody_height_scale = 2.0f;
+	constexpr float rigidbody_jump_scale = 1.5f;
 
 	float jumpTimeCnt;
 	constexpr float jump_time = 0.35f;
@@ -54,19 +55,19 @@ void Player::Initialize()
 
 	self_ = gs_.entityMng_->AddEntity("player");
 	self_->AddComponent<TransformComponent>(start_pos, player_width, player_height, player_scale);
-	auto& rigidBody = gs_.collisionMng_->AddRigidBody2D(
+	auto rigidBody = gs_.collisionMng_->AddRigidBody2D(
 		self_, 
 		start_pos,
 		player_width * rigidbody_width_scale,
 		player_height * rigidbody_height_scale);
-	rigidBody_ = &rigidBody;
-	rigidBody.tag_ = "PLAYER";
+	rigidBody_ = rigidBody;
+	rigidBody->tag_ = "PLAYER";
 	self_->AddComponent<SpriteComponent>();
 	auto playerAnim = self_->GetComponent<SpriteComponent>();
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-idle"), "idle", Rect(0, 0, 32, 32), idle_animation_speed, 4);
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-run"), "run", Rect(0, 0, 32, 32), run_animation_speed, 6);
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-jump"), "jump", Rect(0, 0, 32, 32), jump_animation_speed, 4);
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-fall"), "fall", Rect(0, 0, 32, 32), fall_animation_speed, 2);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-idle"), "idle", Rect(0, 0, 32, 32), idle_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-run"), "run", Rect(0, 0, 32, 32), run_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-jump"), "jump", Rect(0, 0, 32, 32), jump_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-fall"), "fall", Rect(0, 0, 32, 32), fall_animation_speed);
 	playerAnim->Play("idle");
 
 	// Set camera track to player
@@ -195,6 +196,8 @@ void Player::UpdateState()
 
 	if (rigidBody_->isGrounded_ && (rigidBody_->velocity_.X == 0)) moveState_ = MOVE::IDLE;
 
+	rigidBody_->collider_.h = player_height * rigidbody_height_scale;
+
 	switch (moveState_)
 	{
 	case MOVE::LEFT:
@@ -205,6 +208,7 @@ void Player::UpdateState()
 		break;
 	case MOVE::JUMP:
 		sprite->Play("jump");
+		rigidBody_->collider_.h = player_height*rigidbody_jump_scale;
 		break;
 	case MOVE::FALL:
 		sprite->Play("fall");

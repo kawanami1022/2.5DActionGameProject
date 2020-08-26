@@ -1,16 +1,22 @@
 #pragma once
 #include "Enemy.h"
 
+class RigidBody2D;
+
 class Slasher:
 	public Enemy
 {
 private:
 	using ActionUpdate_t = void (Slasher::*)(const float& deltaTime);
 	ActionUpdate_t actionUpdate;
-	RigidBody2D* rigidBody_ = nullptr;
+	std::shared_ptr<RigidBody2D> rigidBody_;
 
 	void AimPlayer(const float& deltaTime);
 	void SlashUpdate(const float& deltaTime);
+	void HurtUpdate(const float& deltaTime);
+	void DeathUpdate(const float& deltaTime);
+
+	void CheckHit();
 public:
 	Slasher(GameScene& gs, std::shared_ptr<TransformComponent> playerPos);
 

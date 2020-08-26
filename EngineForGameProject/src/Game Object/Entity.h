@@ -11,35 +11,36 @@
 
 class Entity
 {
+private:
 	friend class EntityManager;
 	friend class EffectManager;
-protected:
+
 	std::vector<std::shared_ptr<Component>> components_;
 	std::unordered_map < const type_info*, std::shared_ptr<Component>> componentMap_;
 	std::string name_;
 	float isActive_ = false;
 	EntityManager* entityMng_ = nullptr;
+	float isHit_ = false;
+
 public:
+
 	Entity(EntityManager& entityMng, std::string name);
 	void Update(const float& deltaTime);
 	void Render();
-	bool IsActive()
-	{
-		return isActive_;
-	}
 
-	inline std::string GetName()
-	{
-		return name_;
-	}
-
+	int GetProjectileDamage() const;
+	void TakeDamage(const int& damage);
+	inline bool IsActive() const { return isActive_; }
+	inline bool IsHit() const{ return isHit_; }
+	inline void RecoverHit() { isHit_ = false; }
 	void Destroy()
 	{
 		isActive_ = false;
 		entityMng_->TurnOnRemove();
 	}
-
+	
 	Vector2 GetProjectileVelocity();
+	inline std::string GetName() const { return name_; }
 
 	template<typename T, typename...Args>
 	void AddComponent(Args&&...args)
@@ -51,7 +52,7 @@ public:
 	}
 
 	template<typename T>
-	std::shared_ptr<T> GetComponent()
+	std::shared_ptr<T> GetComponent() const
 	{
 		return std::static_pointer_cast<T>(componentMap_.at(&typeid(T)));
 	}
@@ -62,7 +63,7 @@ public:
 	}
 
 	template<typename T>
-	bool HasComponent()
+	bool HasComponent() const
 	{
 		return componentMap_.count(&typeid(T));
 	}
