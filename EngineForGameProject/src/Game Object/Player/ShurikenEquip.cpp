@@ -1,13 +1,15 @@
 #include "ShurikenEquip.h"
 
-#include "../../Scene/GameScene.h"
 #include "../Entity.h"
-#include "../../System/EntityManager.h"
 #include "../../Geometry/Geometry.h"
+#include "../../Scene/GameScene.h"
+
 #include "../../Component/TransformComponent.h"
 #include "../../Component/SpriteComponent.h"
 #include "../../Component/ProjectileEmitterComponent.h"
 #include "../../Component/CircleColliderComponent.h"
+
+#include "../../System/EntityManager.h"
 #include "../../System/CollisionManager.h"
 
 namespace
@@ -22,7 +24,7 @@ namespace
 	constexpr int shuriken_damage = 1;
 }
 
-ShurikenEquip::ShurikenEquip(GameScene& gs):Equipment(gs)
+ShurikenEquip::ShurikenEquip(GameScene& gs,const std::string& tag):Equipment(gs, tag)
 {
 }
 
@@ -40,9 +42,9 @@ void ShurikenEquip::Attack(const Vector2& startPos, const float& angle)
 		Rect(0, 0, shuriken_width, shuriken_height),
 		1, rotate_speed);
 	anim->Play("attack");
-	gs_.collisionMng_->AddProjectileCollider(projectile,
+	auto& collider = gs_.collisionMng_->AddProjectileCollider(projectile,
 		"PLAYER-SHURIKEN", startPos.X , startPos.Y , shuriken_radius);
-
+	collider.SetDistance(shuriken_radius, shuriken_radius);
 	Vector2 velocity = Vector2(move_speed * cosf(angle), move_speed * sinf(angle));
 	projectile->AddComponent<ProjectileEmitterComponent>(startPos, std::move(velocity), move_range, shuriken_damage);
 }

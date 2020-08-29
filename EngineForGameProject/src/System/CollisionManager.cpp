@@ -21,10 +21,11 @@ CollisionManager::CollisionManager(GameScene& gs):gs_(gs)
     actorColliders_.reserve(actor_size);
 }
 
-void CollisionManager::AddProjectileCollider(std::shared_ptr<Entity> owner,
+CircleColliderComponent& CollisionManager::AddProjectileCollider(std::shared_ptr<Entity> owner,
     std::string tag, const float& posX, const float& posY, const float& radius)
 {
     projectileColliders_.emplace_back(owner, tag, posX, posY, radius);
+    return (*projectileColliders_.rbegin());
 }
 
 std::vector<CircleColliderComponent>& CollisionManager::AddBossCollider(std::shared_ptr<Entity> owner, std::string tag, const float& posX, const float& posY, const float& radius)
@@ -35,8 +36,8 @@ std::vector<CircleColliderComponent>& CollisionManager::AddBossCollider(std::sha
 
 bool CollisionManager::CheckCollision(const Rect& rectA, const Rect& rectB)
 {
-    return Overlapping(rectA.origin.X, rectA.origin.X + rectA.w, rectB.origin.X, rectB.origin.X + rectB.w) &&
-        Overlapping(rectA.origin.Y, rectA.origin.Y + rectA.h, rectB.origin.Y, rectB.origin.Y + rectB.h);
+    return Overlapping(rectA.pos.X, rectA.pos.X + rectA.w, rectB.pos.X, rectB.pos.X + rectB.w) &&
+        Overlapping(rectA.pos.Y, rectA.pos.Y + rectA.h, rectB.pos.Y, rectB.pos.Y + rectB.h);
 }
 
 bool CollisionManager::CheckCollision(const Circle& cirA, const Circle& cirB)
@@ -55,8 +56,8 @@ bool CollisionManager::CheckCollision(const Vector2& point, const Rect& rect)
 bool CollisionManager::CheckCollision(const Vector2& ray_point, const Vector2& ray_dir, const Rect& target,
     Vector2& normal, float& collisionTime)
 {
-    Vector2 t_entry = (target.origin - ray_point) / ray_dir;
-    Vector2 t_exit = (target.origin + Vector2(target.w, target.h) - ray_point) / ray_dir;
+    Vector2 t_entry = (target.pos - ray_point) / ray_dir;
+    Vector2 t_exit = (target.pos + Vector2(target.w, target.h) - ray_point) / ray_dir;
 
     if (t_entry.X > t_exit.X) std::swap(t_entry.X, t_exit.X);
     if (t_entry.Y > t_exit.Y) std::swap(t_entry.Y, t_exit.Y);
@@ -85,7 +86,7 @@ bool CollisionManager::CheckSweptAABB(const Rect& main, const Vector2& vec,
 {
     if (vec == Vector2(0.0f, 0.0f)) return false;
 
-    Rect expended_target = Rect(target.origin - Vector2(main.w / 2.0f, main.h / 2.0f),
+    Rect expended_target = Rect(target.pos - Vector2(main.w / 2.0f, main.h / 2.0f),
                                 target.w + main.w,
                                 target.h + main.h);
 
@@ -152,16 +153,21 @@ void CollisionManager::PlatformResolution(const float& deltaTime)
             Vector2 cn;
             float ct;
             if (target.tag_ == "ASURA") continue;
-            if (actor->velocity_.Y != 0)  actor->isGrounded_ = false;
+            if (actor->velocity_.Y > 0)  actor->isGrounded_ = false;
             if (CheckSweptAABB(actor->collider_, actor->velocity_, target.collider_, cn,
                 ct, deltaTime))
             {
-                if (actor->collider_.Bottom() <= target.collider_.origin.Y)
+                if (actor->collider_.Bottom() <= target.collider_.pos.Y && !actor->isGrounded_)
                 {
                     actor->isGrounded_ = true;
+                    actor->collider_.pos.Y = target.collider_.pos.Y - actor->collider_.h;
                     actor->velocity_.Y = 0;
+                    continue;
                 }
-                else  actor->velocity_.X = 0;
+                if (actor->collider_.Bottom() > target.collider_.Top())
+                {
+                    actor->velocity_.X = 0.0f;
+                }
                 
             }
         }
@@ -177,8 +183,8 @@ bool CollisionManager::IsEnterBossArea(const std::string& bossID, Vector2& bossP
             if (target.tag_ != bossID) continue;
             else
             {
-                target.flag_ = true;
-                bossPos = target.collider_.origin;
+                target.isActive_ = true;
+                bossPos = target.collider_.pos;
                 return CheckCollision(actor->collider_, target.collider_);
             }
         }
@@ -189,18 +195,17 @@ void CollisionManager::ProjectileCollision()
 {
     for (auto& actor : actorColliders_)
     {
-        if (actor->tag_ == "PLAYER") continue;
+        if (actor->tag_ == "PLAYER" || !actor->isActive_) continue;
         for (auto& projectile : projectileColliders_)
         {
-            if (CheckCollision(projectile.collider_, actor->collider_) && !actor->flag_)
+            if (CheckCollision(projectile.collider_, actor->collider_))
             {
-                actor->flag_ = false;
-                projectile.flag_ = false;
                 projectile.owner_.lock()->Destroy();
                 if (projectile.tag_ == "PLAYER-SHURIKEN")
                 {
                     auto projectile_owner = projectile.owner_.lock();
                     auto actor_owner = actor->owner_.lock();
+
                     auto damage = projectile_owner->GetProjectileDamage();
                     actor_owner->TakeDamage(damage);
 
@@ -211,6 +216,7 @@ void CollisionManager::ProjectileCollision()
                 {
                     auto projectile_owner = projectile.owner_.lock();
                     auto actor_owner = actor->owner_.lock();
+
                     auto damage = projectile_owner->GetProjectileDamage();
                     actor_owner->TakeDamage(damage);
 

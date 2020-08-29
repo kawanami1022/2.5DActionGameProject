@@ -24,8 +24,10 @@ void KeyboardInput::Initialize()
 	keyCon_.emplace(L"right", KEY_INPUT_RIGHT);
 	keyCon_.emplace(L"enter", KEY_INPUT_RETURN);
 	keyCon_.emplace(L"pause", KEY_INPUT_P);
-	keyCon_.emplace(L"switch", KEY_INPUT_S);
-	keyCon_.emplace(L"attack", KEY_INPUT_Z);
+	keyCon_.emplace(L"switch", KEY_INPUT_C);
+	keyCon_.emplace(L"attack", KEY_INPUT_X);
+	keyCon_.emplace(L"jump", KEY_INPUT_Z);
+	keyCon_.emplace(L"throw", KEY_INPUT_S);
 
 	currentIndexState_ = 0;
 	for (auto& key : keyCon_)
