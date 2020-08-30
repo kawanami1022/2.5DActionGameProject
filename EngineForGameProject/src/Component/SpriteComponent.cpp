@@ -2,21 +2,22 @@
 
 #include <DxLib.h>
 
-#include "../Game Object/Entity.h"
-#include "../System/TextureManager.h"
+#include "../GameObject/Entity.h"
 #include "TransformComponent.h"
+#include "../System/TextureManager.h"
 #include "../System/Camera.h"
 
-SpriteComponent::SpriteComponent(Entity& owner, bool isFixed):Component(owner),isFixed(isFixed)
+SpriteComponent::SpriteComponent(Entity& owner, bool isFixed):Component(owner)
 {
-
+	animateUpdate_ = &SpriteComponent::PlayUpdate;
+	renderUpdate_ = isFixed ? &SpriteComponent::FixedRender : &SpriteComponent::NormalRender;
 }
 
 void SpriteComponent::Initialize()
 {
 	transform_ = owner_->GetComponent<TransformComponent>();
 	auto transform = transform_.lock();
-	desRect.pos = transform->pos;
+	desRect.pos = transform->pos - offset_;
 	desRect.w = transform->w * transform->scale;
 	desRect.h = transform->h * transform->scale;
 }
@@ -37,31 +38,47 @@ void SpriteComponent::AddAnimation(int texture, std::string animID, const Rect& 
 	animations_.emplace(animID, std::move(anim));
 }
 
+void SpriteComponent::SetOffset(const Vector2& offset)
+{
+	auto transform = transform_.lock();
+	offset_ = offset;
+	desRect.pos = transform->pos - offset_;
+}
+
 void SpriteComponent::Update(const float& deltaTime)
+{
+	(this->*animateUpdate_)(deltaTime);
+
+	transform_ = owner_->GetComponent<TransformComponent>();
+}
+
+void SpriteComponent::PlayUpdate(const float& deltaTime)
 {
 	auto& animation = animations_.at(currentAnimID);
 
 	speedTimer_ += deltaTime * 1000.0f;
 	animation.indexX = (speedTimer_ / animation.animSpeed) % animation.numCelX;
-	if (animation.indexX == animation.numCelX - 1 && animation.numCelX > 1) 
+	if (animation.indexX == animation.numCelX - 1 && animation.numCelX > 1)
 		animation.indexY = (animation.indexY + 1) % animation.numCelY;
-	else 
+	else
 		animation.indexY = (speedTimer_ / animation.animSpeed) % animation.numCelY;
 
 	animation.srcRect.pos.X = animation.indexX * animation.srcRect.w;
 	animation.srcRect.pos.Y = animation.indexY * animation.srcRect.w;
 
 	angleRad_ += animation.rotateSpeed * deltaTime;
-	transform_ = owner_->GetComponent<TransformComponent>();
+}
+
+void SpriteComponent::StopUpdate(const float& deltaTime)
+{
+	// Do nothing
 }
 
 void SpriteComponent::Render()
 {
+	(this->*renderUpdate_)();
+
 	auto transform = transform_.lock();
-	desRect.pos.X = transform->pos.X - !isFixed * Camera::Instance().viewport.pos.X;
-	desRect.pos.Y = transform->pos.Y - !isFixed * Camera::Instance().viewport.pos.Y;
-	desRect.w = transform->w * transform->scale;
-	desRect.h = transform->h * transform->scale;
 
 	if (desRect.pos.X >= -desRect.w &&
 		desRect.pos.X <= Camera::Instance().viewport.w + desRect.w &&
@@ -72,11 +89,27 @@ void SpriteComponent::Render()
 		{
 			TextureManager::DrawRectRota(animations_.at(currentAnimID).texture, animations_.at(currentAnimID).srcRect,
 				desRect, transform->scale, angleRad_, isFlipped);
+			// Debug
+			/*TextureManager::DrawBox(desRect, 0x00ff00);*/
 		}
 	}
 }
 
-void SpriteComponent::Play(std::string animID)
+void SpriteComponent::NormalRender()
+{
+	auto transform = transform_.lock();
+
+	desRect.pos = transform->pos - offset_ - Camera::Instance().viewport.pos;
+	desRect.w = transform->w * transform->scale;
+	desRect.h = transform->h * transform->scale;
+}
+
+void SpriteComponent::FixedRender()
+{
+	// Do nothing
+}
+
+void SpriteComponent::Play(const std::string& animID)
 {
 	if (IsPlaying(animID)) return;
 	currentAnimID = animID;
@@ -86,7 +119,23 @@ void SpriteComponent::Play(std::string animID)
 	angleRad_ = 0.0f;
 }
 
-bool SpriteComponent::IsPlaying(std::string animID)
+void SpriteComponent::Pause()
+{
+	animateUpdate_ = &SpriteComponent::StopUpdate;
+}
+
+void SpriteComponent::Resume()
+{
+	animateUpdate_ = &SpriteComponent::PlayUpdate;
+}
+
+void SpriteComponent::SetSpeed(const unsigned int& animSpeed)
+{
+	auto& animation = animations_.at(currentAnimID);
+	animation.animSpeed = animSpeed;
+}
+
+bool SpriteComponent::IsPlaying(const std::string& animID)
 {
 	return currentAnimID.compare(animID) == 0;
 }
