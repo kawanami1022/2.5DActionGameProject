@@ -6,7 +6,7 @@
 
 #include "../../Component/TransformComponent.h"
 #include "../../Component/SpriteComponent.h"
-#include "../../Component/RigidBody2D.h"
+#include "../../Component/Collider/RigidBody2D.h"
 #include "../../Component/HealthComponent.h"
 
 #include "../../System/AssetManager.h"
@@ -36,7 +36,7 @@ namespace
 	constexpr int max_health = 5;
 }
 
-Slasher::Slasher(GameScene& gs, std::shared_ptr<TransformComponent> playerPos):Enemy(gs, playerPos)
+Slasher::Slasher(GameScene& gs, const std::shared_ptr<TransformComponent>& playerPos):Enemy(gs, playerPos)
 {
 	
 }
@@ -49,16 +49,16 @@ Slasher::~Slasher()
 void Slasher::Initialize()
 {
 	self_ = gs_.entityMng_->AddEntity("slasher");
-	self_->AddComponent<TransformComponent>(start_pos, slasher_width, slasher_height, size_scale);
-	self_->AddComponent<SpriteComponent>();
-	auto anim = self_->GetComponent<SpriteComponent>();
+	self_->AddComponent<TransformComponent>(self_, start_pos, slasher_width, slasher_height, size_scale);
+	self_->AddComponent<SpriteComponent>(self_);
+	const auto& anim = self_->GetComponent<SpriteComponent>();
 	anim->AddAnimation(gs_.assetMng_->GetTexture("slasher-run"), "run", src_rect, run_animation_speed);
 	anim->AddAnimation(gs_.assetMng_->GetTexture("slasher-slash"), "slash", src_rect, slash_animation_speed);
 	anim->AddAnimation(gs_.assetMng_->GetTexture("slasher-hurt"), "hurt", src_rect, hurt_animation_speed);
 	anim->AddAnimation(gs_.assetMng_->GetTexture("slasher-death"), "death", src_rect, death_animation_speed);
 	anim->AddAnimation(gs_.assetMng_->GetTexture("slasher-lying"), "lying", src_rect, 1);
-	anim->Play("run");
-	self_->AddComponent<HealthComponent>(max_health);
+	anim->PlayLoop("run");
+	self_->AddComponent<HealthComponent>(self_, max_health);
 	actionUpdate_ = &Slasher::AimPlayer;
 }
 
@@ -69,17 +69,17 @@ std::unique_ptr<Enemy> Slasher::MakeClone()
 
 void Slasher::SetPosition(const Vector2& pos)
 {
-	auto transform = self_->GetComponent<TransformComponent>();
+	const auto& transform = self_->GetComponent<TransformComponent>();
 	transform->pos = pos;
 	// Because RigidBody2D Constructor will Initialize its collider's position depend on owner's Transform
 	// Add RigidBody here after set position for owner's transform
-	auto body = gs_.collisionMng_->AddRigidBody2D(
+	const auto& body = gs_.collisionMng_->AddRigidBody2D(
 		self_, start_pos,
 		slasher_width * body_width_scale,
 		slasher_height * body_heigth_scale
 	);
 	rigidBody_ = body;
-	rigidBody_->tag_ = "SLASHER";
+	rigidBody_->SetTag("SLASHER");
 }
 
 void Slasher::Update(const float& deltaTime)
@@ -100,7 +100,7 @@ void Slasher::AimPlayer(const float& deltaTime)
 	if (std::abs(playerPos_.lock()->pos.X - transform->pos.X) < slash_distancce)
 	{
 		actionUpdate_ = &Slasher::SlashUpdate;
-		sprite->Play("slash");
+		sprite->PlayLoop("slash");
 		rigidBody_->velocity_.X = 0.0f;
 	}
 }
@@ -117,7 +117,7 @@ void Slasher::SlashUpdate(const float& deltaTime)
 		if (sprite->IsFinished())
 		{
 			actionUpdate_ = &Slasher::AimPlayer;
-			sprite->Play("run");
+			sprite->PlayLoop("run");
 		}
 	}
 }
@@ -125,25 +125,33 @@ void Slasher::SlashUpdate(const float& deltaTime)
 void Slasher::HurtUpdate(const float& deltaTime)
 {
 	auto sprite = self_->GetComponent<SpriteComponent>();
-	sprite->Play("hurt");
+	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
+	sprite->PlayOnce("hurt");
 	rigidBody_->velocity_.X = 0;
 	if (sprite->IsFinished())
 	{
+		if (health <= 0)
+		{
+			actionUpdate_ = &Slasher::DeathUpdate;
+			return;
+		}
+			
 		actionUpdate_ = &Slasher::AimPlayer;
-		sprite->Play("run");
+		sprite->PlayLoop("run");
 	}
+
 }
 
 void Slasher::DeathUpdate(const float& deltaTime)
 {
 	auto sprite = self_->GetComponent<SpriteComponent>();
-	sprite->Play("death");
+	sprite->PlayOnce("death");
 	rigidBody_->velocity_.X = 0;
 	if (sprite->IsFinished())
 	{
 		timer_ = wait_destroy_time;
-		sprite->Play("lying");
-		rigidBody_->isActive_ = false;
+		sprite->Pause();
+		rigidBody_->DeActivate();
 		actionUpdate_ = &Slasher::WaitDestroyUpdate;
 	}
 }
@@ -158,11 +166,6 @@ void Slasher::WaitDestroyUpdate(const float& deltaTime)
 void Slasher::CheckHit()
 {
 	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
-	if (health <= 0)
-	{
-		actionUpdate_ = &Slasher::DeathUpdate;
-		return;
-	}
 
 	if (self_->IsHit())
 	{

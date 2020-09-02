@@ -14,6 +14,7 @@
 #include "../System/Map.h"
 #include "../System/Camera.h"
 #include "../System/EffectManager.h"
+#include "../System/CombatManager.h"
 
 #include "../GameObject/Entity.h"
 #include "../GameObject/Player/Player.h"
@@ -25,9 +26,9 @@
 
 #include "../Component/TransformComponent.h"
 #include "../Component/SpriteComponent.h"
-#include "../Component/AABBColliderComponent.h"
-#include "../Component/CircleColliderComponent.h"
-#include "../Component/RigidBody2D.h"
+#include "../Component/Collider/AABBColliderComponent.h"
+#include "../Component/Collider/CircleColliderComponent.h"
+#include "../Component/Collider/RigidBody2D.h"
 
 #include "../Input/KeyboardInput.h"
 
@@ -60,6 +61,7 @@ GameScene::GameScene(SceneManager& sceneMng, KeyboardInput& sceneInput):BaseScen
 	entityMng_ = std::make_unique<EntityManager>();
 	collisionMng_ = std::make_unique<CollisionManager>(*this);
 	effectMng_ = std::make_unique<EffectManager>(*this);
+	combatMng_ = std::make_unique<CombatManager>();
 	
 	LoadLevel(1);
 
@@ -176,15 +178,20 @@ void GameScene::GameUpdate(const float& deltaTime)
 		spawner->Update(deltaTime);
 	}
 	collisionMng_->ApplyForce(deltaTime);
+	/*----------------------------------------------------------------------------*/
+	// Update player's STATE right after received player's INPUT
+	// Purpose : update player's state before updating player's animation to AVOID BLINKING animation ( late animation )
+	player_->UpdateState();
+	/*----------------------------------------------------------------------------*/
 	enemyMng_->Update(deltaTime);
 	entityMng_->Update(deltaTime);
+	combatMng_->Update(deltaTime);
 	Camera::Instance().Update();
-	player_->UpdateState();
 	environment_->Update(deltaTime);
 	ProcessEnterBossArea();
 	collisionMng_->PlatformResolution(deltaTime);
 	collisionMng_->Update(deltaTime);
-	collisionMng_->ProjectileCollision();
+	collisionMng_->CombatCollision();
 	effectMng_->Update(deltaTime);
 }
 
@@ -196,7 +203,7 @@ void GameScene::ProcessEnterBossArea()
 		auto asuraClone = std::make_unique<Asura>(*this, player_->GetPlayerTransform());
 		auto bossSpawner = std::make_unique<BossSpawner>(std::move(asuraClone), bossPos, *enemyMng_);
 		spawners_.emplace_back(std::move(bossSpawner));
-		Camera::Instance().LockCamera();
+		Camera::Instance().LockCameraAt(bossPos);
 		isBossAdded = true;
 	}
 }
@@ -210,6 +217,7 @@ void GameScene::FadeInRender()
 {
 	environment_->RenderBackGround();
 	entityMng_->Render();
+	player_->RenderUI();
 	auto blendpara = 255 * waitTimer_ / wait_fade_time;
 	DxLib::SetDrawBlendMode(DX_BLENDMODE_MULA, blendpara);
 	DxLib::DrawBox(windowBox_.Left(), windowBox_.Top(),
@@ -222,7 +230,7 @@ void GameScene::GameRender()
 {
 	environment_->RenderBackGround();
 	entityMng_->Render();
-	/*collisionMng_->Render();*/
+	collisionMng_->Render();
 	effectMng_->Render();
 	player_->RenderUI();
 }

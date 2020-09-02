@@ -7,9 +7,11 @@
 
 #include "../GameObject/Entity.h"
 
-#include "../Component/CircleColliderComponent.h"
-#include "../Component/AABBColliderComponent.h"
+
+#include "../Component/Collider/CircleColliderComponent.h"
+#include "../Component/Collider/AABBColliderComponent.h"
 #include "../Component/TransformComponent.h"
+#include "../Component/Collider/RigidBody2D.h"
 
 namespace
 {
@@ -23,17 +25,24 @@ CollisionManager::CollisionManager(GameScene& gs):gs_(gs)
     actorColliders_.reserve(actor_size);
 }
 
-CircleColliderComponent& CollisionManager::AddProjectileCollider(std::shared_ptr<Entity> owner,
+CircleColliderComponent& CollisionManager::AddProjectileCollider(std::shared_ptr<Entity>& owner,
     std::string tag, const float& posX, const float& posY, const float& radius)
 {
     projectileColliders_.emplace_back(owner, tag, posX, posY, radius);
     return (*projectileColliders_.rbegin());
 }
 
-std::vector<CircleColliderComponent>& CollisionManager::AddBossCollider(std::shared_ptr<Entity> owner, std::string tag, const float& posX, const float& posY, const float& radius)
+AABBColliderComponent& CollisionManager::AddMeleeAttackCollider(const std::shared_ptr<Entity>& owner, std::string tag, const Vector2& pos, const float& w, const float& h)
 {
-    bossColliders_.emplace_back(owner, tag, posX, posY, radius);
-    return bossColliders_;
+    attackColliders_.emplace_back(owner, tag, pos, w, h);
+    return (*attackColliders_.rbegin());
+}
+
+std::shared_ptr<CircleColliderComponent>& CollisionManager::AddBossCollider(std::shared_ptr<Entity>& owner, std::string tag, const float& posX, const float& posY, const float& radius)
+{
+    auto collider = std::make_shared<CircleColliderComponent>(owner, tag, posX, posY, radius);
+    bossColliders_.emplace_back(std::move(collider));
+    return (*bossColliders_.rbegin());
 }
 
 bool CollisionManager::CheckCollision(const Rect& rectA, const Rect& rectB)
@@ -123,17 +132,16 @@ void CollisionManager::ApplyForce(const float& deltaTime)
 void CollisionManager::Update(const float& deltaTime)
 {
     for (auto& mapCollider : mapColliders_)
-    {
         mapCollider.Update(deltaTime);
-    }
+
     for (auto& actorCollider : actorColliders_)
-    {
         actorCollider->Update(deltaTime);
-    }
+
     for (auto& projectileCollider : projectileColliders_)
-    {
         projectileCollider.Update(deltaTime);
-    }
+
+    for (auto& attack : attackColliders_)
+        attack.Update(deltaTime);
 
     RemoveCollider();
 }
@@ -141,6 +149,7 @@ void CollisionManager::Update(const float& deltaTime)
 void CollisionManager::RemoveCollider()
 {
     ProcessRemoveCollider(projectileColliders_);
+    ProcessRemoveCollider(attackColliders_);
     actorColliders_.erase(std::remove_if(actorColliders_.begin(), actorColliders_.end(), [](std::shared_ptr<RigidBody2D>& collider) {
         return !collider->IsOwnerExist(); }),
         actorColliders_.end());
@@ -187,66 +196,80 @@ bool CollisionManager::IsEnterBossArea(const std::string& bossID, Vector2& bossP
             {
                 target.isActive_ = true;
                 bossPos = target.collider_.pos;
-                return CheckCollision(actor->collider_, target.collider_);
+                return Overlapping(actor->collider_.Left(), actor->collider_.Right(),
+                                   target.collider_.Left(), target.collider_.Right());
             }
         }
     }
 }
 
-void CollisionManager::ProjectileCollision()
+void CollisionManager::ActorVSProjectileCollision()
 {
     for (auto& actor : actorColliders_)
     {
-        if (actor->tag_ == "PLAYER" || !actor->isActive_) continue;
+        if (actor->tag_ == "PLAYER" || !actor->IsActive()) continue;
         for (auto& projectile : projectileColliders_)
         {
             if (CheckCollision(projectile.collider_, actor->collider_))
             {
-                projectile.owner_.lock()->Destroy();
+                const auto& projectile_owner = projectile.owner_.lock();
+                const auto& actor_owner = actor->owner_.lock();
+                projectile_owner->Destroy();
                 if (projectile.tag_ == "PLAYER-SHURIKEN")
                 {
-                    auto projectile_owner = projectile.owner_.lock();
-                    auto actor_owner = actor->owner_.lock();
-
-                    auto damage = projectile_owner->GetProjectileDamage();
-                    actor_owner->TakeDamage(damage);
+                    actor_owner->TakeDamage(projectile_owner->GetProjectileDamage());
 
                     bool flip = projectile_owner->GetProjectileVelocity().X > 0 ? true : false;
-                    gs_.effectMng_->EmitBloodEffect(actor->collider_.Center().X, projectile.collider_.pos.Y, flip);
+                    float bloodPos = flip ? projectile.collider_.pos.X + projectile.collider_.radius :
+                                             projectile.collider_.pos.X;
+                    gs_.effectMng_->EmitBloodEffect(bloodPos, projectile.collider_.pos.Y, flip, 1);
                 }
                 if (projectile.tag_ == "PLAYER-BOMB")
                 {
-                    auto projectile_owner = projectile.owner_.lock();
-                    auto actor_owner = actor->owner_.lock();
-
-                    auto damage = projectile_owner->GetProjectileDamage();
-                    actor_owner->TakeDamage(damage);
-
-                    float X = projectile.collider_.pos.X;
-                    float Y = projectile.collider_.pos.Y;
-                    gs_.effectMng_->BombExplosionEffect(X,Y);
+                    actor_owner->TakeDamage(projectile_owner->GetProjectileDamage());
                 }
             }
         }
     }
+}
+
+void CollisionManager::ActorVSMeleeActtackCollision()
+{
+    for (auto& actor : actorColliders_)
+    {
+        if (actor->tag_ == "PLAYER" != !actor->IsActive()) continue;
+        for (auto& attack : attackColliders_)
+        {
+            auto attack_owner = attack.owner_.lock();
+            auto actor_owner = actor->owner_.lock();
+            if (CheckCollision(attack.collider_, actor->collider_))
+            {
+                actor_owner->TakeDamage(attack_owner->GetMeleeAttackDamage());
+                gs_.effectMng_->EmitBloodEffect(actor->collider_.pos.X, actor->collider_.pos.Y, false, 1);
+            }
+        }
+    }
+}
+
+void CollisionManager::CombatCollision()
+{
+    ActorVSProjectileCollision();
+    ActorVSMeleeActtackCollision();
 }
 
 void CollisionManager::Render()
 {
     for (auto& mapCollider : mapColliders_)
-    {
         mapCollider.Render();
-    }
 
     for (auto& actorCollider : actorColliders_)
-    {
         actorCollider->Render();
-    }
 
     for (auto& projectileCollider : projectileColliders_)
-    {
         projectileCollider.Render();
-    }
+
+    for (auto& attack : attackColliders_)
+        attack.Render();
 }
 
 

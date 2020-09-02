@@ -6,13 +6,16 @@
 #include <memory>
 
 #include "../Geometry/Geometry.h"
-#include "../Component/RigidBody2D.h"
 
 class AABBColliderComponent;
 class CircleColliderComponent;
 class TransformComponent;
+class AABBColliderComponent;
+class AttackColliderComponent;
 class Entity;
 class GameScene;
+class RigidBody2D;
+class Attack;
 
 // Class managing all objects' collider and resolve them
 // This class also manage physic of the game
@@ -23,10 +26,16 @@ private:
 	friend class Map;
 
 	std::vector<AABBColliderComponent> mapColliders_;
-	// Use pointer for RigidBody2D to its owner could track on it
+	/*----------------------------------------------------------------------*/
+	// Container for body of entity
+	// Use pointer for owner can keep track on its body
 	std::vector<std::shared_ptr<RigidBody2D>> actorColliders_;
+	std::vector<std::shared_ptr<CircleColliderComponent>> bossColliders_;
+	/*----------------------------------------------------------------------*/
+	// Container for entities that causing damage
 	std::vector<CircleColliderComponent> projectileColliders_;
-	std::vector<CircleColliderComponent> bossColliders_;
+	std::vector<AABBColliderComponent> attackColliders_;
+	/*----------------------------------------------------------------------*/
 
 	Vector2 gravity_;
 	Vector2 friction_;
@@ -64,19 +73,24 @@ public:
 	/// <param name="h"></param>
 	/// <returns></returns>
 	template<typename...Args>
-	std::shared_ptr<RigidBody2D> AddRigidBody2D(Args&&...args)
+	std::shared_ptr<RigidBody2D>& AddRigidBody2D(Args&&...args)
 	{
 		actorColliders_.emplace_back(std::make_shared<RigidBody2D>(std::forward<Args>(args)...));
 		return (*actorColliders_.rbegin());
 	}
 
-	std::vector<CircleColliderComponent>& AddBossCollider(std::shared_ptr<Entity> owner, std::string tag,
+	std::shared_ptr<CircleColliderComponent>& AddBossCollider(std::shared_ptr<Entity>& owner, std::string tag,
 		const float& posX, const float& posY, const float& radius);
 
-	CircleColliderComponent& AddProjectileCollider(std::shared_ptr<Entity> owner, std::string tag,
+	CircleColliderComponent& AddProjectileCollider(std::shared_ptr<Entity>& owner, std::string tag,
 		const float& posX, const float& posY, const float& radius);
 
-	void ProjectileCollision();
+	AABBColliderComponent& AddMeleeAttackCollider(const std::shared_ptr<Entity>& owner, std::string tag,
+		const Vector2& pos, const float& w, const float& h);
+
+	void ActorVSProjectileCollision();
+	void ActorVSMeleeActtackCollision();
+	void CombatCollision();
 
 	inline void TurnOnRemoveFlag()
 	{

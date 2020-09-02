@@ -9,6 +9,7 @@ class KeyboardInput;
 class Entity;
 class TransformComponent;
 class Equipment;
+class Vector2;
 
 enum class ACTION
 {
@@ -39,9 +40,11 @@ private:
 	std::vector<std::unique_ptr<Equipment>> equipments_;
 	int currentEquip_ = 0;
 	float attackAngle_ = 0.0f;
+	float timer_;
 	bool isDrawn = false;
 	bool isJumping = false;
 	bool isCrouch = false;
+	bool isMeleeActive = false;
 
 	ACTION actionState_ = ACTION::IDLE;
 	ACTION oldActionState_ = actionState_;
@@ -51,21 +54,24 @@ private:
 	void GroundState(const float&);
 	void JumpState(const float&);
 	void FallState(const float&);
-	void ChangeEquip(const float&);
 	void ThrowState(const float&);
 	void CrouchState(const float&);
 	void SecondJumpState(const float&);
 	void DrawWithdrawSwordState(const float&);
-	void MeleeAttack(const float&);
-	
+	void GroundAttackState(const float&);
+
 	void SetSideMoveVelocity(const float& velX);
 	void SetMoveAction(const ACTION& idle, const ACTION& moveType);
+	void SetMeleeAttack(const int& damage, const unsigned int& frame_no, const float& dirAngle, const Vector2& pos,
+		const float& w, const float& h);
 	void SetAngleDirection();
-	void ProcessAttack();
+	void ProcessThrow();
+	void ProcessGroundAttack();
 	void ProcessJump();
 	void ProcessCheckGround();
 	void ProcessFall();
 	void ProcessDrawWithdrawSword();
+	void ChangeEquip();
 	void TurnBackState();
 	
 public:
