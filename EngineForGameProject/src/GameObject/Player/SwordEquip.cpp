@@ -1,18 +1,11 @@
 #include "SwordEquip.h"
 
-#include "../Entity.h"
-#include "../../Geometry/Geometry.h"
 #include "../../Scene/GameScene.h"
+#include "../../System/CombatManager.h"
+#include "../Attack/MeleeAttack.h"
 
-#include "../../Component/TransformComponent.h"
-#include "../../Component/SpriteComponent.h"
-#include "../../Component/ProjectileEmitterComponent.h"
-#include "../../Component/CircleColliderComponent.h"
-
-#include "../../System/EntityManager.h"
-#include "../../System/CollisionManager.h"
-
-SwordEquip::SwordEquip(GameScene& gs, const std::string& tag):Equipment(gs, tag)
+SwordEquip::SwordEquip(GameScene& gs, const std::string& tag, const std::shared_ptr<Entity>& owner, const int& damage):
+	Equipment(gs, tag, owner, damage)
 {
 }
 
@@ -20,8 +13,10 @@ void SwordEquip::Initialize()
 {
 }
 
-void SwordEquip::Attack(const Vector2& startPos, const float& angle)
+void SwordEquip::Attack(const Vector2& startPos, const float& dirAngle, const float& w, const float& h)
 {
+	auto melee = gs_.combatMng_->AddAttack<MeleeAttack>(gs_, owner_.lock(), startPos, w, h);
+	melee->SetDamage(damage_);
 }
 
 void SwordEquip::Render()

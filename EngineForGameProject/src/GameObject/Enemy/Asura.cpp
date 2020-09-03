@@ -5,7 +5,7 @@
 #include "../../Scene/GameScene.h"
 #include "../../Component/TransformComponent.h"
 #include "../../Component/SpriteComponent.h"
-#include "../../Component/CircleColliderComponent.h"
+#include "../../Component/Collider/CircleColliderComponent.h"
 
 #include "../../System/AssetManager.h"
 #include "../../System/CollisionManager.h"
@@ -22,6 +22,27 @@ namespace {
 	constexpr float entering_speed = 100.0f;
 	constexpr float ground_line = 250.0f;
 	
+}
+
+Asura::Asura(GameScene& gs, const std::shared_ptr<TransformComponent>& playerPos_) :Enemy(gs, playerPos_)
+{
+	updater_ = &Asura::EnteringUpdate;
+}
+
+Asura::~Asura()
+{
+}
+
+void Asura::Initialize()
+{
+	self_ = gs_.entityMng_->AddEntity("asura");
+	self_->AddComponent<TransformComponent>(self_, start_pos, asura_width, asura_height, size_scale);
+	self_->AddComponent<SpriteComponent>(self_);
+	const auto& anim = self_->GetComponent<SpriteComponent>();
+	anim->AddAnimation(gs_.assetMng_->GetTexture("boss-asura"), "idle", Rect(0, 0, asura_width, asura_height), 1);
+	anim->PlayLoop("idle");
+	auto& collider = gs_.collisionMng_->AddBossCollider(self_, "asura", collider_pos_x, collider_pos_y, collider_radius);
+	colliders_.push_back(collider);
 }
 
 void Asura::EnteringUpdate(const float& deltaTime)
@@ -52,26 +73,6 @@ void Asura::DeadUpdate(const float& deltaTime)
 {
 }
 
-Asura::Asura(GameScene& gs, std::shared_ptr<TransformComponent> playerPos_):Enemy(gs,playerPos_)
-{
-	updater_ = &Asura::EnteringUpdate;
-}
-
-Asura::~Asura()
-{
-}
-
-void Asura::Initialize()
-{
-	self_ = gs_.entityMng_->AddEntity("asura");
-	self_->AddComponent<TransformComponent>(start_pos, asura_width, asura_height, size_scale);
-	self_->AddComponent<SpriteComponent>();
-	auto anim = self_->GetComponent<SpriteComponent>();
-	anim->AddAnimation(gs_.assetMng_->GetTexture("boss-asura"), "idle", Rect(0, 0, asura_width, asura_height), 1);
-	anim->Play("idle");
-	colliders_ = &gs_.collisionMng_->AddBossCollider(self_, "asura", collider_pos_x, collider_pos_y, collider_radius);
-}
-
 void Asura::Update(const float& deltaTime)
 {
 	(this->*updater_)(deltaTime);
@@ -84,7 +85,7 @@ std::unique_ptr<Enemy> Asura::MakeClone()
 
 void Asura::SetPosition(const Vector2& pos)
 {
-	auto transform = self_->GetComponent<TransformComponent>();
+	const auto& transform = self_->GetComponent<TransformComponent>();
 	transform->pos.X = pos.X - asura_width / 2.0f;
 	transform->pos.Y = pos.Y;
 }

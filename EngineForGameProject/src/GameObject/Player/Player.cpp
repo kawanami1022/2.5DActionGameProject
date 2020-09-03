@@ -14,45 +14,68 @@
 #include "../../System/EntityManager.h"
 
 #include "../../Component/TransformComponent.h"
-#include "../../Component/RigidBody2D.h"
+#include "../../Component/Collider/RigidBody2D.h"
 #include "../../Component/SpriteComponent.h"
 
 namespace
 {
+	// Initialize
 	const Rect src_rect = Rect(0, 0, 32, 32);
-	const Rect attack1_src_rect = Rect(0, 0, 42, 36);
-	const Rect attack2_src_rect = Rect(0, 0, 45, 29);
-	const Rect attack3_src_rect = Rect(0, 0, 50, 26);
-	const Vector2 start_pos = Vector2(30.0f, 500.0f);
+	const Vector2 start_pos = Vector2(30.0f, 512.0f);
 	constexpr float player_width = 32.0f;
 	constexpr float player_height = 32.0f;
 	constexpr float player_scale = 2.0f;
 
+	// Melee Attack
+	const Rect attack1_src_rect = Rect(0, 0, 42, 36);
+	const Rect attack2_src_rect = Rect(0, 0, 45, 29);
+	const Rect attack3_src_rect = Rect(0, 0, 50, 26);
+	const Vector2 attack1_offset = Vector2(0, (attack1_src_rect.h - player_height) * player_scale);
+	const Vector2 attack2_offset = Vector2(10, (attack2_src_rect.h - player_height) * player_scale);
+	const Vector2 attack3_offset = Vector2(10, (attack3_src_rect.h - player_height) * player_scale);
+
+	// Animation's hit box
 	constexpr float rigidbody_width_scale = 1.2f;
 	constexpr float rigidbody_height_scale = 2.0f;
 	constexpr float rigidbody_jump_scale = 1.5f;
 	constexpr float rigidbody_crouch_scale = 1.4f;
 
-	float jumpTimeCnt;
+	// Time counter ( millisecond )
 	constexpr float jump_time = 0.35f;
+	constexpr float change_attack_time = 0.07f;
+	constexpr float cooldown_attack_time = 0.2f;
+
+	// Movement's velocity
 	constexpr float jump_velocity = 300.0f;
 	constexpr float remain_jump_velocity = 300.0f;
 	constexpr float normal_side_velocity = 200.0f;
 	constexpr float crouch_velocity = 50.0f;
 
-	constexpr unsigned int idle_animation_speed = 100;
-	constexpr unsigned int run_animation_speed = 100;
-	constexpr unsigned int fast_run_animation_speed = 50;
-	constexpr unsigned int jump_animation_speed = 100;
-	constexpr unsigned int fall_animation_speed = 100;
-	constexpr unsigned int hurt_animation_speed = 100;
-	constexpr unsigned int die_animation_speed = 100;
-	constexpr unsigned int cast_animation_speed = 50;
-	constexpr unsigned int crouch_animation_speed = 100;
-	constexpr unsigned int attack1_animation_speed = 100;
-	constexpr unsigned int attack2_animation_speed = 100;
-	constexpr unsigned int attack3_animation_speed = 100;
-	constexpr unsigned int draw_withdraw_animation_speed = 100;
+	// Animation's speed
+	constexpr unsigned short int idle_animation_speed = 100;
+	constexpr unsigned short int run_animation_speed = 100;
+	constexpr unsigned short int fast_run_animation_speed = 50;
+	constexpr unsigned short int jump_animation_speed = 100;
+	constexpr unsigned short int fall_animation_speed = 100;
+	constexpr unsigned short int hurt_animation_speed = 100;
+	constexpr unsigned short int die_animation_speed = 100;
+	constexpr unsigned short int cast_animation_speed = 50;
+	constexpr unsigned short int crouch_animation_speed = 100;
+	constexpr unsigned short int attack1_animation_speed = 70;
+	constexpr unsigned short int attack2_animation_speed = 70;
+	constexpr unsigned short int attack3_animation_speed = 70;
+	constexpr unsigned short int draw_withdraw_animation_speed = 100;
+
+	// Attack frame
+	// Attack collider is created at this frame
+	constexpr unsigned short int attack1_frame = 3;
+	constexpr unsigned short int attack2_frame = 4;
+	constexpr unsigned short int attack3_frame = 3;
+
+	// Weapon's damage
+	constexpr int shuriken_damage = 1;
+	constexpr int bomb_damage = 5;
+	constexpr int attack1_damage = 1;
 
 	constexpr char sword_tag[] = "SWORD";
 	constexpr char shuriken_tag[] = "BOMB";
@@ -71,16 +94,16 @@ void Player::Initialize()
 	oldInputState_ = inputState_;
 
 	self_ = gs_.entityMng_->AddEntity("player");
-	self_->AddComponent<TransformComponent>(start_pos, player_width, player_height, player_scale);
-	auto rigidBody = gs_.collisionMng_->AddRigidBody2D(
+	self_->AddComponent<TransformComponent>(self_, start_pos, player_width, player_height, player_scale);
+	const auto& rigidBody = gs_.collisionMng_->AddRigidBody2D(
 		self_, 
 		start_pos,
 		player_width * rigidbody_width_scale,
 		player_height * rigidbody_height_scale);
 	rigidBody_ = rigidBody;
-	rigidBody->tag_ = "PLAYER";
-	self_->AddComponent<SpriteComponent>();
-	auto playerAnim = self_->GetComponent<SpriteComponent>();
+	rigidBody->SetTag("PLAYER");
+	self_->AddComponent<SpriteComponent>(self_);
+	const auto& playerAnim = self_->GetComponent<SpriteComponent>();
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-idle"), "idle", src_rect, idle_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-sword-idle"), "sword-idle", src_rect, idle_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-run"), "run", src_rect, run_animation_speed);
@@ -93,27 +116,33 @@ void Player::Initialize()
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-crouch"), "crouch", src_rect, crouch_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-crouch-walk"), "crouch-walk", src_rect, crouch_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-cast"), "cast", src_rect, cast_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-draw-sword"), "draw", src_rect, draw_withdraw_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-withdraw-sword"), "withdraw", src_rect, draw_withdraw_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack1"), "attack-1", attack1_src_rect, attack1_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack2"), "attack-2", attack2_src_rect, attack2_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack3"), "attack-3", attack3_src_rect, attack3_animation_speed);
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-draw-sword"), "draw", src_rect, draw_withdraw_animation_speed);
-	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-withdraw-sword"), "withdraw", src_rect, draw_withdraw_animation_speed);
-	playerAnim->Play("idle");
+	playerAnim->PlayLoop("idle");
+
+	// Set animation offset
+	playerAnim->SetAnimationOffset("attack-1", attack1_offset);
+	playerAnim->SetAnimationOffset("attack-2", attack2_offset);
+	playerAnim->SetAnimationOffset("attack-3", attack3_offset);
 
 	// Set camera track to player
 	Camera::Instance().TrackingOn(self_->GetComponent<TransformComponent>());
 
 	// Initialize Equipment list
-	equipments_.emplace_back(std::move(std::make_unique<ShurikenEquip>(gs_, shuriken_tag)));
-	equipments_.emplace_back(std::move(std::make_unique<BombEquip>(gs_, bomb_tag)));
+	equipments_.emplace_back(std::move(std::make_unique<ShurikenEquip>(gs_, shuriken_tag, self_, shuriken_damage)));
+	equipments_.emplace_back(std::move(std::make_unique<BombEquip>(gs_, bomb_tag, self_,bomb_damage)));
+	equipments_.emplace_back(std::move(std::make_unique<SwordEquip>(gs_, sword_tag, self_)));
 }
 
 void Player::Input(const float& deltaTime)
 {
 	input_->Update(deltaTime);
 	SetAngleDirection();
-	ChangeEquip(deltaTime);
-	auto sprite = self_->GetComponent<SpriteComponent>();
+	ChangeEquip();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 	(this->*inputState_)(deltaTime);
 }
 
@@ -124,8 +153,9 @@ void Player::GroundState(const float& deltaTime)
 
 	ProcessFall();
 	ProcessJump();
-	ProcessAttack();
+	ProcessThrow();
 	ProcessDrawWithdrawSword();
+	ProcessGroundAttack();
 	if (input_->IsPressed(L"down"))
 	{
 		isCrouch = true;
@@ -134,11 +164,12 @@ void Player::GroundState(const float& deltaTime)
 	}	
 }
 
-void Player::ProcessAttack()
+void Player::ProcessThrow()
 {
-	if (input_->IsTriggered(L"throw") && !isDrawn)
+	if (equipments_[currentEquip_]->GetTag() == sword_tag) return;
+	if (input_->IsTriggered(L"attack") && !isDrawn)
 	{
-		auto transform = self_->GetComponent<TransformComponent>();
+		const auto& transform = self_->GetComponent<TransformComponent>();
 		auto startPos = transform->pos + Vector2(transform->w / 2, transform->h / 2);
 		equipments_[currentEquip_]->Attack(startPos, attackAngle_);
 
@@ -156,16 +187,39 @@ void Player::ProcessAttack()
 		inputState_ = &Player::ThrowState;
 		actionState_ = ACTION::THROW;
 	}
+}
 
-	if (input_->IsTriggered(L"attack") && isDrawn)
+void Player::ProcessGroundAttack()
+{
+	if (equipments_[currentEquip_]->GetTag() != sword_tag) return;
+	if (input_->IsPressed(L"attack") && isDrawn)
 	{
-		
+		switch (actionState_)
+		{
+		case ACTION::ATTACK_1:
+			timer_ = change_attack_time;
+			actionState_ = ACTION::ATTACK_2;
+			break;
+		case ACTION::ATTACK_2:
+			timer_ = change_attack_time;
+			actionState_ = ACTION::ATTACK_3;
+			break;
+		case ACTION::ATTACK_3:
+			timer_ = change_attack_time;
+			actionState_ = ACTION::ATTACK_1;
+		default:
+			actionState_ = ACTION::ATTACK_1;
+			timer_ = change_attack_time;
+			break;
+		}
+		inputState_ = &Player::GroundAttackState;
+		isMeleeActive = true;
 	}
 }
 
 void Player::ThrowState(const float&)
 {
-	auto sprite = self_->GetComponent<SpriteComponent>();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 
 	if (rigidBody_->isGrounded_)
 		rigidBody_->velocity_.X = 0.0f;
@@ -182,8 +236,13 @@ void Player::ProcessJump()
 	{
 		rigidBody_->velocity_.Y = -jump_velocity;
 		rigidBody_->isGrounded_ = false;
-		jumpTimeCnt = jump_time;
+		timer_ = jump_time;
 		isJumping = true;
+		actionState_ = ACTION::JUMP;
+		inputState_ = &Player::JumpState;
+	}
+	if (isJumping)
+	{
 		actionState_ = ACTION::JUMP;
 		inputState_ = &Player::JumpState;
 	}
@@ -192,30 +251,37 @@ void Player::ProcessJump()
 void Player::JumpState(const float& deltaTime)
 {
 	SetSideMoveVelocity(normal_side_velocity);
-	ProcessAttack();
+	ProcessThrow();
 	if (input_->IsPressed(L"jump") && isJumping)
 	{
-		if (jumpTimeCnt > 0)
+		if (timer_ > 0)
 		{
 			rigidBody_->velocity_.Y = -remain_jump_velocity;
-			jumpTimeCnt -= deltaTime;
+			timer_ -= deltaTime;
 		}
 		else
 		{
 			isJumping = false;
 		}
 	}
+
 	if (input_->IsReleased(L"jump"))
 	{
 		isJumping = false;
 	}
-	ProcessFall();
+
+	if (!isJumping)
+	{
+		rigidBody_->isGrounded_ = false;
+		actionState_ = ACTION::FALL;
+		inputState_ = &Player::FallState;
+	}
 }
 
 void Player::FallState(const float& deltaTime)
 {
 	SetSideMoveVelocity(normal_side_velocity);
-	ProcessAttack();
+	ProcessThrow();
 	ProcessCheckGround();
 	// Second jump
 	if (input_->IsTriggered(L"jump"))
@@ -240,10 +306,10 @@ void Player::CrouchState(const float&)
 
 void Player::SecondJumpState(const float& deltaTime)
 {
-	auto sprite = self_->GetComponent<SpriteComponent>();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 
 	SetSideMoveVelocity(normal_side_velocity);
-	ProcessAttack();
+	ProcessThrow();
 	if (isJumping && sprite->IsFinished())
 	{
 		isJumping = false;
@@ -252,8 +318,41 @@ void Player::SecondJumpState(const float& deltaTime)
 	ProcessCheckGround();
 }
 
-void Player::MeleeAttack(const float&)
+void Player::GroundAttackState(const float& deltaTime)
 {
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
+	const auto& transform = self_->GetComponent<TransformComponent>();
+	rigidBody_->velocity_.X = 0;
+	
+	if (isMeleeActive)
+	{
+		switch (actionState_)
+		{
+		case ACTION::ATTACK_1:
+			SetMeleeAttack(1, attack1_frame, sprite->IsFlipped(), attack1_offset, attack1_src_rect);
+			break;
+		case ACTION::ATTACK_2:
+			SetMeleeAttack(2, attack2_frame, sprite->IsFlipped(), attack2_offset, attack2_src_rect);
+			break;
+		case ACTION::ATTACK_3:
+			SetMeleeAttack(2, attack3_frame, sprite->IsFlipped(), attack3_offset, attack3_src_rect);
+			break;
+		}
+	}
+	
+	if (sprite->IsFinished())
+	{
+		if (timer_ > 0)
+		{
+			timer_ -= deltaTime;
+			ProcessGroundAttack();
+		}
+		else
+		{
+			inputState_ = &Player::GroundState;
+			timer_ = 0.0f;
+		}
+	}
 
 }
 
@@ -261,23 +360,23 @@ void Player::DrawWithdrawSwordState(const float&)
 {
 	if (rigidBody_->isGrounded_)
 		rigidBody_->velocity_.X = 0.0f;
-	auto sprite = self_->GetComponent<SpriteComponent>();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 	if (sprite->IsFinished())
 		TurnBackState();
 }
 
 void Player::SetSideMoveVelocity(const float& velX)
 {
-	auto sprite = self_->GetComponent<SpriteComponent>();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 	if (input_->IsPressed(L"left"))
 	{
 		rigidBody_->velocity_.X = -velX;
-		sprite->isFlipped = true;
+		sprite->SetFlipState(true);
 	}
 	else if (input_->IsPressed(L"right"))
 	{
 		rigidBody_->velocity_.X = velX;
-		sprite->isFlipped = false;
+		sprite->SetFlipState(false);
 	}
 	else
 	{
@@ -291,6 +390,25 @@ void Player::SetMoveAction(const ACTION& idle, const ACTION& moveType)
 		actionState_ = moveType;
 	else
 		actionState_ = idle;
+}
+
+void Player::SetMeleeAttack(const int& damage, const unsigned int& frame_no, bool flipFlag, 
+	const Vector2& offset, const Rect& srcRect)
+{
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
+	const auto& transform = self_->GetComponent<TransformComponent>();
+	equipments_[currentEquip_]->SetDamage(damage);
+	Rect destRect = srcRect;
+	destRect.w *= transform->scale;
+	destRect.h *= transform->scale;
+	destRect.pos.X = transform->pos.X - (!sprite->IsFlipped() ? offset.X :
+		destRect.w - transform->w * transform->scale - offset.X);
+	destRect.pos.Y = transform->pos.Y - offset.Y;
+	if (sprite->GetCurrentCelNO() == frame_no)
+	{
+		equipments_[currentEquip_]->Attack(destRect.pos, attackAngle_, destRect.w, destRect.h);
+		isMeleeActive = false;
+	}
 }
 
 void Player::ProcessCheckGround()
@@ -314,16 +432,29 @@ void Player::ProcessFall()
 
 void Player::ProcessDrawWithdrawSword()
 {
-	if (input_->IsTriggered(L"draw"))
+	if (equipments_[currentEquip_]->GetTag() == sword_tag)
 	{
-		isDrawn = isDrawn ? false : true;
-		actionState_ = isDrawn ? ACTION::DRAW_SWORD : ACTION::WITHDRAW_SWORD;
-		oldInputState_ = inputState_;
-		inputState_ = &Player::DrawWithdrawSwordState;
+		if (!isDrawn)
+		{
+			actionState_ = ACTION::DRAW_SWORD;
+			oldInputState_ = inputState_;
+			inputState_ = &Player::DrawWithdrawSwordState;
+			isDrawn = true;
+		}
+	}
+	else
+	{
+		if (isDrawn)
+		{
+			actionState_ = ACTION::WITHDRAW_SWORD;
+			oldInputState_ = inputState_;
+			inputState_ = &Player::DrawWithdrawSwordState;
+			isDrawn = false;
+		}
 	}
 }
 
-void Player::ChangeEquip(const float& deltaTime)
+void Player::ChangeEquip()
 {
 	if (input_->IsTriggered(L"switch"))
 	{
@@ -359,8 +490,8 @@ void Player::TurnBackState()
 
 void Player::UpdateState()
 {
-	auto sprite = self_->GetComponent<SpriteComponent>();
-	auto transform = self_->GetComponent<TransformComponent>();
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
+	const auto& transform = self_->GetComponent<TransformComponent>();
 
 	rigidBody_->collider_.h = player_height * rigidbody_height_scale;
 
@@ -368,48 +499,48 @@ void Player::UpdateState()
 	{
 	case ACTION::NORMAL_RUN:
 		if (isDrawn)
-			sprite->Play("sword-run");
+			sprite->PlayLoop("sword-run");
 		else
-			sprite->Play("run");
+			sprite->PlayLoop("run");
 		break;
 	case ACTION::JUMP:
-		sprite->Play("jump");
+		sprite->PlayLoop("jump");
 		rigidBody_->collider_.h = player_height * rigidbody_jump_scale;
 		break;
 	case ACTION::FALL:
-		sprite->Play("fall");
+		sprite->PlayLoop("fall");
 		break;
 	case ACTION::IDLE:
 		if (isDrawn)
-			sprite->Play("sword-idle");
+			sprite->PlayLoop("sword-idle");
 		else
-			sprite->Play("idle");
+			sprite->PlayLoop("idle");
 		break;
 	case ACTION::THROW:
-		sprite->Play("cast");
+		sprite->PlayOnce("cast");
 		break;
 	case ACTION::CROUCH:
 		rigidBody_->collider_.h = player_height * rigidbody_crouch_scale;
-		sprite->Play("crouch");
+		sprite->PlayLoop("crouch");
 		break;
 	case ACTION::CROUCH_WALK:
 		rigidBody_->collider_.h = player_height * rigidbody_crouch_scale;
-		sprite->Play("crouch-walk");
+		sprite->PlayLoop("crouch-walk");
 		break;
 	case ACTION::ATTACK_1:
-		sprite->Play("attack-1");
+		sprite->PlayOnce("attack-1");
 		break;
 	case ACTION::ATTACK_2:
-		sprite->Play("attack-2");
+		sprite->PlayOnce("attack-2");
 		break;
 	case ACTION::ATTACK_3:
-		sprite->Play("attack-3");
+		sprite->PlayOnce("attack-3");
 		break;
 	case ACTION::DRAW_SWORD:
-		sprite->Play("draw");
+		sprite->PlayOnce("draw");
 		break;
 	case ACTION::WITHDRAW_SWORD:
-		sprite->Play("withdraw");
+		sprite->PlayOnce("withdraw");
 		break;
 	}
 

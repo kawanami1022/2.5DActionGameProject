@@ -28,7 +28,9 @@ public:
 	void Update(const float& deltaTime);
 	void Render();
 
+	Vector2 GetProjectileVelocity();
 	int GetProjectileDamage() const;
+	int GetMeleeAttackDamage() const;
 	void TakeDamage(const int& damage);
 	inline bool IsActive() const { return isActive_; }
 	inline bool IsHit() const{ return isHit_; }
@@ -39,16 +41,23 @@ public:
 		entityMng_->TurnOnRemove();
 	}
 	
-	Vector2 GetProjectileVelocity();
 	inline std::string GetName() const { return name_; }
 
 	template<typename T, typename...Args>
 	void AddComponent(Args&&...args)
 	{
-		auto component = std::make_shared<T>(*this, std::forward<Args>(args)...);
+		auto component = std::make_shared<T>(std::forward<Args>(args)...);
 		component->Initialize();
 		components_.emplace_back(component);
 		componentMap_.emplace(&typeid(T),std::move(component));
+	}
+
+	void SetOwnerForAllComponent(const std::shared_ptr<Entity>& owner);
+
+	template<typename T>
+	void SetComponentOwner(const std::shared_ptr<Entity>& owner)
+	{
+		GetComponent<T>->SetOwner(owner);
 	}
 
 	template<typename T>
@@ -57,13 +66,13 @@ public:
 		return std::static_pointer_cast<T>(componentMap_.at(&typeid(T)));
 	}
 
-	bool IsEmptyComponent()
+	inline bool IsEmptyComponent()
 	{
 		return components_.size() == 0;
 	}
 
 	template<typename T>
-	bool HasComponent() const
+	inline bool HasComponent() const
 	{
 		return componentMap_.count(&typeid(T));
 	}
