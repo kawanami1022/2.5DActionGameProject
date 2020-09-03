@@ -145,6 +145,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\System\Sound.cpp" />
     <ClCompile Include="src\GameObject\Attack\MeleeAttack.cpp" />
     <ClCompile Include="src\GameObject\Attack\ShurikenShot.cpp" />
     <ClCompile Include="src\System\CombatManager.cpp" />
@@ -196,6 +197,7 @@
     <ClCompile Include="src\GameObject\Player\SwordEquip.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\System\Sound.h" />
     <ClInclude Include="src\GameObject\Attack\MeleeAttack.h" />
     <ClInclude Include="src\GameObject\Attack\ShurikenShot.h" />
     <ClInclude Include="src\System\CombatManager.h" />
