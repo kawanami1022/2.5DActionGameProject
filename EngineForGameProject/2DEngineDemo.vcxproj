@@ -145,7 +145,6 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="src\System\Sound.cpp" />
     <ClCompile Include="src\GameObject\Attack\MeleeAttack.cpp" />
     <ClCompile Include="src\GameObject\Attack\ShurikenShot.cpp" />
     <ClCompile Include="src\System\CombatManager.cpp" />
@@ -195,9 +194,9 @@
     <ClCompile Include="src\Component\TransformComponent.cpp" />
     <ClCompile Include="src\Component\TileComponent.cpp" />
     <ClCompile Include="src\GameObject\Player\SwordEquip.cpp" />
+    <ClCompile Include="src\System\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\System\Sound.h" />
     <ClInclude Include="src\GameObject\Attack\MeleeAttack.h" />
     <ClInclude Include="src\GameObject\Attack\ShurikenShot.h" />
     <ClInclude Include="src\System\CombatManager.h" />
@@ -247,6 +246,7 @@
     <ClInclude Include="src\Component\TransformComponent.h" />
     <ClInclude Include="src\Component\TileComponent.h" />
     <ClInclude Include="src\GameObject\Player\SwordEquip.h" />
+    <ClInclude Include="src\System\Time.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
