@@ -35,13 +35,12 @@ void TileComponent::Update(const float& deltaTime)
 
 void TileComponent::Render()
 {
-	desRect.pos.X = pos.X - Camera::Instance().viewport.pos.X;
-	desRect.pos.Y = pos.Y - Camera::Instance().viewport.pos.Y;
+	desRect.pos = pos - Camera::Instance().Position();
 	// Render only destination Rectangle is on viewport ( or on the window's screen )
 	if (desRect.pos.X >= -desRect.w &&
-		desRect.pos.X <= Camera::Instance().viewport.w + desRect.w &&
+		desRect.pos.X <= Camera::Instance().ViewWidth() + desRect.w &&
 		desRect.pos.Y >= -desRect.h &&
-		desRect.pos.Y <= Camera::Instance().viewport.h + desRect.h)
+		desRect.pos.Y <= Camera::Instance().ViewHeight() + desRect.h)
 	{
 		TextureManager::DrawRect(texture, desRect, srcRect);
 	}

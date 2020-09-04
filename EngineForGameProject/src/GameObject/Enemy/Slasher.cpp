@@ -12,6 +12,7 @@
 #include "../../System/AssetManager.h"
 #include "../../System/CollisionManager.h"
 #include "../../System/EntityManager.h"
+#include "../../System/EffectManager.h"
 
 namespace
 {
@@ -114,7 +115,7 @@ void Slasher::SlashUpdate(const float& deltaTime)
 	
 	if (std::abs(playerPos_.lock()->pos.X - transform->pos.X) > slash_distancce)
 	{
-		if (sprite->IsFinished())
+		if (sprite->IsAnimationFinished())
 		{
 			actionUpdate_ = &Slasher::AimPlayer;
 			sprite->PlayLoop("run");
@@ -128,7 +129,7 @@ void Slasher::HurtUpdate(const float& deltaTime)
 	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
 	sprite->PlayOnce("hurt");
 	rigidBody_->velocity_.X = 0;
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		if (health <= 0)
 		{
@@ -147,13 +148,19 @@ void Slasher::DeathUpdate(const float& deltaTime)
 	auto sprite = self_->GetComponent<SpriteComponent>();
 	sprite->PlayOnce("death");
 	rigidBody_->velocity_.X = 0;
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		timer_ = wait_destroy_time;
 		sprite->Pause();
 		rigidBody_->DeActivate();
 		actionUpdate_ = &Slasher::WaitDestroyUpdate;
 	}
+}
+
+void Slasher::ExplosionDeathUpdate(const float& deltaTime)
+{
+	gs_.effectMng_->BloodExplosionEffect(rigidBody_->collider_.Center().X, rigidBody_->collider_.Center().Y);
+	self_->Destroy();
 }
 
 void Slasher::WaitDestroyUpdate(const float& deltaTime)
@@ -165,7 +172,13 @@ void Slasher::WaitDestroyUpdate(const float& deltaTime)
 
 void Slasher::CheckHit()
 {
-	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
+	auto health = self_->GetComponent<HealthComponent>();
+
+	if (health->ReceivedDamage() == health->GetMaxHealth())
+	{
+		actionUpdate_ = &Slasher::ExplosionDeathUpdate;
+		return;
+	}
 
 	if (self_->IsHit())
 	{

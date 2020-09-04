@@ -9,7 +9,6 @@
 
 #include "../../Scene/GameScene.h"
 #include "../../System/AssetManager.h"
-#include "../../System/Camera.h"
 #include "../../System/CollisionManager.h"
 #include "../../System/EntityManager.h"
 
@@ -128,9 +127,6 @@ void Player::Initialize()
 	playerAnim->SetAnimationOffset("attack-2", attack2_offset);
 	playerAnim->SetAnimationOffset("attack-3", attack3_offset);
 
-	// Set camera track to player
-	Camera::Instance().TrackingOn(self_->GetComponent<TransformComponent>());
-
 	// Initialize Equipment list
 	equipments_.emplace_back(std::move(std::make_unique<ShurikenEquip>(gs_, shuriken_tag, self_, shuriken_damage)));
 	equipments_.emplace_back(std::move(std::make_unique<BombEquip>(gs_, bomb_tag, self_,bomb_damage)));
@@ -224,7 +220,7 @@ void Player::ThrowState(const float&)
 	if (rigidBody_->isGrounded_)
 		rigidBody_->velocity_.X = 0.0f;
 
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		TurnBackState();
 	}
@@ -310,7 +306,7 @@ void Player::SecondJumpState(const float& deltaTime)
 
 	SetSideMoveVelocity(normal_side_velocity);
 	ProcessThrow();
-	if (isJumping && sprite->IsFinished())
+	if (isJumping && sprite->IsAnimationFinished())
 	{
 		isJumping = false;
 		actionState_ = ACTION::FALL;
@@ -340,7 +336,7 @@ void Player::GroundAttackState(const float& deltaTime)
 		}
 	}
 	
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		if (timer_ > 0)
 		{
@@ -361,7 +357,7 @@ void Player::DrawWithdrawSwordState(const float&)
 	if (rigidBody_->isGrounded_)
 		rigidBody_->velocity_.X = 0.0f;
 	const auto& sprite = self_->GetComponent<SpriteComponent>();
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 		TurnBackState();
 }
 

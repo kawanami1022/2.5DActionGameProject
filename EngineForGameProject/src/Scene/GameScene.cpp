@@ -112,6 +112,8 @@ void GameScene::LoadLevel(const int& level)
 
 	assetMng_->AddTexture("blood", L"assets/Image/Effect/blood.png");
 	assetMng_->AddTexture("bomb-explosion", L"assets/Image/Effect/bomb_exp.png");
+	assetMng_->AddTexture("energy-ball", L"assets/Image/Effect/chargeball.png");
+	assetMng_->AddTexture("blood-explosion", L"assets/Image/Effect/blood_exp.png");
 	
 	// Create Title Map
 	map_ = std::make_unique<Map>(*entityMng_,*collisionMng_,16,2);
@@ -125,10 +127,6 @@ void GameScene::LoadLevel(const int& level)
 	map_->LoadCollisionLayer("BRICK", "assets/Image/Tilemap/brick.map", MAP_SIZE_X, MAP_SIZE_Y);
 	map_->LoadCollisionLayer("ASURA", "assets/Image/Tilemap/boss-position.map", MAP_SIZE_X, MAP_SIZE_Y);
 
-	// Initialize Camera ( Track Camera to Player )
-	Camera::Instance().viewport.w = WINDOW_WIDTH;
-	Camera::Instance().viewport.h = WINDOW_HEIGHT;
-
 	// Create player Entity
 	player_ = std::make_unique<Player>(*this);
 	player_->Initialize();
@@ -141,6 +139,14 @@ void GameScene::LoadLevel(const int& level)
 	auto sideSpawner = std::make_unique<SideSpawner>(std::move(slasherClone), slasher_start_pos, *enemyMng_);
 	sideSpawner->SetOffSet(side_spawn_offset_x, side_spawn_offset_y);
 	spawners_.emplace_back(std::move(sideSpawner));
+
+	// Initialize Camera ( Track Camera to Player )
+	Camera::Instance().SetViewSize(WINDOW_WIDTH, WINDOW_HEIGHT);
+	Camera::Instance().SetOffset(Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT * 2 / 3));
+	Camera::Instance().SetLimit(Vector2(WORLD_MAP_X - WINDOW_WIDTH, 0));
+	auto playerTransform = player_->self_->GetComponent<TransformComponent>();
+	Camera::Instance().SetTargetEntity(playerTransform);
+	Camera::Instance().SetPosition(playerTransform->pos);
 	
 	collisionMng_->SetGravity(Vector2(0, gravity_force_y));
 }
@@ -186,13 +192,13 @@ void GameScene::GameUpdate(const float& deltaTime)
 	enemyMng_->Update(deltaTime);
 	entityMng_->Update(deltaTime);
 	combatMng_->Update(deltaTime);
-	Camera::Instance().Update();
 	environment_->Update(deltaTime);
 	ProcessEnterBossArea();
 	collisionMng_->PlatformResolution(deltaTime);
 	collisionMng_->Update(deltaTime);
 	collisionMng_->CombatCollision();
 	effectMng_->Update(deltaTime);
+	Camera::Instance().Update();
 }
 
 void GameScene::ProcessEnterBossArea()
@@ -230,7 +236,7 @@ void GameScene::GameRender()
 {
 	environment_->RenderBackGround();
 	entityMng_->Render();
-	collisionMng_->Render();
+	/*collisionMng_->Render();*/
 	effectMng_->Render();
 	player_->RenderUI();
 }
