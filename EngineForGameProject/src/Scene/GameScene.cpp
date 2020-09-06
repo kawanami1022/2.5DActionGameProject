@@ -42,7 +42,6 @@ namespace
 	constexpr float side_spawn_offset_y = WINDOW_HEIGHT/2.0f;
 
 	Rect windowBox_;
-
 }
 
 int GameScene::GetTexture(std::string textureID)
@@ -99,12 +98,14 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("chain-icon", L"assets/Image/UI/chain.png");
 	assetMng_->AddTexture("bomb-icon", L"assets/Image/UI/bomb.png");
 	assetMng_->AddTexture("sword-icon", L"assets/Image/UI/sword.png");
+	assetMng_->AddTexture("energy-bullet", L"assets/Image/Character/Enemy/asura/fireball_b.png");
 
 	assetMng_->AddTexture("slasher-run", L"assets/Image/Character/Enemy/slasher/slasher-run-Sheet.png");
 	assetMng_->AddTexture("slasher-slash", L"assets/Image/Character/Enemy/slasher/slasher-slash-Sheet.png");
 	assetMng_->AddTexture("slasher-hurt", L"assets/Image/Character/Enemy/slasher/slasher-hurt-Sheet.png");
 	assetMng_->AddTexture("slasher-death", L"assets/Image/Character/Enemy/slasher/slasher-death-Sheet.png");
 	assetMng_->AddTexture("slasher-lying", L"assets/Image/Character/Enemy/slasher/slasher-lying-Sheet.png");
+
 	assetMng_->AddTexture("boss-asura", L"assets/Image/Character/Enemy/asura/ashura.png");
 	
 	assetMng_->AddTexture("environment-1", L"assets/Image/Environment/environment_1.png");
@@ -114,6 +115,7 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("bomb-explosion", L"assets/Image/Effect/bomb_exp.png");
 	assetMng_->AddTexture("energy-ball", L"assets/Image/Effect/chargeball.png");
 	assetMng_->AddTexture("blood-explosion", L"assets/Image/Effect/blood_exp.png");
+	assetMng_->AddTexture("eliminate-energy-bullet", L"assets/Image/Effect/eliminate_b.png");
 	
 	// Create Title Map
 	map_ = std::make_unique<Map>(*entityMng_,*collisionMng_,16,2);
@@ -201,6 +203,19 @@ void GameScene::GameUpdate(const float& deltaTime)
 	Camera::Instance().Update();
 }
 
+void GameScene::BossSceneUpdate(const float& deltaTime)
+{
+	(*spawners_.rbegin())->Update(deltaTime);
+	enemyMng_->BossSceneUpdate(deltaTime);
+	entityMng_->BossSceneUpdate(deltaTime);
+	Camera::Instance().Update();
+	if (timer_ <= 0)
+	{
+		updateFunc_ = &GameScene::GameUpdate;
+	}
+	timer_ -= deltaTime;
+}
+
 void GameScene::ProcessEnterBossArea()
 {
 	Vector2 bossPos;
@@ -208,9 +223,14 @@ void GameScene::ProcessEnterBossArea()
 	{
 		auto asuraClone = std::make_unique<Asura>(*this, player_->GetPlayerTransform());
 		auto bossSpawner = std::make_unique<BossSpawner>(std::move(asuraClone), bossPos, *enemyMng_);
+		auto playerTransform = player_->self_->GetComponent<TransformComponent>();
+		playerTransform->SetLeftLimit(bossPos.X - WINDOW_WIDTH / 2);
+		playerTransform->SetRightLimit(bossPos.X + WINDOW_WIDTH / 2 - playerTransform->w);
 		spawners_.emplace_back(std::move(bossSpawner));
 		Camera::Instance().LockCameraAt(bossPos);
 		isBossAdded = true;
+		timer_ = 4.0f;
+		updateFunc_ = &GameScene::BossSceneUpdate;
 	}
 }
 
@@ -236,7 +256,7 @@ void GameScene::GameRender()
 {
 	environment_->RenderBackGround();
 	entityMng_->Render();
-	/*collisionMng_->Render();*/
+	/*collisionMng_->Render();*/	// collision debug
 	effectMng_->Render();
 	player_->RenderUI();
 }
