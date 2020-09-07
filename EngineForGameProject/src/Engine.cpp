@@ -8,7 +8,9 @@
 
 #include "System/SceneManager.h"
 #include "System/Debugger.h"
+#include "System/Time.h"
 #include "Input/KeyboardInput.h"
+
 
 Engine& Engine::Instance()
 {
@@ -20,6 +22,7 @@ void Engine::Start()
 {
     DxLib::ChangeWindowMode(true);
     DxLib::SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, 16);
+    DxLib::SetWindowTextW(L"2D Engine");
 
     if (DxLib::DxLib_Init())
     {
@@ -35,6 +38,8 @@ void Engine::Start()
 
     sceneMng_.reset(new SceneManager(*sceneInput_));
 
+    auto& time = Time::Instance();
+    time.SetFrameRate(FPS);
 }
 
 void Engine::Run()
@@ -44,15 +49,12 @@ void Engine::Run()
     {
         DxLib::ClearDrawScreen();
 
-        int timeToWait = MILLISECONDS_PER_FRAME - (DxLib::GetNowCount() - lastTickFrame);
-        if (timeToWait > 0 && timeToWait <= MILLISECONDS_PER_FRAME) DxLib::WaitTimer(timeToWait);
-
-        float deltaTime = static_cast<float>(DxLib::GetNowCount() - lastTickFrame) / (second_to_millisecond);
-        lastTickFrame = DxLib::GetNowCount();
-
-        sceneInput_->Update(deltaTime);
+        auto& time = Time::Instance();
+        time.FixedFrameRate();
+        
+        sceneInput_->Update(time.FixedDeltaTimeF());
         sceneMng_->ProcessInput();
-        sceneMng_->Update(deltaTime);
+        sceneMng_->Update(time.FixedDeltaTimeF());
 
         // Game Draw
         sceneMng_->Render();

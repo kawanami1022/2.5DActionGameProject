@@ -24,6 +24,7 @@ struct Animation
     unsigned int numCelX;
     unsigned int numCelY;
     unsigned int animSpeed;
+    float angle = 0.0f;
     float rotateSpeed = 0.0f;
 };
 
@@ -40,7 +41,6 @@ private:
     Rect desRect;
     std::unordered_map<std::string, Animation> animations_;                                  
     std::string currentAnimID;
-    float angleRad_ = 0.0f;
     bool isFlipped = false;
     
     // Animation update
@@ -51,6 +51,7 @@ private:
     };
     PLAY playState_;
     unsigned int playTimer_ = 0;
+    unsigned int playLength_ = 0;
     bool isPlaying_;
     using AnimateUpdate_t = void (SpriteComponent::*)(const float&);
     AnimateUpdate_t animateUpdate_;
@@ -71,21 +72,22 @@ public:
     void Render() override;
 
     void AddAnimation(int texture, std::string animID, const Rect& srcRect,
-        const unsigned& animSpeed, const float& rotateSpeed = 0.0f);
+        const unsigned& animSpeed, const float& angle = 0.0f, const float& rotateSpeed = 0.0f);
     
     inline bool IsFlipped() const { return isFlipped; }
     inline void SetFlipState(bool flipFlag) { isFlipped = flipFlag; }
     inline void Flip() { isFlipped = !isFlipped; }
     int GetCurrentCelNO() const;
     void SetAnimationOffset(const std::string& animaID, const Vector2& offset);
-    void PlayLoop(const std::string& animID);
+    void PlayLoop(const std::string& animID, const unsigned int playTime = 0);
     void PlayAnimation(const std::string& animID);
-    void PlayOnce(const std::string& animID);
+    void PlayOnce(const std::string& animID, const unsigned int playTime = 0);
     void SetFinish();
     void Pause();
     void Resume();
     void SetAnimationSpeed(const unsigned int& animSpeed);
-    bool IsPlaying(const std::string& animID);
+    bool IsAnimationPlaying(const std::string& animID);
+    bool IsAnimationFinished();
     bool IsFinished();
 
     SpriteComponent(const std::shared_ptr<Entity>& owner, bool isFixed = false);

@@ -1,12 +1,12 @@
 #include "BombShot.h"
 
-#include "../../Geometry/Geometry.h"
 #include "../../Scene/GameScene.h"
 
 #include "../Entity.h"
 #include "../../System/EntityManager.h"
 #include "../../System/CollisionManager.h"
 #include "../../System/EffectManager.h"
+#include "../../System/Camera.h"
 
 #include "../../Component/TransformComponent.h"
 #include "../../Component/SpriteComponent.h"
@@ -25,6 +25,10 @@ namespace
 	constexpr float collider_offset_x = bomb_width * scale / 2.0f;
 	constexpr float collider_offset_y = bomb_height * scale / 2.0f;
 	constexpr float bomb_exp_scale = 2.0f;
+
+	constexpr int shake_time = 200;
+	constexpr float shake_range_x = 10;
+	constexpr float shake_range_y = 10;
 }
 
 BombShot::BombShot(GameScene& gs, const std::shared_ptr<Entity>& owner, const Vector2& startPos, 
@@ -37,7 +41,7 @@ BombShot::BombShot(GameScene& gs, const std::shared_ptr<Entity>& owner, const Ve
 	auto anim = self_->GetComponent<SpriteComponent>();
 	anim->AddAnimation(gs_->GetTexture("bomb-equip"), "attack",
 		Rect(0, 0, bomb_width, bomb_height),
-		1, rotate_speed);
+		1,0,rotate_speed);
 	anim->PlayLoop("attack");
 	auto& collider = gs_->collisionMng_->AddProjectileCollider(self_,
 		"PLAYER-BOMB", startPos.X, startPos.Y, bomb_radius);
@@ -64,11 +68,13 @@ int BombShot::GetDamage() const
 
 void BombShot::Update(const float& deltaTime)
 {
-	if (!IsOwnerActive())
+	if (!IsOwnerActive() || self_->GetComponent<ProjectileEmitterComponent>()->IsOutOfRange())
 	{
+		self_->Destroy();
 		auto transform = self_->GetComponent<TransformComponent>();
 		Vector2 pos = Vector2(transform->pos.X + transform->w / 2 * transform->scale,
 							transform->pos.Y + transform->h / 2 * transform->scale);
 		gs_->effectMng_->BombExplosionEffect(pos.X , pos.Y, bomb_exp_scale);
+		Camera::Instance().ShakeCamera(shake_range_x, shake_range_y, shake_time);
 	}
 }

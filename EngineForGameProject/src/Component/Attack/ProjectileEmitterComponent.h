@@ -10,13 +10,14 @@ private:
     friend class Entity;
     friend class BombShot;
     friend class ShurikenShot;
+    friend class EnergyBullet;
 
     Vector2 start_;
     Vector2 velocity_;
     float range_;
 
     bool IsOutOfRange();
-    bool IsOutOfWorld();
+    bool IsOutOfMap();
     inline Vector2 GetVelocity() const { return velocity_; }
     inline void SetVelocity(const Vector2& vel) { velocity_ = vel; }
 public:

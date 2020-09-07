@@ -162,7 +162,10 @@
     <ClCompile Include="src\GameObject\Attack\MeleeAttack.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\System\Sound.cpp">
+    <ClCompile Include="src\System\Time.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\GameObject\Attack\EnergyBullet.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -314,7 +317,10 @@
     <ClInclude Include="src\GameObject\Attack\MeleeAttack.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="src\System\Sound.h">
+    <ClInclude Include="src\System\Time.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="src\GameObject\Attack\EnergyBullet.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

@@ -12,6 +12,7 @@
 #include "../../System/AssetManager.h"
 #include "../../System/CollisionManager.h"
 #include "../../System/EntityManager.h"
+#include "../../System/EffectManager.h"
 
 namespace
 {
@@ -64,7 +65,7 @@ void Slasher::Initialize()
 
 std::unique_ptr<Enemy> Slasher::MakeClone()
 {
-	return std::make_unique<Slasher>(gs_,playerPos_.lock());
+	return std::make_unique<Slasher>(gs_,playerTransform_.lock());
 }
 
 void Slasher::SetPosition(const Vector2& pos)
@@ -94,10 +95,10 @@ void Slasher::AimPlayer(const float& deltaTime)
 	auto transform = self_->GetComponent<TransformComponent>();
 	auto sprite = self_->GetComponent<SpriteComponent>();
 
-	rigidBody_->velocity_.X = (playerPos_.lock()->pos.X - transform->pos.X) > 0 ? normal_side_velocity : -normal_side_velocity;
+	rigidBody_->velocity_.X = (playerTransform_.lock()->pos.X - transform->pos.X) > 0 ? normal_side_velocity : -normal_side_velocity;
 
 	sprite->SetFlipState(!(rigidBody_->velocity_.X > 0));
-	if (std::abs(playerPos_.lock()->pos.X - transform->pos.X) < slash_distancce)
+	if (std::abs(playerTransform_.lock()->pos.X - transform->pos.X) < slash_distancce)
 	{
 		actionUpdate_ = &Slasher::SlashUpdate;
 		sprite->PlayLoop("slash");
@@ -112,9 +113,9 @@ void Slasher::SlashUpdate(const float& deltaTime)
 	auto transform = self_->GetComponent<TransformComponent>();
 	auto sprite = self_->GetComponent<SpriteComponent>();
 	
-	if (std::abs(playerPos_.lock()->pos.X - transform->pos.X) > slash_distancce)
+	if (std::abs(playerTransform_.lock()->pos.X - transform->pos.X) > slash_distancce)
 	{
-		if (sprite->IsFinished())
+		if (sprite->IsAnimationFinished())
 		{
 			actionUpdate_ = &Slasher::AimPlayer;
 			sprite->PlayLoop("run");
@@ -125,10 +126,10 @@ void Slasher::SlashUpdate(const float& deltaTime)
 void Slasher::HurtUpdate(const float& deltaTime)
 {
 	auto sprite = self_->GetComponent<SpriteComponent>();
-	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
+	auto health = self_->GetComponent<HealthComponent>()->Health();
 	sprite->PlayOnce("hurt");
 	rigidBody_->velocity_.X = 0;
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		if (health <= 0)
 		{
@@ -147,13 +148,19 @@ void Slasher::DeathUpdate(const float& deltaTime)
 	auto sprite = self_->GetComponent<SpriteComponent>();
 	sprite->PlayOnce("death");
 	rigidBody_->velocity_.X = 0;
-	if (sprite->IsFinished())
+	if (sprite->IsAnimationFinished())
 	{
 		timer_ = wait_destroy_time;
 		sprite->Pause();
 		rigidBody_->DeActivate();
 		actionUpdate_ = &Slasher::WaitDestroyUpdate;
 	}
+}
+
+void Slasher::ExplosionDeathUpdate(const float& deltaTime)
+{
+	gs_.effectMng_->BloodExplosionEffect(rigidBody_->collider_.Center().X, rigidBody_->collider_.Center().Y);
+	self_->Destroy();
 }
 
 void Slasher::WaitDestroyUpdate(const float& deltaTime)
@@ -165,7 +172,13 @@ void Slasher::WaitDestroyUpdate(const float& deltaTime)
 
 void Slasher::CheckHit()
 {
-	auto health = self_->GetComponent<HealthComponent>()->GetHealth();
+	auto health = self_->GetComponent<HealthComponent>();
+
+	if (health->ReceivedDamage() == health->GetMaxHealth())
+	{
+		actionUpdate_ = &Slasher::ExplosionDeathUpdate;
+		return;
+	}
 
 	if (self_->IsHit())
 	{

@@ -3,8 +3,7 @@
 constexpr int WINDOW_WIDTH = 800;
 constexpr int WINDOW_HEIGHT = 600;
 
-constexpr int FPS = 60;
-constexpr int MILLISECONDS_PER_FRAME = 1000 / FPS;
+constexpr unsigned int FPS = 60;
 
 constexpr int MAP_TEXTURE_SIZE_X = 224;
 constexpr int MAP_TEXTURE_SIZE_Y = 176;
@@ -20,4 +19,4 @@ constexpr unsigned int WORLD_MAP_Y = MAP_SIZE_Y * TILE_SIZE * TILE_SCALE;
 
 constexpr unsigned int second_to_millisecond = 1000;
 
-constexpr float PI = 3.14159f;
+constexpr float PI = 3.1415926535897932384626433832795f;

@@ -53,6 +53,12 @@ void EntityManager::Update(const float& deltaTime)
     RemoveEntity();
 }
 
+void EntityManager::BossSceneUpdate(const float& deltaTime)
+{
+    // Just update the newest added Entity ( boss )
+    (*entities_.rbegin())->Update(deltaTime);
+}
+
 void EntityManager::RemoveEntity()
 {
     if (!removeFlag_) return;
