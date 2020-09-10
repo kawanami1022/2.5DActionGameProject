@@ -35,7 +35,7 @@ namespace
 	const Vector2 attack3_offset = Vector2(10, (attack3_src_rect.h - player_height) * player_scale);
 
 	// Animation's hit box
-	constexpr float rigidbody_width_scale = 1.2f;
+	constexpr float rigidbody_width_scale = 1.0f;
 	constexpr float rigidbody_height_scale = 2.0f;
 	constexpr float rigidbody_jump_scale = 1.5f;
 	constexpr float rigidbody_crouch_scale = 1.4f;
@@ -46,7 +46,9 @@ namespace
 	constexpr float cooldown_attack_time = 0.2f;
 
 	// Movement's velocity
-	constexpr float jump_velocity = 300.0f;
+	constexpr float jump_velocity = 400.0f;
+	constexpr float wall_jump_velocity_x = 400.0f;
+	constexpr float wall_jump_velocity_y = 500.0f;
 	constexpr float remain_jump_velocity = 300.0f;
 	constexpr float normal_side_velocity = 200.0f;
 	constexpr float crouch_velocity = 50.0f;
@@ -65,6 +67,7 @@ namespace
 	constexpr unsigned short int attack2_animation_speed = 70;
 	constexpr unsigned short int attack3_animation_speed = 70;
 	constexpr unsigned short int draw_withdraw_animation_speed = 100;
+	constexpr unsigned short int slide_wall_animation_speed = 100;
 
 	// Attack frame
 	// Attack collider is created at this frame
@@ -122,6 +125,7 @@ void Player::Initialize()
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack1"), "attack-1", attack1_src_rect, attack1_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack2"), "attack-2", attack2_src_rect, attack2_animation_speed);
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-attack3"), "attack-3", attack3_src_rect, attack3_animation_speed);
+	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-slide-wall"), "slide-wall", src_rect, slide_wall_animation_speed);
 	playerAnim->PlayLoop("idle");
 
 	// Set animation offset
@@ -232,6 +236,7 @@ void Player::ProcessJump()
 {
 	if (input_->IsTriggered(L"jump") && rigidBody_->isGrounded_)
 	{
+		++jumpCnt_;
 		rigidBody_->velocity_.Y = -jump_velocity;
 		rigidBody_->isGrounded_ = false;
 		timer_ = jump_time;
@@ -248,6 +253,7 @@ void Player::ProcessJump()
 
 void Player::JumpState(const float& deltaTime)
 {
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
 	SetSideMoveVelocity(normal_side_velocity);
 	ProcessThrow();
 	if (input_->IsPressed(L"jump") && isJumping)
@@ -268,7 +274,7 @@ void Player::JumpState(const float& deltaTime)
 		isJumping = false;
 	}
 
-	if (!isJumping)
+	if (!isJumping && sprite->IsAnimationFinished())
 	{
 		rigidBody_->isGrounded_ = false;
 		actionState_ = ACTION::FALL;
@@ -281,13 +287,19 @@ void Player::FallState(const float& deltaTime)
 	SetSideMoveVelocity(normal_side_velocity);
 	ProcessThrow();
 	ProcessCheckGround();
+	ProcessSlidingWall();
 	// Second jump
 	if (input_->IsTriggered(L"jump"))
 	{
-		rigidBody_->velocity_.Y = -jump_velocity;
-		isJumping = true;
-		actionState_ = ACTION::JUMP;
-		inputState_ = &Player::SecondJumpState;
+		if (jumpCnt_ < ammountOfJump_)
+		{
+			++jumpCnt_;
+			timer_ = -1;
+			rigidBody_->velocity_.Y = -jump_velocity;
+			isJumping = true;
+			actionState_ = ACTION::JUMP;
+			inputState_ = &Player::JumpState;
+		}
 	}
 }
 
@@ -300,20 +312,6 @@ void Player::CrouchState(const float&)
 		isCrouch = false;
 		inputState_ = &Player::GroundState;
 	}
-}
-
-void Player::SecondJumpState(const float& deltaTime)
-{
-	const auto& sprite = self_->GetComponent<SpriteComponent>();
-
-	SetSideMoveVelocity(normal_side_velocity);
-	ProcessThrow();
-	if (isJumping && sprite->IsAnimationFinished())
-	{
-		isJumping = false;
-		actionState_ = ACTION::FALL;
-	}
-	ProcessCheckGround();
 }
 
 void Player::GroundAttackState(const float& deltaTime)
@@ -352,6 +350,36 @@ void Player::GroundAttackState(const float& deltaTime)
 		}
 	}
 
+}
+
+void Player::SlidingWallState(const float&)
+{
+	const auto& sprite = self_->GetComponent<SpriteComponent>();
+	SetSideMoveVelocity(normal_side_velocity);
+	rigidBody_->velocity_.Y = 10;
+	if (!rigidBody_->isTouchWall_)
+	{
+		isSlidingWall = false;
+		actionState_ = ACTION::FALL;
+		inputState_ = &Player::FallState;
+	}
+	if (input_->IsTriggered(L"jump"))
+	{
+		if (!sprite->IsFlipped())
+		{
+			rigidBody_->velocity_.X = wall_jump_velocity_x;
+			rigidBody_->velocity_.Y = -wall_jump_velocity_y;
+		}
+		else
+		{
+			rigidBody_->velocity_.X = -wall_jump_velocity_x;
+			rigidBody_->velocity_.Y = -wall_jump_velocity_y;
+		}
+		isSlidingWall = false;
+		isJumping = true;
+		actionState_ = ACTION::JUMP;
+		inputState_ = &Player::JumpState;
+	}
 }
 
 void Player::DrawWithdrawSwordState(const float&)
@@ -413,6 +441,7 @@ void Player::ProcessCheckGround()
 {
 	if (rigidBody_->isGrounded_)
 	{
+		jumpCnt_ = 0;
 		inputState_ = &Player::GroundState;
 		actionState_ = ACTION::IDLE;
 	}
@@ -422,6 +451,7 @@ void Player::ProcessFall()
 {
 	if (rigidBody_->velocity_.Y > 0.0f && !isJumping)
 	{
+		++jumpCnt_;
 		rigidBody_->isGrounded_ = false;
 		actionState_ = ACTION::FALL;
 		inputState_ = &Player::FallState;
@@ -486,6 +516,17 @@ void Player::TurnBackState()
 	actionState_ = oldActionState_;
 }
 
+void Player::ProcessSlidingWall()
+{
+	if (rigidBody_->isTouchWall_ && rigidBody_->velocity_.Y > 0)
+	{
+		jumpCnt_ = 1;
+		isSlidingWall = true;
+		inputState_ = &Player::SlidingWallState;
+		actionState_ = ACTION::SLIDE_WALL;
+	}
+}
+
 void Player::UpdateState()
 {
 	const auto& sprite = self_->GetComponent<SpriteComponent>();
@@ -539,6 +580,9 @@ void Player::UpdateState()
 		break;
 	case ACTION::WITHDRAW_SWORD:
 		sprite->PlayOnce("withdraw");
+		break;
+	case ACTION::SLIDE_WALL:
+		sprite->PlayLoop("slide-wall");
 		break;
 	}
 

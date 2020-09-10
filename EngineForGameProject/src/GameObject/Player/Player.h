@@ -26,7 +26,8 @@ enum class ACTION
 	ATTACK_2,
 	ATTACK_3,
 	DRAW_SWORD,
-	WITHDRAW_SWORD
+	WITHDRAW_SWORD,
+	SLIDE_WALL
 };
 
 class Player
@@ -41,11 +42,15 @@ private:
 	std::vector<std::unique_ptr<Equipment>> equipments_;
 	int currentEquip_ = 0;
 	float attackAngle_ = 0.0f;
+	int ammountOfJump_ = 2;
+	int jumpCnt_ = 0;
 	float timer_;
 	bool isDrawn = false;
 	bool isJumping = false;
 	bool isCrouch = false;
 	bool isMeleeActive = false;
+	bool isSlidingWall = false;
+	bool isWallJumpActive = false;
 
 	ACTION actionState_ = ACTION::IDLE;
 	ACTION oldActionState_ = actionState_;
@@ -57,9 +62,9 @@ private:
 	void FallState(const float&);
 	void ThrowState(const float&);
 	void CrouchState(const float&);
-	void SecondJumpState(const float&);
 	void DrawWithdrawSwordState(const float&);
 	void GroundAttackState(const float&);
+	void SlidingWallState(const float&);
 
 	void SetSideMoveVelocity(const float& velX);
 	void SetMoveAction(const ACTION& idle, const ACTION& moveType);
@@ -72,6 +77,7 @@ private:
 	void ProcessCheckGround();
 	void ProcessFall();
 	void ProcessDrawWithdrawSword();
+	void ProcessSlidingWall();
 	void ChangeEquip();
 	void TurnBackState();
 	
