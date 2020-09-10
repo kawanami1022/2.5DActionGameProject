@@ -65,6 +65,9 @@ void TitleScene::Initialize()
 	assetMng_->AddTexture(setting_tag, L"assets/Image/Title/SETTING.png");
 	assetMng_->AddTexture(exit_tag, L"assets/Image/Title/EXIT.png");
 
+	// keyUI
+	assetMng_->AddTexture("PRESS ENTER", L"assets/Image/Title/PRESS ENTER()KEY.png");
+
 	Vector2 pos = Vector2(menu_pos_x, menu_pos_y);
 	Vector2 size;
 	pos.X = menu_pos_x - 15;
@@ -184,11 +187,15 @@ void TitleScene::FadeRender()
 void TitleScene::Update(const float& deltaTime)
 {
 	(this->*updateFunc_)(deltaTime);
+	
+	frame_++;
 }
 
 void TitleScene::Render()
 {
 	(this->*renderFunc_)();
+	if((frame_/60)%2==0)
+	DrawRotaGraph(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 50, 1.0f, 0.0f, assetMng_->GetTexture("PRESS ENTER"), true);
 }
 
 void TitleScene::SetCurrentItem()

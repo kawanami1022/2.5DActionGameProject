@@ -11,6 +11,7 @@ protected:
 	BaseScene(SceneManager&,KeyboardInput&);
 	SceneManager& sceneMng_;
 	KeyboardInput& sceneInput_;
+	unsigned int frame_=0;
 public:
 	virtual ~BaseScene() = default;
 
