@@ -11,6 +11,7 @@ class TransformComponent;
 class Equipment;
 class Vector2;
 class Rect;
+class TextureManager;
 
 enum class ACTION
 {
