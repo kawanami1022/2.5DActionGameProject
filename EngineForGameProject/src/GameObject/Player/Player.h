@@ -25,6 +25,10 @@ enum class ACTION
 	ATTACK_1,
 	ATTACK_2,
 	ATTACK_3,
+	AIR_ATTACK,
+	AIR_CHARGE,
+	SLASH_DOWN,
+	SMASH_DOWN,
 	DRAW_SWORD,
 	WITHDRAW_SWORD,
 	SLIDE_WALL
@@ -51,6 +55,7 @@ private:
 	bool isMeleeActive = false;
 	bool isSlidingWall = false;
 	bool isWallJumpActive = false;
+	bool isAirAttackActive = false;
 
 	ACTION actionState_ = ACTION::IDLE;
 	ACTION oldActionState_ = actionState_;
@@ -64,6 +69,10 @@ private:
 	void CrouchState(const float&);
 	void DrawWithdrawSwordState(const float&);
 	void GroundAttackState(const float&);
+	void AirAttackState(const float&);
+	void AirChargeState(const float&);
+	void SlashDownState(const float&);
+	void SmashDownState(const float&);
 	void SlidingWallState(const float&);
 
 	void SetSideMoveVelocity(const float& velX);
@@ -73,6 +82,7 @@ private:
 	void SetAngleDirection();
 	void ProcessThrow();
 	void ProcessGroundAttack();
+	void ProcessAirAttack();
 	void ProcessJump();
 	void ProcessCheckGround();
 	void ProcessFall();
@@ -80,7 +90,6 @@ private:
 	void ProcessSlidingWall();
 	void ChangeEquip();
 	void TurnBackState();
-	
 public:
 	void UpdateState();
 	Player(GameScene& gs);

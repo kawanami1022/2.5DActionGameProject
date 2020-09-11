@@ -94,6 +94,10 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("player-attack2", L"assets/Image/Character/Player/adventurer-attack2-sheet.png");
 	assetMng_->AddTexture("player-attack3", L"assets/Image/Character/Player/adventurer-attack3-sheet.png");
 	assetMng_->AddTexture("player-slide-wall", L"assets/Image/Character/Player/adventurer-wall-slide-sheet.png");
+	assetMng_->AddTexture("player-air-attack", L"assets/Image/Character/Player/adventurer-air-attack-sheet.png");
+	assetMng_->AddTexture("player-air-charge", L"assets/Image/Character/Player/adventurer-air-attack2-sheet.png");
+	assetMng_->AddTexture("player-slash-down", L"assets/Image/Character/Player/adventurer-air-attack3-loop-sheet.png");
+	assetMng_->AddTexture("player-end-slash-down", L"assets/Image/Character/Player/adventurer-air-attack-3-end-sheet.png");
 
 	assetMng_->AddTexture("bomb-equip", L"assets/Image/Character/Player/Equipment/bombshot.png");
 	assetMng_->AddTexture("shuriken-equip", L"assets/Image/Character/Player/Equipment/shuriken.png");
@@ -191,11 +195,11 @@ void GameScene::LoadLevel(const int& level)
 
 	LoadEnemy();
 
-	// Create spawn enemy
-	auto slasherClone = std::make_unique<Slasher>(*this, player_->GetPlayerTransform());
+	// Create spawn enemyTile
+	/*auto slasherClone = std::make_unique<Slasher>(*this, player_->GetPlayerTransform());
 	auto sideSpawner = std::make_unique<SideSpawner>(std::move(slasherClone), slasher_start_pos, *enemyMng_);
 	sideSpawner->SetOffSet(side_spawn_offset_x, side_spawn_offset_y);
-	spawners_.emplace_back(std::move(sideSpawner));
+	spawners_.emplace_back(std::move(sideSpawner));*/
 
 	// Initialize Camera ( Track Camera to Player )
 	Camera::Instance().SetViewSize(WINDOW_WIDTH, WINDOW_HEIGHT);
@@ -210,28 +214,32 @@ void GameScene::LoadLevel(const int& level)
 
 void GameScene::LoadEnemy()
 {
-	for (auto& enemy : entityMng_->mapLayers_["ENEMY"])
+	for (auto& enemyTile : entityMng_->mapLayers_["ENEMY"])
 	{
-		auto transform = enemy->GetComponent<TransformComponent>();
-		if (enemy->GetName() == "FLYING-EYE")
+		auto tileTransform = enemyTile->GetComponent<TransformComponent>();
+		if (enemyTile->GetName() == "FLYING-EYE")
 		{
 			auto flyingEye = std::make_unique<FlyingEye>(*this, player_->GetPlayerTransform());
 			flyingEye->Initialize();
-			flyingEye->SetPosition(transform->pos);
+			flyingEye->SetPosition(tileTransform->pos);
 			enemyMng_->AddEnemy(std::move(flyingEye));
 		}
-		if (enemy->GetName() == "MUSHROOM")
+		if (enemyTile->GetName() == "MUSHROOM")
 		{
 			auto mushroom = std::make_unique<Mushroom>(*this, player_->GetPlayerTransform());
 			mushroom->Initialize();
-			mushroom->SetPosition(transform->pos - Vector2(transform->w * transform->scale, transform->h * transform->scale));
+			auto mushroomTransform = mushroom->GetOwner()->GetComponent<TransformComponent>();
+			mushroom->SetPosition(tileTransform->pos - 
+				Vector2(mushroomTransform->w * mushroomTransform->scale, mushroomTransform->h * mushroomTransform->scale));
 			enemyMng_->AddEnemy(std::move(mushroom));
 		}
-		if (enemy->GetName() == "SKELETON")
+		if (enemyTile->GetName() == "SKELETON")
 		{
 			auto skeleton = std::make_unique<Skeleton>(*this, player_->GetPlayerTransform());
 			skeleton->Initialize();
-			skeleton->SetPosition(transform->pos - Vector2(transform->w * transform->scale, transform->h * transform->scale));
+			auto skeletonTransform = skeleton->GetOwner()->GetComponent<TransformComponent>();
+			skeleton->SetPosition(tileTransform->pos - 
+				Vector2(skeletonTransform->w * skeletonTransform->scale, skeletonTransform->h * skeletonTransform->scale));
 			enemyMng_->AddEnemy(std::move(skeleton));
 		}
 	}
@@ -254,6 +262,7 @@ void GameScene::FadeInUpdate(const float& deltaTime)
 {
 	Camera::Instance().Update();
 	entityMng_->Update(deltaTime);
+
 	if (waitTimer_ <= 0)
 	{
 		updateFunc_ = &GameScene::GameUpdate;
