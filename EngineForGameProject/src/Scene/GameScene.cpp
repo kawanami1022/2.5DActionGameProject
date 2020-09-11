@@ -149,11 +149,12 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("UI_change_weapon", L"assets/Image/UI/Command/change_wepon.png");
 
 	assetMng_->AddTexture("UI_MoveLeft", L"assets/Image/UI/Command/run.png");
-	//assetMng_->AddTexture("UI_MoveRight", L"assets/Image/UI/Command/run.png");
+
 	// keymap
 	assetMng_->AddTexture("Z_jump", L"assets/Image/UI/Key/z_alternative_paper.png");
 	assetMng_->AddTexture("X_attack", L"assets/Image/UI/Key/x_alternative_paper.png");
 	assetMng_->AddTexture("C_change_weapon", L"assets/Image/UI/Key/c_alternative_paper.png");
+	assetMng_->AddTexture("P_pouse", L"assets/Image/UI/Key/p_alternative_paper.png");
 
 	assetMng_->AddTexture("LeftArrow_Move", L"assets/Image/UI/Key/arrowleft_alternative_paper.png");
 	assetMng_->AddTexture("RightArrow_Move", L"assets/Image/UI/Key/arrowright_alternative_paper.png");
@@ -285,6 +286,7 @@ void GameScene::GameUpdate(const float& deltaTime)
 	collisionMng_->CombatCollision();
 	effectMng_->Update(deltaTime);
 	Camera::Instance().Update();
+	
 }
 
 void GameScene::BossSceneUpdate(const float& deltaTime)

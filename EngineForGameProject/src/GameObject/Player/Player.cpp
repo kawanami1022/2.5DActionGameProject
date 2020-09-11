@@ -610,6 +610,7 @@ void Player::RenderUI()
 	TextureManager::DrawDebugBox(Rect(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 30, 100, 30), 0x000000, true);
 	DxLib::DrawGraph(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("LeftArrow_Move"), true);	//LeftArrow-key
 	DxLib::DrawGraph(WINDOW_WIDTH - 35, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("RightArrow_Move"), true);	//RightArrow-key
+	DxLib::DrawGraph(WINDOW_WIDTH - 35, 0, gs_.assetMng_->GetTexture("P_pouse"), true);	//RightArrow-key
 
 	width = 35;
 

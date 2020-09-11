@@ -50,7 +50,6 @@ private:
 
     bool isBossAdded = false;
     float timer_ = 0.0f;
-
     using UpdateFunc_t = void(GameScene::*)(const float&);
     UpdateFunc_t updateFunc_;
     using RenderFunc_t = void(GameScene::*)();
