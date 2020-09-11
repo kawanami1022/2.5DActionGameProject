@@ -1,3 +1,6 @@
+#include <DxLib.h>
+
+#include "../../Constant.h"
 #include "Player.h"
 
 #include "../Entity.h"
@@ -6,6 +9,7 @@
 #include "../Player/ShurikenEquip.h"
 #include "../Player/BombEquip.h"
 #include "../Player/SwordEquip.h"
+
 
 #include "../../Scene/GameScene.h"
 #include "../../System/AssetManager.h"
@@ -16,6 +20,8 @@
 #include "../../Component/Collider/RigidBody2D.h"
 #include "../../Component/SpriteComponent.h"
 #include "../../Component/HealthComponent.h"
+
+#include "../../System/TextureManager.h"
 
 namespace
 {
@@ -591,7 +597,30 @@ std::shared_ptr<TransformComponent> Player::GetPlayerTransform()
 
 void Player::RenderUI()
 {
+	//TextureManager::DrawRect(gs_.assetMng_->GetTexture("Z_jump"), Rect{}, Rect{});
 	equipments_[currentEquip_]->Render();
+
+	int height;
+
+	int width;
+	width = 0;
+
+	TextureManager::DrawDebugBox(Rect( width,WINDOW_HEIGHT - 100,75,100 ), 0x000000, true);
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 100, gs_.assetMng_->GetTexture("Z_jump"), true);			//z-key
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 65, gs_.assetMng_->GetTexture("X_attack"), true);			//X-key
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("C_change_weapon"), true);	//C-key
+
+	TextureManager::DrawDebugBox(Rect(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 30, 100, 30), 0x000000, true);
+	DxLib::DrawGraph(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("LeftArrow_Move"), true);	//LeftArrow-key
+	DxLib::DrawGraph(WINDOW_WIDTH - 35, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("RightArrow_Move"), true);	//RightArrow-key
+
+	width = 35;
+
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 100, gs_.assetMng_->GetTexture("UI_jump"), true);	//z-key
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 65, gs_.assetMng_->GetTexture("UI_attack"), true);	//X-key
+	DxLib::DrawGraph(width, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("UI_change_weapon"), true);	//C-key
+
+	DxLib::DrawGraph(WINDOW_WIDTH - 65, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("UI_MoveLeft"), true);	//LeftArrow-key
 }
 
 Player::~Player()

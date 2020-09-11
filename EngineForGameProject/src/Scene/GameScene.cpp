@@ -141,6 +141,22 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("blood-explosion", L"assets/Image/Effect/blood_exp.png");
 	assetMng_->AddTexture("eliminate-energy-bullet", L"assets/Image/Effect/eliminate_b.png");
 	
+	// character UI
+	assetMng_->AddTexture("UI_jump", L"assets/Image/UI/Command/jump.png");
+	assetMng_->AddTexture("UI_attack", L"assets/Image/UI/Command/Attack.png");
+	assetMng_->AddTexture("UI_change_weapon", L"assets/Image/UI/Command/change_wepon.png");
+
+	assetMng_->AddTexture("UI_MoveLeft", L"assets/Image/UI/Command/run.png");
+	//assetMng_->AddTexture("UI_MoveRight", L"assets/Image/UI/Command/run.png");
+	// keymap
+	assetMng_->AddTexture("Z_jump", L"assets/Image/UI/Key/z_alternative_paper.png");
+	assetMng_->AddTexture("X_attack", L"assets/Image/UI/Key/x_alternative_paper.png");
+	assetMng_->AddTexture("C_change_weapon", L"assets/Image/UI/Key/c_alternative_paper.png");
+
+	assetMng_->AddTexture("LeftArrow_Move", L"assets/Image/UI/Key/arrowleft_alternative_paper.png");
+	assetMng_->AddTexture("RightArrow_Move", L"assets/Image/UI/Key/arrowright_alternative_paper.png");
+
+
 	// Create Title Map
 	map_ = std::make_unique<Map>(*entityMng_,*collisionMng_,16,2);
 	map_->LoadMapLayer("BACKGROUND",assetMng_->GetTexture("map"),"assets/Image/Tilemap/background.map",
