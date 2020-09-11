@@ -8,11 +8,13 @@
 #include "../../Component/SpriteComponent.h"
 #include "../../Component/Collider/RigidBody2D.h"
 #include "../../Component/HealthComponent.h"
+#include "../Attack/MeleeAttack.h"
 
 #include "../../System/AssetManager.h"
 #include "../../System/CollisionManager.h"
 #include "../../System/EntityManager.h"
 #include "../../System/EffectManager.h"
+#include "../../System/CombatManager.h"
 
 namespace
 {
@@ -24,6 +26,11 @@ namespace
 
 	constexpr float body_width_scale = 1.3f;
 	constexpr float body_heigth_scale = 1.6f;
+	constexpr float attack_size_x = slasher_width * size_scale;
+	constexpr float attack_size_y = 32;
+	constexpr int attack_damage = 1;
+	constexpr float wait_attack_time = 0.3f;
+	constexpr float attack_offset_y = 35;
 
 	constexpr unsigned int run_animation_speed = 100;
 	constexpr unsigned int slash_animation_speed = 300;
@@ -101,7 +108,9 @@ void Slasher::AimPlayer(const float& deltaTime)
 	if (std::abs(playerTransform_.lock()->pos.X - transform->pos.X) < slash_distancce)
 	{
 		actionUpdate_ = &Slasher::SlashUpdate;
-		sprite->PlayOnce("slash");
+		sprite->PlayLoop("slash");
+		attackFlag_ = true;
+		timer_ = wait_attack_time;
 		rigidBody_->velocity_.X = 0.0f;
 	}
 }
@@ -113,14 +122,23 @@ void Slasher::SlashUpdate(const float& deltaTime)
 	auto transform = self_->GetComponent<TransformComponent>();
 	auto sprite = self_->GetComponent<SpriteComponent>();
 	
-	if (std::abs(playerTransform_.lock()->pos.X - transform->pos.X) > slash_distancce)
+	if (timer_ <= 0 && attackFlag_)
 	{
-		if (sprite->IsAnimationFinished())
-		{
-			actionUpdate_ = &Slasher::AimPlayer;
-			sprite->PlayLoop("run");
-		}
+		attackFlag_ = false;
+		timer_ = wait_attack_time;
+		Vector2 attack_pos = transform->pos + Vector2(0,attack_offset_y);
+		auto melee = gs_.combatMng_->AddAttack<MeleeAttack>(gs_, self_, attack_pos, attack_size_x, attack_size_y);
+		melee->SetDamage(attack_damage);
 	}
+
+	if (sprite->IsAnimationFinished())
+	{
+		timer_ = 0;
+		actionUpdate_ = &Slasher::AimPlayer;
+		sprite->PlayLoop("run");
+	}
+
+	timer_ -= deltaTime;
 }
 
 void Slasher::HurtUpdate(const float& deltaTime)
