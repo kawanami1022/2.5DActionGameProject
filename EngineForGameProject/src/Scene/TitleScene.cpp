@@ -172,6 +172,8 @@ void TitleScene::NormalRender()
 			DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
+	if ((frame_ / 60) % 2 == 0)
+		DrawRotaGraph(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 50, 1.0f, 0.0f, assetMng_->GetTexture("PRESS ENTER"), true);
 }
 
 void TitleScene::FadeRender()
@@ -193,8 +195,6 @@ void TitleScene::Update(const float& deltaTime)
 void TitleScene::Render()
 {
 	(this->*renderFunc_)();
-	if ((frame_ / 60) % 2 == 0)
-		DrawRotaGraph(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 50, 1.0f, 0.0f, assetMng_->GetTexture("PRESS ENTER"), true);
 }
 
 void TitleScene::SetCurrentItem()
