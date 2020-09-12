@@ -147,6 +147,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\Scene\EndingScene.cpp" />
     <ClCompile Include="src\GameObject\Enemy\Skeleton.cpp" />
     <ClCompile Include="src\GameObject\Enemy\Mushroom.cpp" />
     <ClCompile Include="src\GameObject\Enemy\FlyingEye.cpp" />
@@ -204,6 +205,7 @@
     <ClCompile Include="src\System\Time.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="src\Scene\EndingScene.h" />
     <ClInclude Include="src\GameObject\Enemy\Skeleton.h" />
     <ClInclude Include="src\GameObject\Enemy\Mushroom.h" />
     <ClInclude Include="src\GameObject\Enemy\FlyingEye.h" />

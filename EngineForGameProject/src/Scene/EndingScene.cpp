@@ -15,3 +15,12 @@ void EndingScene::GameUpdate(const float& deltaTime)
 void EndingScene::Render()
 {
 }
+
+EndingScene::EndingScene(SceneManager& sceneMng, KeyboardInput& sceneInput):BaseScene(sceneMng, sceneInput)
+{
+
+}
+
+EndingScene::~EndingScene()
+{
+}
