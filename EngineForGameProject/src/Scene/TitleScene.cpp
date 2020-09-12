@@ -66,7 +66,6 @@ void TitleScene::Initialize()
 	assetMng_->AddTexture(play_tag, L"assets/Image/Title/PLAY.png");
 	assetMng_->AddTexture(setting_tag, L"assets/Image/Title/SETTING.png");
 	assetMng_->AddTexture(exit_tag, L"assets/Image/Title/EXIT.png");
-	assetMng_->AddTexture("PRESS ENTER", L"assets/Image/Title/PRESS ENTER()KEY.png");
 
 	Vector2 pos = Vector2(menu_pos_x, menu_pos_y);
 	Vector2 size;
@@ -172,8 +171,6 @@ void TitleScene::NormalRender()
 			DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
 	}
-	if ((frame_ / 60) % 2 == 0)
-		DrawRotaGraph(WINDOW_WIDTH / 2, WINDOW_HEIGHT - 50, 1.0f, 0.0f, assetMng_->GetTexture("PRESS ENTER"), true);
 }
 
 void TitleScene::FadeRender()
