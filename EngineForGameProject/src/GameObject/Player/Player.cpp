@@ -863,9 +863,9 @@ void Player::RenderUI()
 	DxLib::DrawGraph(WINDOW_WIDTH - 100, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("LeftArrow_Move"), true);	//LeftArrow-key
 	DxLib::DrawGraph(WINDOW_WIDTH - 35, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("RightArrow_Move"), true);	//RightArrow-key
 
+	DxLib::DrawGraph(WINDOW_WIDTH - 35, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("RightArrow_Move"), true);	//
+
 	width = 35;
-
-
 	DxLib::DrawGraph(width, WINDOW_HEIGHT - 100, gs_.assetMng_->GetTexture("UI_jump"), true);	//z-key
 	DxLib::DrawGraph(width, WINDOW_HEIGHT - 65, gs_.assetMng_->GetTexture("UI_attack"), true);	//X-key
 	DxLib::DrawGraph(width, WINDOW_HEIGHT - 30, gs_.assetMng_->GetTexture("UI_change_weapon"), true);	//C-key
