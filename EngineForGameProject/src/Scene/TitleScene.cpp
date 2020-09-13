@@ -68,6 +68,8 @@ void TitleScene::Initialize()
 	assetMng_->AddTexture(exit_tag, L"assets/Image/Title/EXIT.png");
 	assetMng_->AddTexture("PRESS ENTER", L"assets/Image/Title/PRESS ENTER()KEY.png");
 
+	assetMng_->AddTexture("PRESS_ENTERKEY", L"assets/Image/Title/PRESS_ENTERKEY.png");
+
 	Vector2 pos = Vector2(menu_pos_x, menu_pos_y);
 	Vector2 size;
 	pos.X = menu_pos_x - 15;
@@ -179,6 +181,12 @@ void TitleScene::NormalRender()
 			DxLib::DrawRotaGraphF(item.pos.X, item.pos.Y, 1.0f, 0.0f, assetMng_->GetTexture(item.menuText), true);
 			DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 		}
+	}
+	if (frame_ / 60 % 2 == 0)
+	{
+		DxLib::SetDrawBlendMode(DX_BLENDMODE_ADD, 100);
+		DxLib::DrawRotaGraphF(WINDOW_WIDTH/2, WINDOW_HEIGHT-60, 0.5, 0.0f, assetMng_->GetTexture("PRESS_ENTERKEY"), true);
+		DxLib::SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 	}
 }
 
