@@ -50,6 +50,7 @@ namespace
 	constexpr float rigidbody_height_scale = 2.0f;
 	constexpr float rigidbody_jump_scale = 1.5f;
 	constexpr float rigidbody_crouch_scale = 1.4f;
+	constexpr float rigidbody_fall_scale = 1.8f;
 
 	// Time counter ( millisecond )
 	constexpr float jump_time = 0.35f;
@@ -76,7 +77,7 @@ namespace
 	constexpr unsigned short int jump_animation_speed = 100;
 	constexpr unsigned short int fall_animation_speed = 100;
 	constexpr unsigned short int hurt_animation_speed = 100;
-	constexpr unsigned short int die_animation_speed = 100;
+	constexpr unsigned short int die_animation_speed = 200;
 	constexpr unsigned short int cast_animation_speed = 50;
 	constexpr unsigned short int crouch_animation_speed = 100;
 	constexpr unsigned short int attack1_animation_speed = 70;
@@ -111,6 +112,8 @@ namespace
 	constexpr char shuriken_tag[] = "BOMB";
 	constexpr char bomb_tag[] = "SHURIKEN";
 
+	constexpr int player_health = 5;
+
 	Vector2 slashDownPos;
 }
 
@@ -131,6 +134,25 @@ float Player::Height() const
 {
 	auto transform = self_->GetComponent<TransformComponent>();
 	return transform->h * transform->scale;
+}
+
+void Player::StopSlashDown()
+{
+	if (actionState_ == ACTION::SLASH_DOWN)
+	{
+		isJumping = false;
+		actionState_ = ACTION::FALL;
+		inputState_ = &Player::FallState;
+	}
+}
+
+void Player::Respawn()
+{
+	auto health = self_->GetComponent<HealthComponent>();
+	health->SetHealth(player_health);
+	actionState_ = ACTION::IDLE;
+	inputState_ = &Player::GroundState;
+	rigidBody_->Activate();
 }
 
 Player::Player(GameScene& gs):gs_(gs)
@@ -154,7 +176,7 @@ void Player::Initialize()
 	rigidBody_ = rigidBody;
 	rigidBody->SetTag("PLAYER");
 	rigidBody_->SetMaxVelocity(player_max_velocity_x, player_max_velocity_y);
-	self_->AddComponent<HealthComponent>(self_, 100);
+	self_->AddComponent<HealthComponent>(self_, player_health);
 	self_->AddComponent<SpriteComponent>(self_);
 	const auto& playerAnim = self_->GetComponent<SpriteComponent>();
 	playerAnim->AddAnimation(gs_.assetMng_->GetTexture("player-idle"), "idle", src_rect, idle_animation_speed);
@@ -197,11 +219,9 @@ void Player::Initialize()
 void Player::Input(const float& deltaTime)
 {
 	input_->Update(deltaTime);
-	if (input_->IsTriggered(L"space"))
-		isAlive_ = false;
 	SetAngleDirection();
 	ChangeEquip();
-	const auto& sprite = self_->GetComponent<SpriteComponent>();
+	CheckHit();
 	(this->*inputState_)(deltaTime);
 }
 
@@ -264,7 +284,7 @@ void Player::ProcessGroundAttack()
 			actionState_ = ACTION::ATTACK_3;
 			break;
 		case ACTION::ATTACK_3:
-			timer_ = change_attack_time;
+			timer_ = 0;
 			actionState_ = ACTION::ATTACK_1;
 		default:
 			actionState_ = ACTION::ATTACK_1;
@@ -362,7 +382,6 @@ void Player::FallState(const float& deltaTime)
 {
 	SetSideMoveVelocity(normal_side_velocity);
 	ProcessThrow();
-	ProcessCheckGround();
 	ProcessSlidingWall();
 	ProcessAirAttack();
 	// Second jump
@@ -378,6 +397,8 @@ void Player::FallState(const float& deltaTime)
 			inputState_ = &Player::JumpState;
 		}
 	}
+	// Put check ground to the end to avoid air action while in the ground
+	ProcessCheckGround();
 }
 
 void Player::CrouchState(const float&)
@@ -532,6 +553,36 @@ void Player::SlidingWallState(const float&)
 	}
 }
 
+void Player::HurtState(const float&)
+{
+	auto sprite = self_->GetComponent<SpriteComponent>();
+	if (sprite->IsAnimationFinished())
+	{
+		sprite->TurnOffBlinking();
+		rigidBody_->Activate();
+		actionState_ = ACTION::IDLE;
+		inputState_ = &Player::GroundState;
+	}
+}
+
+void Player::DeathState(const float&)
+{
+	auto sprite = self_->GetComponent<SpriteComponent>();
+	auto& time = Time::Instance();
+
+	time.SetTimeScale(0.5f);
+	if (sprite->IsAnimationFinished())
+	{
+		time.SetTimeScale(1.0f);
+		isAlive_ = false;
+		inputState_ = &Player::WaitRespawnState;
+	}
+}
+
+void Player::WaitRespawnState(const float&)
+{
+}
+
 void Player::DrawWithdrawSwordState(const float&)
 {
 	if (rigidBody_->isGrounded_)
@@ -668,6 +719,26 @@ void Player::TurnBackState()
 	actionState_ = oldActionState_;
 }
 
+void Player::CheckHit()
+{
+	auto sprite = self_->GetComponent<SpriteComponent>();
+	auto health = self_->GetComponent<HealthComponent>();
+	if (health->Health() <= 0)
+	{
+		actionState_ = ACTION::DEATH;
+		inputState_ = &Player::DeathState;
+		sprite->PlayOnce("die");
+		return;
+	}
+	if (!rigidBody_->IsActive())
+	{
+		sprite->TurnOnBlinking();
+		actionState_ = ACTION::HURT;
+		inputState_ = &Player::HurtState;
+		sprite->PlayOnce("hurt");
+	}
+}
+
 void Player::ProcessSlidingWall()
 {
 	if (rigidBody_->isTouchWall_ && rigidBody_->velocity_.Y > 0 && !rigidBody_->isGrounded_)
@@ -695,10 +766,11 @@ void Player::UpdateState()
 			sprite->PlayLoop("run");
 		break;
 	case ACTION::JUMP:
-		sprite->PlayLoop("jump");
 		rigidBody_->collider_.h = player_height * rigidbody_jump_scale;
+		sprite->PlayLoop("jump");
 		break;
 	case ACTION::FALL:
+		rigidBody_->collider_.h = player_height * rigidbody_fall_scale;
 		sprite->PlayLoop("fall");
 		break;
 	case ACTION::IDLE:
@@ -748,11 +820,25 @@ void Player::UpdateState()
 	case ACTION::SLIDE_WALL:
 		sprite->PlayLoop("slide-wall");
 		break;
+	case ACTION::HURT:
+		sprite->PlayOnce("hurt");
+		break;
+	case ACTION::DEATH:
+		sprite->PlayOnce("die");
+		break;
 	}
 
-	// Relocate rigid body's position after change it's size
-	rigidBody_->collider_.pos.X = transform->pos.X + transform->w * transform->scale / 2.0f - rigidBody_->collider_.w / 2;
-	rigidBody_->collider_.pos.Y = transform->pos.Y + transform->h * transform->scale - rigidBody_->collider_.h;
+	// Relocate rigid body's position after change it's size (animation state)
+	switch (actionState_)
+	{
+	case ACTION::FALL:
+		rigidBody_->collider_.pos.X = transform->pos.X + transform->w * transform->scale / 2.0f - rigidBody_->collider_.w / 2;
+		break;
+	default:
+		rigidBody_->collider_.pos.X = transform->pos.X + transform->w * transform->scale / 2.0f - rigidBody_->collider_.w / 2;
+		rigidBody_->collider_.pos.Y = transform->pos.Y + transform->h * transform->scale - rigidBody_->collider_.h;
+		break;
+	}
 }
 
 std::shared_ptr<TransformComponent> Player::GetPlayerTransform()

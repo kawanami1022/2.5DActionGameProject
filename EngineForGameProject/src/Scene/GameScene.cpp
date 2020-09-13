@@ -89,7 +89,7 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("player-cast", L"assets/Image/Character/Player/adventurer-cast-sheet.png");
 	assetMng_->AddTexture("player-crouch", L"assets/Image/Character/Player/adventurer-crouch-sheet.png");
 	assetMng_->AddTexture("player-crouch-walk", L"assets/Image/Character/Player/adventurer-crouch-walk-sheet.png");
-	assetMng_->AddTexture("player-die", L"assets/Image/Character/Player/adventurer-die-sheet.png");
+	assetMng_->AddTexture("player-die", L"assets/Image/Character/Player/adventurer-death-sheet.png");
 	assetMng_->AddTexture("player-draw-sword", L"assets/Image/Character/Player/adventurer-swd-drw-sheet.png");
 	assetMng_->AddTexture("player-withdraw-sword", L"assets/Image/Character/Player/adventurer-swd-wd-sheet.png");
 	assetMng_->AddTexture("player-attack1", L"assets/Image/Character/Player/adventurer-attack1-sheet.png");
@@ -180,11 +180,11 @@ void GameScene::LoadLevel(const int& level)
 		32,32);
 	map_->LoadCollisionLayer("TERRAIN", "TERRAIN", "assets/Image/Tilemap/bamboo-terrain.map", NUM_TILE_X, NUM_TILE_Y,
 		bamboo_collider_w, bamboo_collider_h, bamboo_collider_offset_x, bamboo_collider_offset_y);
-	map_->LoadCollisionLayer("TERRAIN", "BAMBOO-H-TRAP", "assets/Image/Tilemap/bamboo-h-trap.map", NUM_TILE_X, NUM_TILE_Y,
+	map_->LoadCollisionLayer("TERRAIN", "TRAP", "assets/Image/Tilemap/bamboo-h-trap.map", NUM_TILE_X, NUM_TILE_Y,
 		bamboo_horizontal_trap_w, bamboo_horizontal_trap_h, bamboo_horizontal_trap_offset_x, bamboo_horizontal_trap_offset_y);
-	map_->LoadCollisionLayer("TERRAIN", "BAMBOO-V-TRAP", "assets/Image/Tilemap/bamboo-v-trap.map", NUM_TILE_X, NUM_TILE_Y,
+	map_->LoadCollisionLayer("TERRAIN", "TRAP", "assets/Image/Tilemap/bamboo-v-trap.map", NUM_TILE_X, NUM_TILE_Y,
 		bamboo_vertical_trap_w, bamboo_vertical_trap_h, bamboo_vertical_trap_offset_x, bamboo_vertical_trap_offset_y);
-	map_->LoadCollisionLayer("TERRAIN", "METAL-TRAP", "assets/Image/Tilemap/metal-trap.map", NUM_TILE_X, NUM_TILE_Y,
+	map_->LoadCollisionLayer("TERRAIN", "TRAP", "assets/Image/Tilemap/metal-trap.map", NUM_TILE_X, NUM_TILE_Y,
 		32, 32);
 	map_->LoadCollisionLayer("ENEMY", "FLYING-EYE", "assets/Image/Tilemap/flying-eye.map", NUM_TILE_X, NUM_TILE_Y, 32, 32);
 	map_->LoadCollisionLayer("ENEMY", "MUSHROOM", "assets/Image/Tilemap/mushroom.map", NUM_TILE_X, NUM_TILE_Y, 32, 32);
@@ -301,16 +301,16 @@ void GameScene::FadeInUpdate(const float& deltaTime)
 void GameScene::GameUpdate(const float& deltaTime)
 {
 	player_->Input(deltaTime);
-	for (auto& spawner : spawners_)
-	{
-		spawner->Update(deltaTime);
-	}
-	collisionMng_->ApplyForce(deltaTime);
 	/*----------------------------------------------------------------------------*/
 	// Update player's STATE right after received player's INPUT
 	// Purpose : update player's state before updating player's animation to AVOID BLINKING animation ( late animation )
 	player_->UpdateState();
 	/*----------------------------------------------------------------------------*/
+	for (auto& spawner : spawners_)
+	{
+		spawner->Update(deltaTime);
+	}
+	collisionMng_->ApplyForce(deltaTime);
 	CheckRespawnPlayer();
 	enemyMng_->Update(deltaTime);
 	entityMng_->Update(deltaTime);
