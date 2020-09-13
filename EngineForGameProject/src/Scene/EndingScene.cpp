@@ -77,6 +77,9 @@ void EndingScene::FadeRender()
 
 void EndingScene::Initialize()
 {
+	updateFunc_ = &EndingScene::FadeInUpdate;
+	renderFunc_ = &EndingScene::FadeRender;
+	inputFunc_ = &EndingScene::SleepInput;
 }
 
 void EndingScene::ProcessInput()
@@ -85,9 +88,7 @@ void EndingScene::ProcessInput()
 
 EndingScene::EndingScene(SceneManager& sceneMng, KeyboardInput& sceneInput):BaseScene(sceneMng, sceneInput)
 {
-	updateFunc_ = &EndingScene::FadeInUpdate;
-	renderFunc_= &EndingScene::FadeRender;
-	inputFunc_ = &EndingScene::SleepInput;
+	Initialize();
 
 }
 

@@ -1,7 +1,7 @@
 #include "SceneManager.h"
 
 #include "../Scene/TitleScene.h"
-
+#include "../Scene/EndingScene.h"
 SceneManager::SceneManager(KeyboardInput& sceneInput):sceneInput_(sceneInput)
 {
 	scenes_.emplace_back(new TitleScene(*this,sceneInput_));
