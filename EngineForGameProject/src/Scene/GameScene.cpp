@@ -155,12 +155,9 @@ void GameScene::LoadLevel(const int& level)
 	assetMng_->AddTexture("UI_jump", L"assets/Image/UI/Command/jump.png");
 	assetMng_->AddTexture("UI_attack", L"assets/Image/UI/Command/Attack.png");
 	assetMng_->AddTexture("UI_change_weapon", L"assets/Image/UI/Command/change_wepon.png");
+	assetMng_->AddTexture("UI_heart", L"assets/Image/UI/heart.png");
 
 	assetMng_->AddTexture("UI_MoveLeft", L"assets/Image/UI/Command/run.png");
-
-	assetMng_->AddTexture("double_Jump", L"assets/Image/UI/Command/double_Jump.png");
-	assetMng_->AddTexture("Wall_Jump", L"assets/Image/UI/Command/Wall_Jump.png");
-	assetMng_->AddTexture("slash_Down", L"assets/Image/UI/Command/slash_Down.png");
 	//assetMng_->AddTexture("UI_MoveRight", L"assets/Image/UI/Command/run.png");
 	// keymap
 	assetMng_->AddTexture("Z_jump", L"assets/Image/UI/Key/z_alternative_paper.png");
@@ -169,10 +166,11 @@ void GameScene::LoadLevel(const int& level)
 
 	assetMng_->AddTexture("LeftArrow_Move", L"assets/Image/UI/Key/arrowleft_alternative_paper.png");
 	assetMng_->AddTexture("RightArrow_Move", L"assets/Image/UI/Key/arrowright_alternative_paper.png");
-	assetMng_->AddTexture("Jump+Down", L"assets/Image/UI/Key/Jump+Down.png");
+	assetMng_->AddTexture("double_Jump", L"assets/Image/UI/Command/double_Jump.png");
+	assetMng_->AddTexture("Wall_Jump", L"assets/Image/UI/Command/Wall_Jump.png");
+	assetMng_->AddTexture("slash_Down", L"assets/Image/UI/Command/slash_Down.png");
 
 	assetMng_->AddTexture("born-fire", L"assets/Image/UI/bornfire.png");
-
 
 	// Create Title Map
 	map_ = std::make_unique<Map>(*entityMng_,*collisionMng_,16,2);
