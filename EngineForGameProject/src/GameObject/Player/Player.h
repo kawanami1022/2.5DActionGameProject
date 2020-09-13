@@ -31,7 +31,9 @@ enum class ACTION
 	SMASH_DOWN,
 	DRAW_SWORD,
 	WITHDRAW_SWORD,
-	SLIDE_WALL
+	SLIDE_WALL,
+	HURT,
+	DEATH
 };
 
 class Player
@@ -75,6 +77,10 @@ private:
 	void SlashDownState(const float&);
 	void SmashDownState(const float&);
 	void SlidingWallState(const float&);
+	void HurtState(const float&);
+	void DeathState(const float&);
+	void WaitRespawnState(const float&);
+	void CheckHit();
 
 	void SetSideMoveVelocity(const float& velX);
 	void SetMoveAction(const ACTION& idle, const ACTION& moveType);
@@ -91,18 +97,23 @@ private:
 	void ProcessSlidingWall();
 	void ChangeEquip();
 	void TurnBackState();
+
 public:
+	Player(GameScene& gs);
+	~Player();
+
+	void Initialize();
+	void Input(const float& deltaTime);
 	void UpdateState();
+	void RenderUI();
 	inline bool IsAlive() const { return isAlive_; }
 	inline void SetAlive() { isAlive_ = true; }
 	void SetPosition(const float& posX, const float& posY);
 	float Width() const;
 	float Height() const;
-	Player(GameScene& gs);
-	void Initialize();
-	void Input(const float& deltaTime);
+	void StopSlashDown();
+	void Respawn();
+	
 	std::shared_ptr<TransformComponent> GetPlayerTransform();
-	void RenderUI();
-	~Player();
 };
 
